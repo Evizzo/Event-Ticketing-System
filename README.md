@@ -1,4 +1,4 @@
-#Event Ticketing System
+# **Event Ticketing System**
 
 The Event Ticketing System is a web application designed for managing and attending events. It is built using Spring Boot for the backend, backed by a database, and features a React frontend. The key functions of this application include:
 
