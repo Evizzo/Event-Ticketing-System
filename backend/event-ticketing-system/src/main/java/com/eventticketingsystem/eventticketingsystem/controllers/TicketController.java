@@ -14,7 +14,7 @@ public class TicketController {
     private final TicketService ticketService;
     @PostMapping("/event/{eventId}/ticket")
     public ResponseEntity<String> purchaseTicket(@PathVariable UUID eventId, @RequestParam UUID userId) {
-        // link example: http://localhost:8080/event/25fc8ca7-7ad9-438d-908a-0d8324361068/ticket?userId=2
+        // link example: http://localhost:8080/event/25fc8ca7-7ad9-438d-908a-0d8324361068/ticket?userId=a1a2b6da-aa65-4f81-88e9-f2d36d7e0e6a
         return ticketService.purchaseTicket(eventId, userId)
                 .map(purchasedTicket -> ResponseEntity.ok("Ticket purchased successfully. Ticket ID: " + purchasedTicket.getId()))
                 .orElseThrow(() -> new TicketNotFoundException("Ticket purchasing failed."));
