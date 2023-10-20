@@ -1,6 +1,6 @@
 package com.eventticketingsystem.eventticketingsystem.controllers;
 
-import com.eventticketingsystem.eventticketingsystem.database.Event;
+import com.eventticketingsystem.eventticketingsystem.entities.Event;
 import com.eventticketingsystem.eventticketingsystem.exceptions.EventNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.services.EventService;
 import jakarta.transaction.Transactional;
@@ -14,24 +14,25 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
+@RequestMapping("event")
 public class EventController {
     private final EventService eventService;
-    @PostMapping("event")
+    public static final String EVENT_NOT_FOUND = "Event not found with ID: ";
+    @PostMapping
     public ResponseEntity<Event> addNewEvent(@Valid @RequestBody Event event){
         return ResponseEntity.ok(eventService.saveEvent(event));
     }
-    @GetMapping("event")
-    public ResponseEntity<List<Event>> retriveAllEvents(){
+    @GetMapping
+    public ResponseEntity<List<Event>> retrieveAllEvents(){
         return ResponseEntity.ok(eventService.findAllEvents());
     }
-
-    @GetMapping("event/{id}")
-    public ResponseEntity<Event> retriveEvent(@PathVariable UUID id){
+    @GetMapping("/{id}")
+    public ResponseEntity<Event> retrieveEvent(@PathVariable UUID id){
         return eventService.findEventById(id)
-                .map(event -> ResponseEntity.ok(event))
-                .orElseThrow(() -> new EventNotFoundException("id: " + id));
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new EventNotFoundException(EVENT_NOT_FOUND + id));
     }
-    @DeleteMapping("event/{id}")
+    @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<String> deleteEvent(@PathVariable UUID id) {
         return eventService.findEventById(id)
@@ -39,12 +40,12 @@ public class EventController {
                     eventService.deleteEventById(id);
                     return ResponseEntity.ok("Event deleted successfully.");
                 })
-                .orElseThrow(() -> new EventNotFoundException("Event not found with ID: " + id));
+                .orElseThrow(() -> new EventNotFoundException(EVENT_NOT_FOUND + id));
     }
-    @PutMapping("/event/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable UUID id, @Valid @RequestBody Event event) {
         return eventService.updateEvent(id, event)
-                .map(updatedEvent -> ResponseEntity.ok(updatedEvent))
-                .orElseThrow(() -> new EventNotFoundException("id: " + id));
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new EventNotFoundException(EVENT_NOT_FOUND + id));
     }
 }

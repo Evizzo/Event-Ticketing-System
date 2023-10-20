@@ -1,6 +1,6 @@
 package com.eventticketingsystem.eventticketingsystem.repositories;
 
-import com.eventticketingsystem.eventticketingsystem.database.Ticket;
+import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +16,6 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
 
     void deleteByEventId(UUID id);
 
-    @Modifying
     @Query("SELECT t FROM Ticket t WHERE t.user.id = :userId")
     List<Ticket> findTicketsPurchasedByUserId(@Param("userId") UUID userId);
 }

@@ -1,4 +1,4 @@
-package com.eventticketingsystem.eventticketingsystem.database;
+package com.eventticketingsystem.eventticketingsystem.entities;
 
 import jakarta.persistence.*;
 

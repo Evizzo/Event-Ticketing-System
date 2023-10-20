@@ -1,6 +1,6 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
-import com.eventticketingsystem.eventticketingsystem.database.Event;
+import com.eventticketingsystem.eventticketingsystem.entities.Event;
 import com.eventticketingsystem.eventticketingsystem.exceptions.EventNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.repositories.EventRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.TicketRepository;
@@ -32,28 +32,18 @@ public class EventService {
     public Optional<Event> updateEvent(UUID id, Event updatedEvent) {
         return eventRepository.findById(id)
                 .map(existingEvent -> {
-                    if (updatedEvent.getName() != null) {
-                        existingEvent.setName(updatedEvent.getName());
-                    }
-                    if (updatedEvent.getDate() != null) {
-                        existingEvent.setDate(updatedEvent.getDate());
-                    }
-                    if (updatedEvent.getLocation() != null) {
-                        existingEvent.setLocation(updatedEvent.getLocation());
-                    }
-                    if (updatedEvent.getDescription() != null) {
-                        existingEvent.setDescription(updatedEvent.getDescription());
-                    }
-                    if (updatedEvent.getCapacity() != 0) {
-                        existingEvent.setCapacity(updatedEvent.getCapacity());
-                    }
-                    if (updatedEvent.getTicketPrice() != null) {
-                        existingEvent.setTicketPrice(updatedEvent.getTicketPrice());
-                    }
+                    Optional.ofNullable(updatedEvent.getName()).ifPresent(existingEvent::setName);
+                    Optional.ofNullable(updatedEvent.getDate()).ifPresent(existingEvent::setDate);
+                    Optional.ofNullable(updatedEvent.getLocation()).ifPresent(existingEvent::setLocation);
+                    Optional.ofNullable(updatedEvent.getDescription()).ifPresent(existingEvent::setDescription);
+                    Optional.of(updatedEvent.getCapacity()).ifPresent(existingEvent::setCapacity);
+                    Optional.ofNullable(updatedEvent.getTicketPrice()).ifPresent(existingEvent::setTicketPrice);
 
                     Event updated = eventRepository.save(existingEvent);
+
                     return Optional.of(updated);
                 })
                 .orElseThrow(() -> new EventNotFoundException("Event not found with ID: " + id));
     }
+
 }

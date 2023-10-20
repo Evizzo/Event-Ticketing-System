@@ -1,9 +1,9 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
-import com.eventticketingsystem.eventticketingsystem.database.Event;
-import com.eventticketingsystem.eventticketingsystem.database.Ticket;
-import com.eventticketingsystem.eventticketingsystem.database.TicketStatus;
-import com.eventticketingsystem.eventticketingsystem.database.User;
+import com.eventticketingsystem.eventticketingsystem.entities.Event;
+import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
+import com.eventticketingsystem.eventticketingsystem.entities.TicketStatus;
+import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.repositories.EventRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.TicketRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.UserRepository;
@@ -22,56 +22,44 @@ public class TicketService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final UserService userService;
-    private final EventService eventService;
     public Optional<Ticket> purchaseTicket(UUID eventId, UUID userId) {
-        try {
-            Event event = eventRepository.findById(eventId).orElse(null);
+        return eventRepository.findById(eventId)
+                .flatMap(event -> userRepository.findById(userId)
+                        .map(user -> {
+                            Optional<Ticket> existingTicket = user.getTickets().stream()
+                                    .filter(ticket -> ticket.getEvent().getId().equals(eventId))
+                                    .findFirst();
 
-            if (event == null) {
-                return Optional.empty();
-            }
+                            if (existingTicket.isPresent()) {
+                                Ticket ticket = existingTicket.get();
+                                ticket.setAmount(ticket.getAmount() + 1);
+                            } else {
+                                Ticket ticket = new Ticket();
+                                ticket.setEvent(event);
+                                ticket.setUser(user);
+                                ticket.setPurchaseDate(LocalDateTime.now());
+                                ticket.setStatus(TicketStatus.PURCHASED);
+                                ticket.setAmount(1);
+                                user.getTickets().add(ticket);
+                            }
 
-            User user = userRepository.findById(userId).orElse(null);
+                            event.setCapacity(event.getCapacity() - 1);
 
-            if (user == null) {
-                return Optional.empty();
-            }
+                            BigDecimal newCredits = user.getCredits().subtract(event.getTicketPrice());
 
-            Optional<Ticket> existingTicket = user.getTickets().stream()
-                    .filter(ticket -> ticket.getEvent().getId().equals(eventId))
-                    .findFirst();
+                            int comparison = newCredits.compareTo(BigDecimal.ZERO);
+                            if (comparison < 0) {
+                                return Optional.<Ticket>empty();
+                            }
 
-            if (existingTicket.isPresent()) {
-                Ticket ticket = existingTicket.get();
-                ticket.setAmount(ticket.getAmount() + 1);
-            } else {
-                Ticket ticket = new Ticket();
-                ticket.setEvent(event);
-                ticket.setUser(user);
-                ticket.setPurchaseDate(LocalDateTime.now());
-                ticket.setStatus(TicketStatus.PURCHASED);
-                ticket.setAmount(1);
-                user.getTickets().add(ticket);
-            }
+                            user.setCredits(newCredits);
 
-            event.setCapacity(event.getCapacity() - 1);
+                            ticketRepository.saveAll(user.getTickets());
+                            eventRepository.save(event);
 
-            BigDecimal newCredits = user.getCredits().subtract(event.getTicketPrice());
-
-            int comparison = newCredits.compareTo(BigDecimal.ZERO);
-            if (comparison < 0) {
-                return Optional.empty();
-            }
-
-            user.setCredits(newCredits);
-
-            ticketRepository.saveAll(user.getTickets());
-            eventRepository.save(event);
-
-            return Optional.of(existingTicket.isPresent() ? existingTicket.get() : user.getTickets().get(user.getTickets().size() - 1));
-        } catch (Exception e) {
-            return Optional.empty();
-        }
+                            return Optional.of(existingTicket.orElseGet(() -> user.getTickets().get(user.getTickets().size() - 1)));
+                        }))
+                .orElse(Optional.empty());
     }
 
     public Optional<Ticket> findTicketById(UUID ticketId){

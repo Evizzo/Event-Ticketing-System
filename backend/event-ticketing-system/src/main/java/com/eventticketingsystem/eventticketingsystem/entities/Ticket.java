@@ -1,4 +1,4 @@
-package com.eventticketingsystem.eventticketingsystem.database;
+package com.eventticketingsystem.eventticketingsystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -19,16 +19,13 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
-
     private LocalDateTime purchaseDate;
     private TicketStatus status;
     private int amount;

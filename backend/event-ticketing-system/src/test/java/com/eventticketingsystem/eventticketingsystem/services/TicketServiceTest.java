@@ -1,8 +1,8 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
-import com.eventticketingsystem.eventticketingsystem.database.Event;
-import com.eventticketingsystem.eventticketingsystem.database.Ticket;
-import com.eventticketingsystem.eventticketingsystem.database.User;
+import com.eventticketingsystem.eventticketingsystem.entities.Event;
+import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
+import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.repositories.EventRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.TicketRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.UserRepository;

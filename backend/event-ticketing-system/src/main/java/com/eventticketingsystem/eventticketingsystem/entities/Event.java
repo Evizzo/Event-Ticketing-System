@@ -1,4 +1,4 @@
-package com.eventticketingsystem.eventticketingsystem.database;
+package com.eventticketingsystem.eventticketingsystem.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +26,6 @@ public class Event {
     private UUID id;
     @Size(max = 32, min = 2, message = "Max character size is 32, min is 2")
     private String name;
-    // Added validation that all events should be in the future
     @Future(message = "Event Date should be in the future")
     private LocalDate date;
     @Size(max = 32, min = 3, message = "Max character size is 32, min is 3")

@@ -1,7 +1,7 @@
 package com.eventticketingsystem.eventticketingsystem.controllers;
 
-import com.eventticketingsystem.eventticketingsystem.database.Ticket;
-import com.eventticketingsystem.eventticketingsystem.database.User;
+import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
+import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.exceptions.UserNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.services.UserService;
 import jakarta.transaction.Transactional;
@@ -15,23 +15,25 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
+@RequestMapping("user")
 public class UserController {
     private final UserService userService;
-    @PostMapping("user")
+    public static final String USER_NOT_FOUND = "User not found with ID: ";
+    @PostMapping
     public ResponseEntity<User> addNewUser(@Valid @RequestBody User user){
         return ResponseEntity.ok(userService.saveUser(user));
     }
-    @GetMapping("user")
+    @GetMapping
     public ResponseEntity<List<User>> retriveAllUsers(){
         return ResponseEntity.ok(userService.findAllUsers());
     }
-    @GetMapping("user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> retrieveUser(@PathVariable UUID id) {
         return userService.findUserById(id)
                 .map(user -> ResponseEntity.ok(user))
-                .orElseThrow(() -> new UserNotFoundException("id: " + id));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + id));
     }
-    @DeleteMapping("user/{id}")
+    @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<String> deleteUser(@PathVariable UUID id) {
         return userService.findUserById(id)
@@ -39,18 +41,18 @@ public class UserController {
                     userService.deleteUserById(id);
                     return ResponseEntity.ok("User deleted successfully.");
                 })
-                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + id));
     }
-    @PutMapping("/user/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable UUID id, @Valid @RequestBody User user) {
         return userService.updateUser(id, user)
-                .map(updatedUser -> ResponseEntity.ok(updatedUser))
-                .orElseThrow(() -> new UserNotFoundException("id: " + id));
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + id));
     }
-    @GetMapping("/user/tickets/{userId}")
+    @GetMapping("/tickets/{userId}")
     public ResponseEntity<List<Ticket>> retrieveAllUserTickets(@PathVariable UUID userId) {
         return userService.retrieveAllUserTickets(userId)
-                .map(userTickets -> ResponseEntity.ok(userTickets))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 }
