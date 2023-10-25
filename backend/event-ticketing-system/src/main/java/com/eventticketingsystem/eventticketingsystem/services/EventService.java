@@ -45,5 +45,4 @@ public class EventService {
                 })
                 .orElseThrow(() -> new EventNotFoundException("Event not found with ID: " + id));
     }
-
 }

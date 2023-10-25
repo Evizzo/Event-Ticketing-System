@@ -8,7 +8,6 @@ function AvailableEvents() {
   const [numberOfBought, setNumberOfBought] = useState(1)
 
   useEffect(() => {
-    // Fetch events from the API when the component mounts
     retrieveAllEvents()
       .then((response) => {
         const sortedEvents = response.data.sort((a: { name: string }, b: { name: string }) =>
