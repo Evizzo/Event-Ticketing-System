@@ -25,7 +25,6 @@ public class Event {
     private UUID id;
     @Size(max = 32, min = 2, message = "Max character size of name is 32, min is 2")
     private String name;
-    @NotNull
     @Future(message = "Event Date should be in the future")
     private LocalDate date;
     @Size(max = 32, min = 2, message = "Max character size of location is 32, min is 3")
@@ -33,7 +32,7 @@ public class Event {
     @Size(max = 320, min = 12, message = "Max character size of description is 320, min is 12")
     private String description;
     @Min(value = 12, message = "Min capacity is 12")
-    private int capacity;
+    private Integer capacity;
     @DecimalMin(value = "0", message = "Ticket price cannot be negative")
     private BigDecimal ticketPrice;
 }

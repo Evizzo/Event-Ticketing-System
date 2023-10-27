@@ -28,5 +28,5 @@ public class Ticket {
     private User user;
     private LocalDateTime purchaseDate;
     private TicketStatus status;
-    private int amount;
+    private Integer amount;
 }

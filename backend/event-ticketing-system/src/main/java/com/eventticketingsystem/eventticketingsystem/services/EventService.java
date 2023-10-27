@@ -1,6 +1,7 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
 import com.eventticketingsystem.eventticketingsystem.entities.Event;
+import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
 import com.eventticketingsystem.eventticketingsystem.exceptions.EventNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.repositories.EventRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.TicketRepository;
@@ -36,10 +37,16 @@ public class EventService {
                     Optional.ofNullable(updatedEvent.getDate()).ifPresent(existingEvent::setDate);
                     Optional.ofNullable(updatedEvent.getLocation()).ifPresent(existingEvent::setLocation);
                     Optional.ofNullable(updatedEvent.getDescription()).ifPresent(existingEvent::setDescription);
-                    Optional.of(updatedEvent.getCapacity()).ifPresent(existingEvent::setCapacity);
+                    Optional.ofNullable(updatedEvent.getCapacity()).ifPresent(existingEvent::setCapacity);
                     Optional.ofNullable(updatedEvent.getTicketPrice()).ifPresent(existingEvent::setTicketPrice);
 
                     Event updated = eventRepository.save(existingEvent);
+
+                    List<Ticket> eventTickets = ticketRepository.findTicketsByEventId(updatedEvent.getId());
+                    for (Ticket ticket : eventTickets) {
+                        ticket.setEvent(updated);
+                        ticketRepository.save(ticket);
+                    }
 
                     return Optional.of(updated);
                 })

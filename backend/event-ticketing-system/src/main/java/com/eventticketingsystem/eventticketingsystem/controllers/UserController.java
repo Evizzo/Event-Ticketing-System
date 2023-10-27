@@ -30,7 +30,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> retrieveUser(@PathVariable UUID id) {
         return userService.findUserById(id)
-                .map(user -> ResponseEntity.ok(user))
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + id));
     }
     @DeleteMapping("/{id}")
