@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { retrieveAllEvents, purchaseEventTicket } from '../api/ApiService.ts';
+import SearchBar from './SearchBar';
 
 function AvailableEvents() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   const [events, setEvents] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [message,setMessage] = useState("")
@@ -44,6 +47,10 @@ function AvailableEvents() {
         <p>Loading events...</p>
       ) : (
         <div className="row">
+
+          <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+
+
           {message && <div className="alert alert-warning">{message}</div>}
           {events.map((event) => (
             <div className="col-md-4 mb-4" key={event.id}>
