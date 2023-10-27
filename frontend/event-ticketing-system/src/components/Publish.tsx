@@ -35,7 +35,10 @@ function Publish() {
     try {
       const response = await addNewEvent(eventData);
       console.log('Event added:', response);
-
+      setMessage("Event published !")
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
       setEventData({
         name: '',
         date: '',
@@ -45,7 +48,11 @@ function Publish() {
         ticketPrice: 0,
       });
     } catch (error: any) {
-      if (error.response && error.response.data) {
+      if (!eventData.date) {
+        setMessage("Event Date cannot be empty");
+        return;
+      }
+      else if (error.response && error.response.data) {
         setMessage(error.response.data.message)
       } else {
         console.error('Error adding event:', error);
