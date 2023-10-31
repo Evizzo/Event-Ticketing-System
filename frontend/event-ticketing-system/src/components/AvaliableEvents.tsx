@@ -80,7 +80,7 @@ function AvailableEvents() {
                     className="btn btn-primary"
                     onClick={() => handlePurchase(event.id, "a1a2b6da-aa65-4f81-88e9-f2d36d7e0e6a")}
                   >
-                    Purchase
+                    Purchase: {event.capacity}
                   </button>
                 </div>
               </div>
