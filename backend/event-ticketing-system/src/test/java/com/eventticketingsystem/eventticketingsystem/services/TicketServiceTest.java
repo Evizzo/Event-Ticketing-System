@@ -44,6 +44,7 @@ public class TicketServiceTest {
         // Mocking necessary dependencies
         Event event = new Event();
         event.setTicketPrice(BigDecimal.valueOf(50.00));
+        event.setCapacity(100);
         when(eventRepository.findById(UUID.fromString("74b3a465-c5a7-4850-a590-80db8db84b0f"))).thenReturn(Optional.of(event));
 
         User user = new User();
