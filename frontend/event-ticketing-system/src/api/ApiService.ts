@@ -34,3 +34,7 @@ export const refoundTicket = (ticketId: string, userId: string) => {
 export const searchEventsByName = (eventName: string) => {
     return apiClient.get(`/event/search?name=${eventName}`)
 }
+
+export const retrieveEventById = (eventId: string) => {
+    return apiClient.get(`/event/${eventId}`)
+}

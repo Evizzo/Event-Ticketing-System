@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { retrieveAllUserTickets, refoundTicket } from '../api/ApiService.ts';
+import { Link } from 'react-router-dom';
 
 function UsersEvents() {
   const [events, setEvents] = useState<any[]>([])
@@ -51,11 +52,13 @@ function UsersEvents() {
           {events.map((event) => (
             <div className="col-md-4 mb-4" key={event.id}>
               <div className="card h-100 d-flex flex-column position-relative">
+              <Link to={`/events/${event.event.id}`}>
                 <img
                   src="public/ets.png"
                   className="card-img-top"
                   alt={event.event.name}
                 />
+              </Link>
                 <div className="position-absolute top-0 start-0 m-3">
                   <p className="mb-0">
                     <strong>Date:</strong> {event.event.date}

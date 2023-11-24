@@ -19,7 +19,6 @@ function Search() {
       setLoading(false);
     } catch (error) {
       setFoundEvents([]);
-      console.error('Error fetching events:', error);
       setLoading(false);
       setMessage('Error searching for events. Please try again.');
     }
