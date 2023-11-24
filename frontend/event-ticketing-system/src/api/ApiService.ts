@@ -30,3 +30,7 @@ export const retrieveAllUserTickets = (userId: string) => {
 export const refoundTicket = (ticketId: string, userId: string) => {
     return apiClient.delete(`/event/refund/${ticketId}?userId=${userId}&refundAmount=1`)
 }
+
+export const searchEventsByName = (eventName: string) => {
+    return apiClient.get(`/event/search?name=${eventName}`)
+}
