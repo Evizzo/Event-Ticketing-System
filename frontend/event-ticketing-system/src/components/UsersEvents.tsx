@@ -8,7 +8,6 @@ function UsersEvents() {
   const [message,setMessage] = useState("")
   const [refundAttempts, setRefundAttempts] = useState(1)
   useEffect(() => {
-    // Fetch events from the API when the component mounts
     retrieveAllUserTickets("a1a2b6da-aa65-4f81-88e9-f2d36d7e0e6a")
       .then((response) => {
         const sortedEvents = response.data.sort((a: { event: { name: string } }, b: { event: { name: string } }) =>

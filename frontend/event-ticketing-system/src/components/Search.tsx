@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, FormControl, Button, Container, Row, Col } from 'react-bootstrap';
 import { searchEventsByName, purchaseEventTicket } from '../api/ApiService';
+import { Link } from 'react-router-dom';
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -83,7 +84,13 @@ function Search() {
           foundEvents.map((event) => (
             <Col xs={12} md={4} key={event.id}>
               <div className="card mb-4 h-100 d-flex flex-column position-relative">
-                <img src="public/ets.png" className="card-img-top" alt={event.name} />
+              <Link to={`/events/${event.id}`}>
+                <img
+                  src="public/ets.png"
+                  className="card-img-top"
+                  alt={event.name}
+                />
+              </Link>
                 <div className="position-absolute top-0 start-0 m-3">
                   <p className="mb-0">
                     <strong>Date:</strong> {event.date}
