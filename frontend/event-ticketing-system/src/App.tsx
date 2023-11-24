@@ -5,6 +5,7 @@ import NavigationBar from "./components/NavigationBar";
 import UsersEvents from "./components/UsersEvents";
 import About from "./components/About"
 import Publish from './components/Publish'
+import Search from "./components/Search";
 function App(){
 
   return(
@@ -15,6 +16,7 @@ function App(){
         <Route path='/events' element={<AvaliableEvents/>}/>
         <Route path="/manage" element={<UsersEvents/>}/>
         <Route path="/publish" element={<Publish/>}/>
+        <Route path="/search" element={<Search/>}/>
         <Route path="/about" element={<About/>}/>
       </Routes>
     </>

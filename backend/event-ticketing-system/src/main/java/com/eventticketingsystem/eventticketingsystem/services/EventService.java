@@ -17,6 +17,9 @@ import java.util.UUID;
 public class EventService {
     private final EventRepository eventRepository;
     private final TicketRepository ticketRepository;
+    public List<Event> findEventsByName(String name) {
+        return eventRepository.findByNameContainingIgnoreCase(name);
+    }
     public Event saveEvent(Event event){
         return eventRepository.save(event);
     }

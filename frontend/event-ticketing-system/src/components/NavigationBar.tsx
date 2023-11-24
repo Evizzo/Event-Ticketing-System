@@ -14,6 +14,7 @@ function NavigationBar() {
                         <Nav.Link href="/events">Events</Nav.Link>
                         <Nav.Link href="/manage">Tickets</Nav.Link>
                         <Nav.Link href="/publish">Publish</Nav.Link>
+                        <Nav.Link href="/search">Search</Nav.Link>
                         <Nav.Link href="/about">About</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>

@@ -48,4 +48,10 @@ public class EventController {
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new EventNotFoundException(EVENT_NOT_FOUND + id));
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<Event>> searchEventsByName(@RequestParam String name) {
+        return eventService.findEventsByName(name).isEmpty()
+                ? ResponseEntity.notFound().build()
+                : ResponseEntity.ok(eventService.findEventsByName(name));
+    }
 }
