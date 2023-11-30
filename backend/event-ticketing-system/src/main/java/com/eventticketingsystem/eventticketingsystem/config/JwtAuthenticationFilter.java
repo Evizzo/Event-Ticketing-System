@@ -1,5 +1,7 @@
 package com.eventticketingsystem.eventticketingsystem.config;
 
+import com.eventticketingsystem.eventticketingsystem.entities.Token;
+import com.eventticketingsystem.eventticketingsystem.repositories.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +22,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenRepository tokenRepository;
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
@@ -36,7 +39,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 userEmail = jwtService.extractUsername(jwt);
                 if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
                     UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-                    if (jwtService.isTokenValid(jwt, userDetails)){
+                    var isTokenValid = tokenRepository.findByToken(jwt)
+                            .map(token -> !token.isRevoked() && !token.isExpired())
+                            .orElse(false);
+                    if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid){
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                                 userDetails,
                                 null,
