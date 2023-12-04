@@ -1,4 +1,4 @@
-import { apiClient } from './ApiClient'
+import {apiClient} from './ApiClient'; 
 
 type Event = {
     name: string;
@@ -8,9 +8,17 @@ type Event = {
     capacity: number;
     ticketPrice: number;
   };
-  
-// User ID to use until the implementation of Spring Security: 
-// a1a2b6da-aa65-4f81-88e9-f2d36d7e0e6a
+
+type RegisterRequest = {
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+};
+
+export const executeRegistration = (userData: RegisterRequest) => {
+    return apiClient.post(`/api/v1/auth/register`, userData);
+};
 
 export const retrieveAllEvents
     = () => apiClient.get(`/event`)
@@ -37,4 +45,18 @@ export const searchEventsByName = (eventName: string) => {
 
 export const retrieveEventById = (eventId: string) => {
     return apiClient.get(`/event/${eventId}`)
+}
+export const retrieveUserById = (userId: string) => {
+    return apiClient.get(`/user/${userId}`)
+}
+export const executeJwtAuthenticationService = (email: string, password: string) => {
+    return apiClient.post(`/api/v1/auth/authenticate`, { email, password });
+}
+
+export const executeLogout = () => {
+    return apiClient.post(`/api/v1/auth/logout`);
+}
+
+export const retrieveUserCredits = (userId: string) => {
+    return apiClient.get(`/user/credits?userId=${userId}`)
 }

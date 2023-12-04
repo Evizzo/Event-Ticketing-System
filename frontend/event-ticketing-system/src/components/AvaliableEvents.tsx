@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { retrieveAllEvents, purchaseEventTicket } from '../api/ApiService.ts';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../api/AuthContex';
 
 function AvailableEvents() {
 
+  const authContext = useAuth();
   const [events, setEvents] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [message,setMessage] = useState("")
@@ -24,9 +26,10 @@ function AvailableEvents() {
   }, [numberOfBought]);
 
   const handlePurchase = (eventId: string, userId: string) => {
-    purchaseEventTicket(eventId, "a1a2b6da-aa65-4f81-88e9-f2d36d7e0e6a")
+    purchaseEventTicket(eventId, userId)
       .then((response) => {
         setNumberOfBought(numberOfBought + 1)
+
         if (numberOfBought === 1){
           setMessage(`Ticket purchased ${numberOfBought} time: ${response.data}`)
         }
@@ -81,7 +84,7 @@ function AvailableEvents() {
                 <div className="position-absolute bottom-0 end-0 p-2">
                   <button
                     className="btn btn-primary"
-                    onClick={() => handlePurchase(event.id, "a1a2b6da-aa65-4f81-88e9-f2d36d7e0e6a")}
+                    onClick={() => handlePurchase(event.id, authContext.userId)}
                   >
                     Purchase: {event.capacity}
                   </button>
