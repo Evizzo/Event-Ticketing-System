@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,10 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
     public static final String USER_NOT_FOUND = "User not found with ID: ";
+    @GetMapping("/credits")
+    public ResponseEntity<BigDecimal> retrieveUserCredits(@RequestParam UUID userId){
+        return ResponseEntity.ok(userService.retrieveUserCredits(userId));
+    }
     @PostMapping
     public ResponseEntity<User> addNewUser(@Valid @RequestBody User user){
         return ResponseEntity.ok(userService.saveUser(user));

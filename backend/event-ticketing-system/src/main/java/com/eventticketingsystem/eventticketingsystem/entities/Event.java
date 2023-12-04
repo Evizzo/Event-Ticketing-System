@@ -31,7 +31,7 @@ public class Event {
     private String location;
     @Size(max = 320, min = 12, message = "Max character size of description is 320, min is 12")
     private String description;
-    @Min(value = 12, message = "Min capacity is 12")
+    @Min(value = 0, message = "Capacity must be positive")
     private Integer capacity;
     @DecimalMin(value = "0", message = "Ticket price cannot be negative")
     private BigDecimal ticketPrice;

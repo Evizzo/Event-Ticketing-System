@@ -8,6 +8,7 @@ import com.eventticketingsystem.eventticketingsystem.repositories.UserRepository
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +31,10 @@ public class UserService {
         ticketRepository.deleteByUserId(id);
         userRepository.deleteById(id);
     }
-
+    public BigDecimal retrieveUserCredits(UUID id){
+        return userRepository.findCreditsByUserId(id)
+                .orElseThrow(() -> new RuntimeException("Credits not found for user with ID: " + id));
+    }
     public Optional<User> updateUser(UUID id, User updatedUser) {
         return userRepository.findById(id)
                 .map(existingUser -> {
