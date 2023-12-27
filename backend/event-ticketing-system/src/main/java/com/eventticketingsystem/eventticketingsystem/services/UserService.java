@@ -1,5 +1,6 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
+import com.eventticketingsystem.eventticketingsystem.auth.AuthenticationService;
 import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
 import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.exceptions.UserNotFoundException;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final TicketRepository ticketRepository;
+    private final AuthenticationService authenticationService;
     public User saveUser(User user){
         return userRepository.save(user);
     }
@@ -28,6 +30,7 @@ public class UserService {
         return userRepository.findById(userId);
     }
     public void deleteUserById(UUID id){
+        authenticationService.deleteAllUserTokens(id);
         ticketRepository.deleteByUserId(id);
         userRepository.deleteById(id);
     }

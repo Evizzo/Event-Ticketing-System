@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -72,5 +74,9 @@ public class AuthenticationService {
                 .revoked(false)
                 .build();
         tokenRepository.save(token);
+    }
+
+    public void deleteAllUserTokens(UUID userId) {
+        tokenRepository.deleteAllTokensByUserId(userId);
     }
 }
