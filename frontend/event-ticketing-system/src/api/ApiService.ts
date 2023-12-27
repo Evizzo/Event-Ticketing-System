@@ -60,3 +60,7 @@ export const executeLogout = () => {
 export const retrieveUserCredits = () => {
     return apiClient.get(`/user/credits`)
 }
+
+export const deleteCurrentUser = () => {
+    return apiClient.delete(`/user/delete-current-user`)
+}

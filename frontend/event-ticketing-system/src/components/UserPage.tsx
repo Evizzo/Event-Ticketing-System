@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
-import { retrieveCurrentUser } from '../api/ApiService';
+import { retrieveCurrentUser, deleteCurrentUser } from '../api/ApiService';
+import { Button } from 'react-bootstrap';
+import { useAuth } from '../api/AuthContex';
 
 function UserPage() {
+  const authContext = useAuth();
+
   const [userData, setUserData] = useState({
     firstname: '',
     lastname: '',
@@ -25,6 +29,17 @@ function UserPage() {
       });
   }, []);
 
+  const handleDeleteAccount = () => {
+    deleteCurrentUser()
+      .then(() => {
+        authContext.logout();
+        alert('Account deleted successfully');
+      })
+      .catch((error) => {
+        alert(`Error deleting account: ${error}`);
+      });
+  };
+
   return (
     <Container className="mt-4">
       <h1>User Information</h1>
@@ -42,6 +57,9 @@ function UserPage() {
               <strong>Email:</strong> {userData.email}<br />
               <strong>Credits:</strong> {userData.credits}<br />
             </Card.Text>
+            <Button variant="danger" onClick={handleDeleteAccount}>
+              Delete your account
+            </Button>
           </Card.Body>
         </Card>
       )}
