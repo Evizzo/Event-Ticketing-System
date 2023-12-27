@@ -27,16 +27,16 @@ export const addNewEvent = (event: Event) => {
         return apiClient.post('/event', event)
     }
       
-export const purchaseEventTicket = (eventId: string, userId: string) => {
-    return apiClient.post(`/event/${eventId}/ticket?userId=${userId}`)
+export const purchaseEventTicket = (eventId: string) => {
+    return apiClient.post(`/event/${eventId}/ticket`)
     }
 
-export const retrieveAllUserTickets = (userId: string) => {
-    return apiClient.get(`/user/tickets/${userId}`)
+export const retrieveAllUserTickets = () => {
+    return apiClient.get(`/user/tickets`)
 }
 
-export const refoundTicket = (ticketId: string, userId: string) => {
-    return apiClient.delete(`/event/refund/${ticketId}?userId=${userId}&refundAmount=1`)
+export const refoundTicket = (ticketId: string) => {
+    return apiClient.delete(`/event/refund/${ticketId}?refundAmount=1`)
 }
 
 export const searchEventsByName = (eventName: string) => {
@@ -46,8 +46,8 @@ export const searchEventsByName = (eventName: string) => {
 export const retrieveEventById = (eventId: string) => {
     return apiClient.get(`/event/${eventId}`)
 }
-export const retrieveUserById = (userId: string) => {
-    return apiClient.get(`/user/${userId}`)
+export const retrieveCurrentUser = () => {
+    return apiClient.get(`/user/current`)
 }
 export const executeJwtAuthenticationService = (email: string, password: string) => {
     return apiClient.post(`/api/v1/auth/authenticate`, { email, password });
@@ -57,6 +57,6 @@ export const executeLogout = () => {
     return apiClient.post(`/api/v1/auth/logout`);
 }
 
-export const retrieveUserCredits = (userId: string) => {
-    return apiClient.get(`/user/credits?userId=${userId}`)
+export const retrieveUserCredits = () => {
+    return apiClient.get(`/user/credits`)
 }

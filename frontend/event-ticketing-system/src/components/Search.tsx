@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Form, FormControl, Button, Container, Row, Col } from 'react-bootstrap';
 import { searchEventsByName, purchaseEventTicket } from '../api/ApiService';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../api/AuthContex';
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -10,7 +9,6 @@ function Search() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [numberOfBought, setNumberOfBought] = useState(1);
-  const authContext = useAuth();
 
   const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -31,8 +29,8 @@ function Search() {
     setSearchTerm(event.target.value);
   };
 
-  const handlePurchase = (eventId: string, userId: string) => {
-    purchaseEventTicket(eventId, userId)
+  const handlePurchase = (eventId: string) => {
+    purchaseEventTicket(eventId)
       .then((response) => {
         const updatedNumberOfBought = numberOfBought + 1;
         setNumberOfBought(updatedNumberOfBought);
@@ -54,7 +52,8 @@ function Search() {
         setFoundEvents(updatedEvents);
       })
       .catch((error) => {
-        setMessage(`Error purchasing ticket: ${error}`);
+        setMessage(`Not enought credits.`)
+        console.error(`Error purchasing ticket: ${error}`)
         setTimeout(() => setMessage(''), 3000);
       });
   };
@@ -117,7 +116,7 @@ function Search() {
                 <div className="position-absolute bottom-0 end-0 p-2">
                   <button
                     className="btn btn-primary"
-                    onClick={() => handlePurchase(event.id, authContext.userId)}
+                    onClick={() => handlePurchase(event.id)}
                   >
                     Purchase: {event.capacity}
                   </button>

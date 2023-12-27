@@ -1,14 +1,14 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 import { apiClient } from "../api/ApiClient";
-import { executeJwtAuthenticationService, executeLogout } from "./ApiService";
+import { executeJwtAuthenticationService, executeLogout, executeRegistration } from "./ApiService";
 
 export const AuthContext = createContext({
     isAuthenticated: false,
     login: async (email: string, password: string) => false,
+    register: async (userData: any) => false,
     logout: () => {},
     email: '',
     token: '',
-    userId:'',
   })
   
 export const useAuth = () => useContext(AuthContext)
@@ -18,7 +18,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     const [isAuthenticated, setAuthenticated] = useState(false)
     const [email, setEmail] = useState("")
     const [token, setToken] = useState("")
-    const [userId, setUserId] = useState("")
 
     async function login(email: string, password: string) {
         try {
@@ -32,7 +31,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
                 setAuthenticated(true)
                 setEmail(email)
                 setToken(jwtToken)
-                setUserId(response.data.id);
 
                 apiClient.interceptors.request.use(
                     (config) => {
@@ -55,7 +53,39 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         }
     }
 
+    async function register(userData: any) {
+      try {
+          const response = await executeRegistration(userData)
+          console.log(response.status)
+          if(response.status === 200){
+              console.log("resp stat is 200")
+              const jwtToken = 'Bearer ' + response.data.token
+              console.log(jwtToken)
+              
+              setAuthenticated(true)
+              setEmail(userData.email)
+              setToken(jwtToken)
 
+              apiClient.interceptors.request.use(
+                  (config) => {
+                      console.log('intercepting and adding a token')
+                      config.headers.Authorization = jwtToken
+                      return config
+                  }
+              )
+
+              return true            
+          } else {
+              console.log("failed at authcontext 79")
+              logout()
+              return false
+          }    
+      } catch(error) {
+          console.error(error)
+          logout()
+          return false
+      }
+  }
     function logout() {
         async function performLogout() {
           try {
@@ -65,7 +95,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
               setAuthenticated(false);
               setToken('');
               setEmail('');
-              setUserId('');
 
               window.location.reload()
 
@@ -82,7 +111,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       }
 
     return (
-        <AuthContext.Provider value={ {isAuthenticated, login, logout, email, token, userId }  }>
+        <AuthContext.Provider value={ {isAuthenticated, login, register, logout, email, token }  }>
             {children}
         </AuthContext.Provider>
     )

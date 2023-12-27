@@ -38,7 +38,7 @@ function NavigationBar() {
                         <ul className="navbar-nav">
                         <li className="nav-item">
                             <span className="nav-link">
-                            <strong>User:</strong> <Link to={`/user/${authContext.userId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                            <strong>User:</strong> <Link to={`/current-user`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                         {authContext.email}
                                     </Link>
                             </span>

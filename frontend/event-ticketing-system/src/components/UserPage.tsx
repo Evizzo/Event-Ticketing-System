@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
-import { retrieveUserById } from '../api/ApiService';
-import { useAuth } from '../api/AuthContex';
+import { retrieveCurrentUser } from '../api/ApiService';
 
 function UserPage() {
   const [userData, setUserData] = useState({
@@ -13,12 +12,9 @@ function UserPage() {
     credits: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
-  const authContext = useAuth();
 
   useEffect(() => {
-    const userId = authContext.userId
-
-    retrieveUserById(userId)
+    retrieveCurrentUser()
       .then((response) => {
         setUserData(response.data);
         setIsLoading(false);

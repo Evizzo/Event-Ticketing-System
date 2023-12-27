@@ -47,7 +47,7 @@ function App(){
                 <EventPage />
               </AuthenticatedRoute>
             } />
-            <Route path="/user/:userId" element={
+            <Route path="/current-user" element={
               <AuthenticatedRoute>
                 <UserPage />
               </AuthenticatedRoute>

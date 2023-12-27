@@ -4,7 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Link, useNavigate } from 'react-router-dom';
-import { executeRegistration } from '../api/ApiService';
+import { useAuth } from '../api/AuthContex';
 
 function RegisterPage() {
     const [firstname, setFirstName] = useState('');
@@ -14,6 +14,7 @@ function RegisterPage() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const navigate = useNavigate();
     const [message,setMessage] = useState("")
+    const authContext = useAuth();
 
     const handleFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFirstName(e.target.value);
@@ -50,21 +51,20 @@ function RegisterPage() {
             password: password,
         };
     
-        try {
-            const response = await executeRegistration(userData);
-    
-            if (response.status != 200) {
-                setMessage(`Registration failed: ${response.statusText}`);
+        try {            
+            if (await authContext.register(userData)) {
+                console.log('Registration successful');
+                navigate("/")
+            } else {
+                alert(`Registration failed, password must have at least 7 characters and contain at least one number.`);
                 return;
             }
-            console.log('Registration successful');
-            navigate("/")
         } catch (error: any) {
             if (error.response && error.response.data) {
-                setMessage(error.response.data.message)
+                alert(error.response.data.message)
               }
             else
-                console.error('Error during registration:', error);
+                alert(`Error during registration: ${error}`);
         }
     };
 

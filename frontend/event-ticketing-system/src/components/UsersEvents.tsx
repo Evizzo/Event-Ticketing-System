@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react';
 import { retrieveAllUserTickets, refoundTicket } from '../api/ApiService.ts';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../api/AuthContex';
 
 function UsersEvents() {
-  const authContext = useAuth();
   const [events, setEvents] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [message,setMessage] = useState("")
   const [refundAttempts, setRefundAttempts] = useState(1)
 
   useEffect(() => {
-    retrieveAllUserTickets(authContext.userId)
+    retrieveAllUserTickets()
       .then((response) => {
         const sortedEvents = response.data.sort((a: { event: { name: string } }, b: { event: { name: string } }) =>
         a.event.name.localeCompare(b.event.name));
@@ -24,9 +22,9 @@ function UsersEvents() {
       });
     }, [refundAttempts]);
 
-  const handleRefound = (ticketId: string, userId: string) => {
+  const handleRefound = (ticketId: string) => {
     console.log(ticketId)
-    refoundTicket(ticketId, userId)
+    refoundTicket(ticketId)
       .then((response) => {
         setRefundAttempts(refundAttempts + 1)
         if (refundAttempts === 1){
@@ -85,7 +83,7 @@ function UsersEvents() {
                 <div className="position-absolute bottom-0 end-0 p-2">
                   <button
                     className="btn btn-primary"
-                    onClick={() => handleRefound(event.id, authContext.userId)}
+                    onClick={() => handleRefound(event.id)}
                   >
                     Refound: {event.amount}
                   </button>

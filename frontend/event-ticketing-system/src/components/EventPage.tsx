@@ -32,14 +32,15 @@ function EventPage() {
     }
   }, [eventId]);
 
-  const handlePurchase = (eventId: string, userId: string) => {
-    purchaseEventTicket(eventId, userId)
+  const handlePurchase = (eventId: string) => {
+    purchaseEventTicket(eventId)
       .then((response) => {
         setMessage(`Ticket purchased successfully: ${response.data}`);
         updateEventCapacity();
       })
       .catch((error) => {
-        setMessage(`Error purchasing ticket: ${error}`);
+        setMessage(`Not enought credits.`)
+        console.error(`Error purchasing ticket: ${error}`)
         setTimeout(() => setMessage(''), 3000);
       });
   };
@@ -85,7 +86,7 @@ function EventPage() {
               <button
                 className="btn btn-primary"
                 onClick={() =>
-                  handlePurchase(event.id, 'a1a2b6da-aa65-4f81-88e9-f2d36d7e0e6a')
+                  handlePurchase(event.id)
                 }
               >
                 Purchase: {event.capacity}
