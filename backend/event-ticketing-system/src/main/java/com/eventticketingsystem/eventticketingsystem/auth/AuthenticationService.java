@@ -50,7 +50,7 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user,jwtToken);
-        return AuthenticationResponse.builder().token(jwtToken).id(user.getId()).build();
+        return AuthenticationResponse.builder().token(jwtToken).build();
     }
     private void revokeAllUserTokens(User user){
         var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());

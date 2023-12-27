@@ -1,9 +1,11 @@
 package com.eventticketingsystem.eventticketingsystem.controllers;
 
+import com.eventticketingsystem.eventticketingsystem.config.JwtService;
 import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
 import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.exceptions.UserNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
@@ -20,9 +21,10 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
     public static final String USER_NOT_FOUND = "User not found with ID: ";
+    private final JwtService jwtService;
     @GetMapping("/credits")
-    public ResponseEntity<BigDecimal> retrieveUserCredits(@RequestParam UUID userId){
-        return ResponseEntity.ok(userService.retrieveUserCredits(userId));
+    public ResponseEntity<BigDecimal> retrieveUserCredits(HttpServletRequest request){
+        return ResponseEntity.ok(userService.retrieveUserCredits(jwtService.extractUserIdFromToken(request)));
     }
     @PostMapping
     public ResponseEntity<User> addNewUser(@Valid @RequestBody User user){
@@ -32,31 +34,31 @@ public class UserController {
     public ResponseEntity<List<User>> retriveAllUsers(){
         return ResponseEntity.ok(userService.findAllUsers());
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<User> retrieveUser(@PathVariable UUID id) {
-        return userService.findUserById(id)
+    @GetMapping("/current")
+    public ResponseEntity<User> retrieveCurrentUser(HttpServletRequest request) {
+        return userService.findUserById(jwtService.extractUserIdFromToken(request))
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + id));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + jwtService.extractUserIdFromToken(request)));
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete-current-user")
     @Transactional
-    public ResponseEntity<String> deleteUser(@PathVariable UUID id) {
-        return userService.findUserById(id)
+    public ResponseEntity<String> deleteUser(HttpServletRequest request) {
+        return userService.findUserById(jwtService.extractUserIdFromToken(request))
                 .map(user -> {
-                    userService.deleteUserById(id);
+                    userService.deleteUserById(jwtService.extractUserIdFromToken(request));
                     return ResponseEntity.ok("User deleted successfully.");
                 })
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + id));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + jwtService.extractUserIdFromToken(request)));
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable UUID id, @Valid @RequestBody User user) {
-        return userService.updateUser(id, user)
+    @PutMapping("/update-current-user")
+    public ResponseEntity<User> updateUser(HttpServletRequest request, @Valid @RequestBody User user) {
+        return userService.updateUser(jwtService.extractUserIdFromToken(request), user)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + id));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + jwtService.extractUserIdFromToken(request)));
     }
-    @GetMapping("/tickets/{userId}")
-    public ResponseEntity<List<Ticket>> retrieveAllUserTickets(@PathVariable UUID userId) {
-        return userService.retrieveAllUserTickets(userId)
+    @GetMapping("/tickets")
+    public ResponseEntity<List<Ticket>> retrieveAllUserTickets(HttpServletRequest request) {
+        return userService.retrieveAllUserTickets(jwtService.extractUserIdFromToken(request))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

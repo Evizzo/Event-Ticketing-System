@@ -1,8 +1,3 @@
-INSERT INTO users (id, firstname, lastname, email, password, credits, role)
-VALUES
-  (UNHEX('a4a8456f23ce4f029b6913bbdd74a045'), 'John', 'Doe', 'johndoe@example.com', 'hashed_password_1', 1000.00, 'USER'),
-  (UNHEX('a1a2b6daaa654f8188e9f2d36d7e0e6a'), 'Jane', 'Smith', 'janesmith@example.com', 'hashed_password_2', 5000.00, 'USER');
-
 INSERT INTO event (id, name, date, location, description, capacity, ticket_price)
 VALUES
   (UNHEX('8a9b6ac4e3e04824a5436c89a1e31c2e'), 'Concert 1', '2024-10-15', 'Venue A', 'Concert description 1', 500, 30.00),
