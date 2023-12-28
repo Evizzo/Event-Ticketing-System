@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, FormControl, Button, Container, Row, Col } from 'react-bootstrap';
 import { searchEventsByName, purchaseEventTicket } from '../api/ApiService';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../api/AuthContex';
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -9,6 +10,8 @@ function Search() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [numberOfBought, setNumberOfBought] = useState(1);
+  const authContext = useAuth();
+  const isAuthenticated = authContext.isAuthenticated;
 
   const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -78,12 +81,14 @@ function Search() {
           </Form>
         </Col>
       </Row>
+      <br></br>
+      {message && <div className="alert alert-warning">{message}</div>}
       <Row className="justify-content-center mt-4">
         {loading ? (
           <p>Loading events...</p>
         ) : (
           foundEvents.map((event) => (
-            <Col xs={12} md={4} key={event.id}>
+            <Col xs={12} md={4} key={event.id} className="mb-4">
               <div className="card mb-4 h-100 d-flex flex-column position-relative">
               <Link to={`/events/${event.id}`}>
                 <img
@@ -113,20 +118,26 @@ function Search() {
                     </p>
                   </div>
                 </div>
-                <div className="position-absolute bottom-0 end-0 p-2">
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => handlePurchase(event.id)}
-                  >
-                    Purchase: {event.capacity}
-                  </button>
-                </div>
+                {isAuthenticated &&
+                  <div className="position-absolute bottom-0 end-0 p-2">
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handlePurchase(event.id)}
+                    >
+                      Purchase: {event.capacity}
+                    </button>
+                  </div>
+                }
+                {!isAuthenticated &&
+                  <div className="position-absolute bottom-0 end-0 p-2">
+                    <strong>Tickets left: <i>{event.capacity}</i></strong>
+                  </div>
+                }
               </div>
             </Col>
           ))
         )}
       </Row>
-      {message && <div className="alert alert-warning">{message}</div>}
     </Container>
   );
 }

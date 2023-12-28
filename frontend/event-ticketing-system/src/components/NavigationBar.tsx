@@ -19,13 +19,13 @@ function NavigationBar() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
-                        {isAuthenticated && <Nav.Link as={Link} to="/">Home</Nav.Link>}
-                        {isAuthenticated && <Nav.Link as={Link} to="/events">Events</Nav.Link>}
-                        {isAuthenticated && <Nav.Link as={Link} to="/manage">Tickets</Nav.Link>}
+                        <Nav.Link as={Link} to="/">Home</Nav.Link>
+                        <Nav.Link as={Link} to="/events">Events</Nav.Link>
+                        {isAuthenticated && <Nav.Link as={Link} to="/tickets">Tickets</Nav.Link>}
                         {isAuthenticated && <Nav.Link as={Link} to="/publish">Publish</Nav.Link>}
-                        {isAuthenticated && <Nav.Link as={Link} to="/search">Search</Nav.Link>}
+                        <Nav.Link as={Link} to="/search">Search</Nav.Link>
                         
-                        {!isAuthenticated && <Nav.Link as={Link} to="/about">About</Nav.Link>}
+                        <Nav.Link as={Link} to="/about">About</Nav.Link>
                         {!isAuthenticated && <Nav.Link as={Link} to="/login" style={{color: "cyan"}}>Login</Nav.Link>}
                         {!isAuthenticated && <Nav.Link as={Link} to="/register" style={{color: "cyan"}}>Register</Nav.Link>}
                         {isAuthenticated && <Nav.Link as={Link} to="/login" onClick={logout} style={{color: "red"}}>Logout</Nav.Link>}

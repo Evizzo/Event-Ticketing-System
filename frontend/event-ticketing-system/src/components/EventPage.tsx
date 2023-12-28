@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { retrieveEventById, purchaseEventTicket } from '../api/ApiService.ts';
+import { useAuth } from '../api/AuthContex';
 
 interface Event {
   id: string;
@@ -17,6 +18,8 @@ function EventPage() {
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
+  const authContext = useAuth();
+  const isAuthenticated = authContext.isAuthenticated;
 
   useEffect(() => {
     if (eventId) {
@@ -82,16 +85,23 @@ function EventPage() {
             <p>
               <strong>Price:</strong> ${event.ticketPrice}
             </p>
-            <div className="text-center">
-              <button
-                className="btn btn-primary"
-                onClick={() =>
-                  handlePurchase(event.id)
-                }
-              >
-                Purchase: {event.capacity}
-              </button>
-            </div>
+            {isAuthenticated &&
+              <div className="text-center">
+                <button
+                  className="btn btn-primary"
+                  onClick={() =>
+                    handlePurchase(event.id)
+                  }
+                >
+                  Purchase: {event.capacity}
+                </button>
+              </div>
+            }
+            {!isAuthenticated &&
+              <div className="text-center">
+                <strong>Tickets left: <i>{event.capacity}</i></strong>
+              </div>
+            }
           </div>
         </div>
       ) : (

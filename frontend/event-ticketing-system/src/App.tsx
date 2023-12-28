@@ -2,7 +2,7 @@ import HomePage from "./components/HomePage";
 import AvaliableEvents from "./components/AvaliableEvents"
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom"
 import NavigationBar from "./components/NavigationBar";
-import UsersEvents from "./components/UsersEvents";
+import UsersTickets from "./components/UsersTickets";
 import About from "./components/About"
 import Publish from './components/Publish'
 import Search from "./components/Search";
@@ -33,28 +33,22 @@ function App(){
           <NavigationBar />
           <Routes>
             <Route path='/' element={
-              <AuthenticatedRoute>
-                <HomePage/>
-              </AuthenticatedRoute>
+              <HomePage/>
             }/>
             <Route path='/events' element={
-              <AuthenticatedRoute>
-                <AvaliableEvents/>
-              </AuthenticatedRoute>
+              <AvaliableEvents/>
             }/>
             <Route path="/events/:eventId" element={
-              <AuthenticatedRoute>
-                <EventPage />
-              </AuthenticatedRoute>
+              <EventPage />
             } />
             <Route path="/current-user" element={
               <AuthenticatedRoute>
                 <UserPage />
               </AuthenticatedRoute>
             } />
-            <Route path="/manage" element={
+            <Route path="/tickets" element={
               <AuthenticatedRoute>
-                <UsersEvents/>
+                <UsersTickets/>
               </AuthenticatedRoute>
             }/>
             <Route path="/publish" element={
@@ -63,9 +57,7 @@ function App(){
               </AuthenticatedRoute>
             }/>
             <Route path="/search" element={
-              <AuthenticatedRoute>
                 <Search/>
-              </AuthenticatedRoute>
             }/>
 
             <Route path="/about" element={<About/>}/>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { retrieveAllUserTickets, refoundTicket } from '../api/ApiService.ts';
 import { Link } from 'react-router-dom';
 
-function UsersEvents() {
+function UsersTickets() {
   const [events, setEvents] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [message,setMessage] = useState("")
@@ -97,4 +97,4 @@ function UsersEvents() {
   );
 }
 
-export default UsersEvents;
+export default UsersTickets;
