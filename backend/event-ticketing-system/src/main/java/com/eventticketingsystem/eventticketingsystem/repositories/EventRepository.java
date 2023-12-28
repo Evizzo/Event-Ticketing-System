@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface EventRepository extends JpaRepository<Event, UUID> {
     List<Event> findByNameContainingIgnoreCase(String name);
+    List<Event> findByPublisherId(UUID publisherId);
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -99,6 +100,13 @@ public class TicketService {
             }
             eventRepository.save(event);
             userRepository.save(user);
+        }
+    }
+    public void refundUsersForCanceledEvent(UUID eventId) {
+        List<Ticket> tickets = ticketRepository.findTicketsByEventId(eventId);
+        for (Ticket ticket : tickets) {
+            refundTicket(ticket.getId(), ticket.getUser().getId(), ticket.getAmount());
+            ticketRepository.delete(ticket);
         }
     }
 }

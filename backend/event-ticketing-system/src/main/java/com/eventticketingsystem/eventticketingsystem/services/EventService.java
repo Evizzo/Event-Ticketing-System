@@ -1,10 +1,15 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
+import com.eventticketingsystem.eventticketingsystem.auth.AuthenticationService;
+import com.eventticketingsystem.eventticketingsystem.config.JwtService;
 import com.eventticketingsystem.eventticketingsystem.entities.Event;
 import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
+import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.exceptions.EventNotFoundException;
+import com.eventticketingsystem.eventticketingsystem.exceptions.UserNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.repositories.EventRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.TicketRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +20,22 @@ import java.util.UUID;
 @AllArgsConstructor
 @Service
 public class EventService {
+    private final TicketService ticketService;
     private final EventRepository eventRepository;
     private final TicketRepository ticketRepository;
+    private final UserService userService;
+    private final JwtService jwtService;
     public List<Event> findEventsByName(String name) {
         return eventRepository.findByNameContainingIgnoreCase(name);
     }
-    public Event saveEvent(Event event){
+    public Event saveEvent(Event event, HttpServletRequest request){
+        UUID userId = jwtService.extractUserIdFromToken(request);
+        User user = userService.findUserById(userId).orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+        event.setPublisher(user);
         return eventRepository.save(event);
+    }
+    public List<Event> getEventsByPublisherId(HttpServletRequest request) {
+        return eventRepository.findByPublisherId(jwtService.extractUserIdFromToken(request));
     }
     public List<Event> findAllEvents(){
         return eventRepository.findAll();
@@ -29,10 +43,21 @@ public class EventService {
     public Optional<Event> findEventById(UUID id){
         return eventRepository.findById(id);
     }
-    public void deleteEventById(UUID id){
-        ticketRepository.deleteByEventId(id);
-        eventRepository.deleteById(id);
+    public void deleteEventById(UUID id, HttpServletRequest request) {
+        UUID publisherIdFromToken = jwtService.extractUserIdFromToken(request);
+        Optional<Event> optionalEvent = eventRepository.findById(id);
+
+        optionalEvent.ifPresent(event -> {
+            UUID eventPublisherId = event.getPublisher().getId();
+            if (eventPublisherId.equals(publisherIdFromToken)) {
+                ticketService.refundUsersForCanceledEvent(id);
+                eventRepository.deleteById(id);
+            } else {
+                throw new RuntimeException("You are not authorized to delete this event.");
+            }
+        });
     }
+
     public Optional<Event> updateEvent(UUID id, Event updatedEvent) {
         return eventRepository.findById(id)
                 .map(existingEvent -> {

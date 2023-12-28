@@ -20,8 +20,8 @@ import java.util.List;
 @RequestMapping("user")
 public class UserController {
     private final UserService userService;
-    public static final String USER_NOT_FOUND = "User not found with ID: ";
     private final JwtService jwtService;
+    public static final String USER_NOT_FOUND = "User not found with ID: ";
     @GetMapping("/credits")
     public ResponseEntity<BigDecimal> retrieveUserCredits(HttpServletRequest request){
         return ResponseEntity.ok(userService.retrieveUserCredits(jwtService.extractUserIdFromToken(request)));

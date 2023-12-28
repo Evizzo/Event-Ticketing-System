@@ -1,9 +1,7 @@
 package com.eventticketingsystem.eventticketingsystem.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 @Data
@@ -35,4 +34,8 @@ public class Event {
     private Integer capacity;
     @DecimalMin(value = "0", message = "Ticket price cannot be negative")
     private BigDecimal ticketPrice;
+    @ManyToOne
+    @JoinColumn(name = "publisher_id")
+    @JsonIgnore
+    private User publisher;
 }
