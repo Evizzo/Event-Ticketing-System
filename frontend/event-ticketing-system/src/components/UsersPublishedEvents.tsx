@@ -31,7 +31,7 @@ function UsersPublishedEvents() {
         setLoading(false);
       })
       .catch((error: Error) => {
-        console.error('Error fetching publisher events:', error);
+        console.error('Error fetching publishers events:', error);
         setLoading(false);
       });
   }, [numberOfDeleted]);
