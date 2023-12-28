@@ -29,7 +29,7 @@ export const addNewEvent = (event: Event) => {
       
 export const purchaseEventTicket = (eventId: string) => {
     return apiClient.post(`/event/${eventId}/ticket`)
-    }
+}
 
 export const retrieveAllUserTickets = () => {
     return apiClient.get(`/user/tickets`)
@@ -63,4 +63,12 @@ export const retrieveUserCredits = () => {
 
 export const deleteCurrentUser = () => {
     return apiClient.delete(`/user/delete-current-user`)
+}
+
+export const retrieveAllPublishersEvents = () => {
+    return apiClient.get(`/event/published`)
+}
+
+export const deleteEvent = (eventId: string) => {
+    return apiClient.delete(`/event/${eventId}`)
 }

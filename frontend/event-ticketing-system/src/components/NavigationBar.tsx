@@ -21,9 +21,10 @@ function NavigationBar() {
                     <Nav className="ml-auto">
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
                         <Nav.Link as={Link} to="/events">Events</Nav.Link>
+                        <Nav.Link as={Link} to="/search">Search</Nav.Link>
                         {isAuthenticated && <Nav.Link as={Link} to="/tickets">Tickets</Nav.Link>}
                         {isAuthenticated && <Nav.Link as={Link} to="/publish">Publish</Nav.Link>}
-                        <Nav.Link as={Link} to="/search">Search</Nav.Link>
+                        {isAuthenticated && <Nav.Link as={Link} to="/published">Published</Nav.Link>}
                         
                         <Nav.Link as={Link} to="/about">About</Nav.Link>
                         {!isAuthenticated && <Nav.Link as={Link} to="/login" style={{color: "cyan"}}>Login</Nav.Link>}

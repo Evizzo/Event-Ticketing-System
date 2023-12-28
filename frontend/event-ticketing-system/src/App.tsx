@@ -14,6 +14,7 @@ import { ReactNode } from "react";
 import { useAuth } from "./api/AuthContex";
 import NotFound from "./components/NotFound";
 import UserPage from "./components/UserPage";
+import UsersPublishedEvents from "./components/UsersPublishedEvents";
 
 function App(){
   function AuthenticatedRoute({ children }: { children: ReactNode }) {
@@ -44,6 +45,11 @@ function App(){
             <Route path="/current-user" element={
               <AuthenticatedRoute>
                 <UserPage />
+              </AuthenticatedRoute>
+            } />
+            <Route path="/published" element={
+              <AuthenticatedRoute>
+                <UsersPublishedEvents />
               </AuthenticatedRoute>
             } />
             <Route path="/tickets" element={
