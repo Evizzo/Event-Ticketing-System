@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Form, FormControl, Button, Container, Row, Col } from 'react-bootstrap';
 import { searchEventsByName, purchaseEventTicket } from '../api/ApiService';
-import { Link } from 'react-router-dom';
 import { useAuth } from '../api/AuthContex';
+import EventCard from './EventCard';
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -88,53 +88,12 @@ function Search() {
           <p>Loading events...</p>
         ) : (
           foundEvents.map((event) => (
-            <Col xs={12} md={4} key={event.id} className="mb-4">
-              <div className="card mb-4 h-100 d-flex flex-column position-relative">
-              <Link to={`/events/${event.id}`}>
-                <img
-                  src="public/ets.png"
-                  className="card-img-top"
-                  alt={event.name}
-                />
-              </Link>
-                <div className="position-absolute top-0 start-0 m-3">
-                  <p className="mb-0">
-                    <strong>Date:</strong> {event.date}
-                  </p>
-                </div>
-                <div className="position-absolute top-0 end-0 m-3">
-                  <p className="mb-0">
-                    <strong>Location:</strong> {event.location}
-                  </p>
-                </div>
-                <div className="card-body d-flex flex-column justify-content-between">
-                  <div>
-                    <h5 className="card-title">{event.name}</h5>
-                    <p className="card-text">{event.description}</p>
-                  </div>
-                  <div className="text-left">
-                    <p className="card-text">
-                      <strong>Price: ${event.ticketPrice}</strong>
-                    </p>
-                  </div>
-                </div>
-                {isAuthenticated &&
-                  <div className="position-absolute bottom-0 end-0 p-2">
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => handlePurchase(event.id)}
-                    >
-                      Purchase: {event.capacity}
-                    </button>
-                  </div>
-                }
-                {!isAuthenticated &&
-                  <div className="position-absolute bottom-0 end-0 p-2">
-                    <strong>Tickets left: <i>{event.capacity}</i></strong>
-                  </div>
-                }
-              </div>
-            </Col>
+            <EventCard
+              key={event.id}
+              event={event}
+              isAuthenticated={isAuthenticated}
+              handlePurchase={handlePurchase}
+            />
           ))
         )}
       </Row>

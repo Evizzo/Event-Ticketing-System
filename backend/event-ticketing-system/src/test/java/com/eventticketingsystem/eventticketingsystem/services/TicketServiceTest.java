@@ -41,7 +41,6 @@ public class TicketServiceTest {
 
     @Test
     public void testPurchaseTicket_Success() {
-        // Mocking necessary dependencies
         Event event = new Event();
         event.setTicketPrice(BigDecimal.valueOf(50.00));
         event.setCapacity(100);
@@ -53,10 +52,8 @@ public class TicketServiceTest {
 
         when(ticketRepository.save(any())).thenReturn(new Ticket());
 
-        // Test purchaseTicket method
         Optional<Ticket> ticketOptional = ticketService.purchaseTicket(UUID.fromString("74b3a465-c5a7-4850-a590-80db8db84b0f"), UUID.fromString("c65d8e0d-6bc9-4a1b-a981-0ef9c74d2da4"));
 
-        // Verify successful purchase
         assertTrue(ticketOptional.isPresent());
         String responseMessage = "Ticket purchased successfully. Ticket ID: " + ticketOptional.get().getId();
         ResponseEntity<String> response = ResponseEntity.ok(responseMessage);
@@ -66,16 +63,12 @@ public class TicketServiceTest {
 
     @Test
     public void testPurchaseTicket_InvalidEvent() {
-        // Mocking the repository to return null (invalid event)
         when(eventRepository.findById(UUID.fromString("74b3a465-c5a7-4850-a590-80db8db84b0f"))).thenReturn(Optional.empty());
 
-        // Test purchaseTicket method with an invalid event
         Optional<Ticket> ticketOptional = ticketService.purchaseTicket(UUID.fromString("74b3a465-c5a7-4850-a590-80db8db84b0f"), UUID.fromString("c65d8e0d-6bc9-4a1b-a981-0ef9c74d2da4"));
 
-        // Verify that an empty Optional is returned
         assertTrue(ticketOptional.isEmpty());
 
-        // Construct a bad request response
         String errorMessage = "Invalid event.";
         ResponseEntity<String> response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());

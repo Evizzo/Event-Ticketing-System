@@ -80,6 +80,8 @@ function UsersTickets() {
                     </p>
                   </div>
                 </div>
+
+                {!event.event.done && 
                 <div className="position-absolute bottom-0 end-0 p-2">
                   <button
                     className="btn btn-primary"
@@ -87,7 +89,18 @@ function UsersTickets() {
                   >
                     Refound: {event.amount}
                   </button>
-                </div>
+                </div>}
+                
+                {event.event.done && 
+                <div className="position-absolute bottom-0 end-0 p-2">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => {/* Handle "Review" functionality */}}
+                    >
+                    Review
+                  </button>
+                </div>}
+              
               </div>
             </div>
           ))}

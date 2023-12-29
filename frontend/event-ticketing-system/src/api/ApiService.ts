@@ -72,3 +72,7 @@ export const retrieveAllPublishersEvents = () => {
 export const deleteEvent = (eventId: string) => {
     return apiClient.delete(`/event/${eventId}`)
 }
+
+export const eventIsDone = (eventId: string) => {
+    return apiClient.put(`/event/done/${eventId}`)
+}

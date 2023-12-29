@@ -38,4 +38,5 @@ public class Event {
     @JoinColumn(name = "publisher_id")
     @JsonIgnore
     private User publisher;
+    private boolean isDone;
 }

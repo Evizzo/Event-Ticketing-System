@@ -27,6 +27,9 @@ public class TicketService {
         return eventRepository.findById(eventId)
                 .flatMap(event -> userRepository.findById(userId)
                         .map(user -> {
+                            if(event.isDone()){
+                                return Optional.<Ticket>empty();
+                            }
                             Optional<Ticket> existingTicket = user.getTickets().stream()
                                     .filter(ticket -> ticket.getEvent().getId().equals(eventId))
                                     .findFirst();

@@ -32,8 +32,35 @@ public class EventService {
         UUID userId = jwtService.extractUserIdFromToken(request);
         User user = userService.findUserById(userId).orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
         event.setPublisher(user);
+        event.setDone(false);
         return eventRepository.save(event);
     }
+    public Event eventIsDone(UUID eventId, HttpServletRequest request) {
+        UUID userIdFromToken = jwtService.extractUserIdFromToken(request);
+
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        Event event = optionalEvent.orElseThrow(() -> new EventNotFoundException("Event not found with ID: " + eventId));
+
+        User publisher = event.getPublisher();
+        if (publisher == null) {
+            throw new RuntimeException("Publisher information is missing for this event.");
+        }
+
+        UUID publisherId = publisher.getId();
+        if (userIdFromToken.equals(publisherId)) {
+            if(!event.isDone()){
+                event.setDone(true);
+                return eventRepository.save(event);
+            }
+            else{
+                event.setDone(false);
+                return eventRepository.save(event);
+            }
+        } else {
+            throw new RuntimeException("You are not authorized to mark this event as done.");
+        }
+    }
+
     public List<Event> getEventsByPublisherId(HttpServletRequest request) {
         return eventRepository.findByPublisherId(jwtService.extractUserIdFromToken(request));
     }

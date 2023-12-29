@@ -59,4 +59,8 @@ public class EventController {
                 ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok(eventService.findEventsByName(name));
     }
+    @PutMapping("/done/{id}")
+    public ResponseEntity<Event> eventIsDone(@PathVariable UUID id, HttpServletRequest request){
+        return ResponseEntity.ok(eventService.eventIsDone(id,request));
+    }
 }

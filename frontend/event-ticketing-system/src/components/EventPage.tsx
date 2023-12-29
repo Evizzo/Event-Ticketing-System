@@ -11,6 +11,7 @@ interface Event {
   description: string;
   ticketPrice: number;
   capacity: number;
+  done: boolean;
 }
 
 function EventPage() {
@@ -38,7 +39,7 @@ function EventPage() {
   const handlePurchase = (eventId: string) => {
     purchaseEventTicket(eventId)
       .then((response) => {
-        setMessage(`Ticket purchased successfully: ${response.data}`);
+        setMessage(`${response.data}`);
         updateEventCapacity();
       })
       .catch((error) => {
@@ -85,6 +86,11 @@ function EventPage() {
             <p>
               <strong>Price:</strong> ${event.ticketPrice}
             </p>
+            {event.done ? (
+            <div className="text-center">
+              <strong style={{ color: 'red' }}>Ended</strong>
+            </div>
+            ) : (<>
             {isAuthenticated &&
               <div className="text-center">
                 <button
@@ -102,6 +108,7 @@ function EventPage() {
                 <strong>Tickets left: <i>{event.capacity}</i></strong>
               </div>
             }
+            </>)}
           </div>
         </div>
       ) : (

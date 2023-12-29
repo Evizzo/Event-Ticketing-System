@@ -34,26 +34,22 @@ public class UserServiceTest {
     }
     @Test
     public void testFindUserById() {
-        // Mocking the repository to return a user with ID 1
         User user = new User();
         user.setId(UUID.fromString("a4a8456f-23ce-4f02-9b69-13bbdd74a045"));
         when(usersRepository.findById(UUID.fromString("a4a8456f-23ce-4f02-9b69-13bbdd74a045"))).thenReturn(Optional.of(user));
 
         Optional<User> foundUser = userService.findUserById(UUID.fromString("a4a8456f-23ce-4f02-9b69-13bbdd74a045"));
 
-        // Verify that the user is found and returned correctly
         assertEquals(user, foundUser.orElse(null));
     }
     @Test
     public void testDeleteUserById() {
-        // Mocking the repository to return a user with ID 1
         User user = new User();
         user.setId(UUID.fromString("a4a8456f-23ce-4f02-9b69-13bbdd74a045"));
         when(usersRepository.findById(UUID.fromString("a4a8456f-23ce-4f02-9b69-13bbdd74a045"))).thenReturn(Optional.of(user));
 
         userService.deleteUserById(UUID.fromString("a4a8456f-23ce-4f02-9b69-13bbdd74a045"));
 
-        // Verify that deleteUserById deletes the user and associated tickets
         verify(usersRepository, times(1)).deleteById(UUID.fromString("a4a8456f-23ce-4f02-9b69-13bbdd74a045"));
         verify(ticketRepository, times(1)).deleteByUserId(UUID.fromString("a4a8456f-23ce-4f02-9b69-13bbdd74a045"));
     }
@@ -79,7 +75,6 @@ public class UserServiceTest {
     }
     @Test
     public void testFindAllUsers() {
-        // Mocking the repository to return a list of users
         List<User> userList = new ArrayList<>();
         userList.add(new User());
         userList.add(new User());
@@ -87,7 +82,6 @@ public class UserServiceTest {
 
         List<User> foundUsers = userService.findAllUsers();
 
-        // Verify that the list of users is returned correctly
         assertEquals(userList, foundUsers);
     }
 }
