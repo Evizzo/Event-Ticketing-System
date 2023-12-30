@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { retrieveAllPublishersEvents, deleteEvent, eventIsDone } from '../api/ApiService.ts';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../api/AuthContex';
 
 interface Event {
@@ -21,6 +21,7 @@ function UsersPublishedEvents() {
   const authContext = useAuth();
   const isAuthenticated: boolean = authContext.isAuthenticated;
   const [numberOfActions, setNumberOfActions] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     retrieveAllPublishersEvents()
@@ -62,6 +63,9 @@ function UsersPublishedEvents() {
         setTimeout(() => setMessage(''), 3000);
       });
   };
+  const handleEdit = (eventId: string) => {
+    navigate(`/event/${eventId}`);
+  };
   return (
     <div className="container mt-4">
       {loading ? (
@@ -101,7 +105,7 @@ function UsersPublishedEvents() {
                     <div className="d-flex justify-content-between mt-3">
                       <button
                         className="btn btn-primary"
-                        onClick={() => {/* Handle "Edit" functionality */}}
+                        onClick={() => handleEdit(event.id)} 
                       >
                         Edit
                       </button>

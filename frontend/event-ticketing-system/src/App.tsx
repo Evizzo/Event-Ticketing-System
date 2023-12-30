@@ -15,6 +15,7 @@ import { useAuth } from "./api/AuthContex";
 import NotFound from "./components/NotFound";
 import UserPage from "./components/UserPage";
 import UsersPublishedEvents from "./components/UsersPublishedEvents";
+import EditPublishedEvent from "./components/EditPublishedEvent";
 
 function App(){
   function AuthenticatedRoute({ children }: { children: ReactNode }) {
@@ -45,6 +46,11 @@ function App(){
             <Route path="/current-user" element={
               <AuthenticatedRoute>
                 <UserPage />
+              </AuthenticatedRoute>
+            } />
+            <Route path="/event/:eventId" element={
+              <AuthenticatedRoute>
+                <EditPublishedEvent />
               </AuthenticatedRoute>
             } />
             <Route path="/published" element={

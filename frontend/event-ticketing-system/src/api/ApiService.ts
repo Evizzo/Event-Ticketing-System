@@ -76,3 +76,7 @@ export const deleteEvent = (eventId: string) => {
 export const eventIsDone = (eventId: string) => {
     return apiClient.put(`/event/done/${eventId}`)
 }
+
+export const editEvent = (eventId: string, updatedEvent: Event) => {
+    return apiClient.put(`/event/${eventId}`, updatedEvent)
+}
