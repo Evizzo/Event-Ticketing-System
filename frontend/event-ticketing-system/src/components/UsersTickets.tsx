@@ -76,7 +76,7 @@ function UsersTickets() {
                   </div>
                   <div className="text-left">
                     <p className="card-text">
-                      <strong>Paid: ${event.event.ticketPrice}</strong>
+                      <strong>Paid: ${event.paidAmount}</strong>
                     </p>
                   </div>
                 </div>
