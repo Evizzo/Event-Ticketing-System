@@ -30,13 +30,26 @@ public class TicketService {
                             if(event.isDone()){
                                 return Optional.<Ticket>empty();
                             }
+
                             Optional<Ticket> existingTicket = user.getTickets().stream()
                                     .filter(ticket -> ticket.getEvent().getId().equals(eventId))
                                     .findFirst();
 
                             if (existingTicket.isPresent()) {
                                 Ticket ticket = existingTicket.get();
-                                ticket.setAmount(ticket.getAmount() + 1);
+                                if (ticket.getPaidAmount().equals(event.getTicketPrice())){
+                                    ticket.setAmount(ticket.getAmount() + 1);
+                                }
+                                else {
+                                    Ticket newTicket = new Ticket();
+                                    newTicket.setEvent(event);
+                                    newTicket.setUser(user);
+                                    newTicket.setPurchaseDate(LocalDateTime.now());
+                                    newTicket.setStatus(TicketStatus.PURCHASED);
+                                    newTicket.setAmount(1);
+                                    newTicket.setPaidAmount(event.getTicketPrice());
+                                    user.getTickets().add(newTicket);
+                                }
                             } else {
                                 Ticket ticket = new Ticket();
                                 ticket.setEvent(event);
@@ -44,6 +57,7 @@ public class TicketService {
                                 ticket.setPurchaseDate(LocalDateTime.now());
                                 ticket.setStatus(TicketStatus.PURCHASED);
                                 ticket.setAmount(1);
+                                ticket.setPaidAmount(event.getTicketPrice());
                                 user.getTickets().add(ticket);
                             }
 
@@ -88,7 +102,7 @@ public class TicketService {
                 throw new RuntimeException("Invalid amout to refound");
             }
 
-            BigDecimal refundPrice = event.getTicketPrice().multiply(BigDecimal.valueOf(refundAmount));
+            BigDecimal refundPrice = ticket.getPaidAmount().multiply(BigDecimal.valueOf(refundAmount));
 
             user.setCredits(user.getCredits().add(refundPrice));
             ticket.setAmount(currentAmount - refundAmount);

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -29,4 +30,5 @@ public class Ticket {
     private LocalDateTime purchaseDate;
     private TicketStatus status;
     private Integer amount;
+    private BigDecimal paidAmount;
 }

@@ -8,7 +8,7 @@ VALUES
   (UNHEX('8a9b6ac4e3e04824a5436c89a1e31c2e'), 'Concert 1', '2027-10-15', 'Venue A', 'Concert description 1', 500, 30.00, UNHEX('3f883b26f61b41b0a83f390bfb4b311a'), false),
   (UNHEX('6f885b26f61b41b0a83f390bfb4be11a'), 'Conference', '2027-11-02', 'Venue B', 'Conference description', 200, 50.00, UNHEX('3f883b26f61b41b0a83f390bfb4b311a'), false);
 
-INSERT INTO ticket (id, event_id, user_id, purchase_date, status, amount)
+INSERT INTO ticket (id, event_id, user_id, purchase_date, status, amount, paid_amount)
 VALUES
-    (UNHEX('8a9b6ac4e3e04824a5476c89a1e31c2e'), UNHEX('8a9b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('2f883b26f61b41b0a83f390bfb4b311a'), '2025-11-02', 1, 2),
-    (UNHEX('8a9b6ac4e3e04824a5469c89a1e31c2e'), UNHEX('6f885b26f61b41b0a83f390bfb4be11a'), UNHEX('2f883b26f61b41b0a83f390bfb4b311a'), '2025-10-01', 1, 2);
+    (UNHEX('8a9b6ac4e3e04824a5476c89a1e31c2e'), UNHEX('8a9b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('2f883b26f61b41b0a83f390bfb4b311a'), '2025-11-02', 1, 2, 30.00),
+    (UNHEX('8a9b6ac4e3e04824a5469c89a1e31c2e'), UNHEX('6f885b26f61b41b0a83f390bfb4be11a'), UNHEX('2f883b26f61b41b0a83f390bfb4b311a'), '2025-10-01', 1, 2, 50.00);
