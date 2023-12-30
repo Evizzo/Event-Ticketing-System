@@ -48,8 +48,8 @@ public class EventController {
                 .orElseThrow(() -> new EventNotFoundException(EVENT_NOT_FOUND + id));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable UUID id, @Valid @RequestBody Event event) {
-        return eventService.updateEvent(id, event)
+    public ResponseEntity<Event> updateEvent(@PathVariable UUID id, @Valid @RequestBody Event event, HttpServletRequest request) {
+        return eventService.updateEvent(id, event, request)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new EventNotFoundException(EVENT_NOT_FOUND + id));
     }

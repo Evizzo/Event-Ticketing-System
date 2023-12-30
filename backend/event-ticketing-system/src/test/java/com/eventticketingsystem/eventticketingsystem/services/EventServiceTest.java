@@ -204,8 +204,11 @@ class EventServiceTest {
     }
 
     @Test
-    void updateEvent_WhenValidIdAndEventExists_UpdatesEvent() {
+    void updateEvent_WhenValidIdAndEventExistsAndUserIsPublisher_UpdatesEvent() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
         UUID eventId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+
         Event existingEvent = new Event();
         existingEvent.setId(eventId);
         existingEvent.setName("Old Event Name");
@@ -214,11 +217,16 @@ class EventServiceTest {
         updatedEvent.setId(eventId);
         updatedEvent.setName("Updated Event Name");
 
+        User publisher = new User();
+        publisher.setId(userId);
+        existingEvent.setPublisher(publisher);
+
+        when(jwtService.extractUserIdFromToken(request)).thenReturn(userId);
         when(eventRepository.findById(eventId)).thenReturn(Optional.of(existingEvent));
         when(eventRepository.save(existingEvent)).thenReturn(updatedEvent);
         when(ticketRepository.findTicketsByEventId(eventId)).thenReturn(Collections.emptyList());
 
-        Optional<Event> result = eventService.updateEvent(eventId, updatedEvent);
+        Optional<Event> result = eventService.updateEvent(eventId, updatedEvent, request);
 
         assertTrue(result.isPresent());
         assertEquals("Updated Event Name", result.get().getName());
@@ -227,13 +235,40 @@ class EventServiceTest {
     }
 
     @Test
+    void updateEvent_WhenValidIdAndEventExistsAndUserIsNotPublisher_ThrowsRuntimeException() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        UUID eventId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
+
+        Event existingEvent = new Event();
+        existingEvent.setId(eventId);
+        existingEvent.setName("Old Event Name");
+
+        Event updatedEvent = new Event();
+        updatedEvent.setId(eventId);
+        updatedEvent.setName("Updated Event Name");
+
+        User publisher = new User();
+        publisher.setId(UUID.randomUUID());
+        existingEvent.setPublisher(publisher);
+
+        when(jwtService.extractUserIdFromToken(request)).thenReturn(userId);
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(existingEvent));
+
+        assertThrows(RuntimeException.class, () -> eventService.updateEvent(eventId, updatedEvent, request));
+        verify(eventRepository, never()).save(any(Event.class));
+        verify(ticketRepository, never()).findTicketsByEventId(eventId);
+    }
+
+    @Test
     void updateEvent_WhenInvalidEventId_ThrowsEventNotFoundException() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
         UUID invalidId = UUID.randomUUID();
         Event updatedEvent = new Event();
 
         when(eventRepository.findById(invalidId)).thenReturn(Optional.empty());
 
-        assertThrows(EventNotFoundException.class, () -> eventService.updateEvent(invalidId, updatedEvent));
+        assertThrows(EventNotFoundException.class, () -> eventService.updateEvent(invalidId, updatedEvent, request));
         verify(eventRepository, never()).save(any(Event.class));
     }
 

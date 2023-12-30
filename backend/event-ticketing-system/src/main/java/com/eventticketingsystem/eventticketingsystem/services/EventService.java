@@ -85,26 +85,39 @@ public class EventService {
         });
     }
 
-    public Optional<Event> updateEvent(UUID id, Event updatedEvent) {
+    public Optional<Event> updateEvent(UUID id, Event updatedEvent, HttpServletRequest request) {
+        UUID userIdFromToken = jwtService.extractUserIdFromToken(request);
+
         return eventRepository.findById(id)
                 .map(existingEvent -> {
-                    Optional.ofNullable(updatedEvent.getName()).ifPresent(existingEvent::setName);
-                    Optional.ofNullable(updatedEvent.getDate()).ifPresent(existingEvent::setDate);
-                    Optional.ofNullable(updatedEvent.getLocation()).ifPresent(existingEvent::setLocation);
-                    Optional.ofNullable(updatedEvent.getDescription()).ifPresent(existingEvent::setDescription);
-                    Optional.ofNullable(updatedEvent.getCapacity()).ifPresent(existingEvent::setCapacity);
-                    Optional.ofNullable(updatedEvent.getTicketPrice()).ifPresent(existingEvent::setTicketPrice);
-
-                    Event updated = eventRepository.save(existingEvent);
-
-                    List<Ticket> eventTickets = ticketRepository.findTicketsByEventId(updatedEvent.getId());
-                    for (Ticket ticket : eventTickets) {
-                        ticket.setEvent(updated);
-                        ticketRepository.save(ticket);
+                    User publisher = existingEvent.getPublisher();
+                    if (publisher == null) {
+                        throw new RuntimeException("Publisher information is missing for this event.");
                     }
 
-                    return Optional.of(updated);
+                    UUID publisherId = publisher.getId();
+                    if (userIdFromToken.equals(publisherId)) {
+                        Optional.ofNullable(updatedEvent.getName()).ifPresent(existingEvent::setName);
+                        Optional.ofNullable(updatedEvent.getDate()).ifPresent(existingEvent::setDate);
+                        Optional.ofNullable(updatedEvent.getLocation()).ifPresent(existingEvent::setLocation);
+                        Optional.ofNullable(updatedEvent.getDescription()).ifPresent(existingEvent::setDescription);
+                        Optional.ofNullable(updatedEvent.getCapacity()).ifPresent(existingEvent::setCapacity);
+                        Optional.ofNullable(updatedEvent.getTicketPrice()).ifPresent(existingEvent::setTicketPrice);
+
+                        Event updated = eventRepository.save(existingEvent);
+
+                        List<Ticket> eventTickets = ticketRepository.findTicketsByEventId(updatedEvent.getId());
+                        for (Ticket ticket : eventTickets) {
+                            ticket.setEvent(updated);
+                            ticketRepository.save(ticket);
+                        }
+
+                        return Optional.of(updated);
+                    } else {
+                        throw new RuntimeException("You are not authorized to update this event.");
+                    }
                 })
                 .orElseThrow(() -> new EventNotFoundException("Event not found with ID: " + id));
     }
+
 }
