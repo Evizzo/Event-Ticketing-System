@@ -6,7 +6,8 @@ VALUES
 INSERT INTO event (id, name, date, location, description, capacity, ticket_price, publisher_id, is_done)
 VALUES
   (UNHEX('8a9b6ac4e3e04824a5436c89a1e31c2e'), 'Concert 1', '2027-10-15', 'Venue A', 'Concert description 1', 500, 30.00, UNHEX('3f883b26f61b41b0a83f390bfb4b311a'), false),
-  (UNHEX('6f885b26f61b41b0a83f390bfb4be11a'), 'Conference', '2027-11-02', 'Venue B', 'Conference description', 200, 50.00, UNHEX('3f883b26f61b41b0a83f390bfb4b311a'), false);
+  (UNHEX('6f885b26f61b41b0a83f390bfb4be11a'), 'Conference', '2027-11-02', 'Venue B', 'Conference description', 200, 50.00, UNHEX('3f883b26f61b41b0a83f390bfb4b311a'), false),
+  (UNHEX('6f825b26f61b41b0a83f390bfb4be11a'), 'Event', '2027-11-07', 'Venue C', 'Event description', 300, 70.00, UNHEX('3f883b26f61b41b0a83f390bfb4b311a'), false);
 
 INSERT INTO ticket (id, event_id, user_id, purchase_date, status, amount, paid_amount)
 VALUES

@@ -12,10 +12,12 @@ import com.eventticketingsystem.eventticketingsystem.repositories.TicketReposito
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -127,5 +129,7 @@ public class EventService {
                 })
                 .orElseThrow(() -> new EventNotFoundException("Event not found with ID: " + id));
     }
-
+    public List<Event> findTop3MostPopularEvents() {
+        return eventRepository.findMostPopularEventsSortedByName(PageRequest.of(0, 3));
+    }
 }

@@ -81,3 +81,7 @@ export const eventIsDone = (eventId: string) => {
 export const editEvent = (eventId: string, updatedEvent: Event) => {
     return apiClient.put(`/event/${eventId}`, updatedEvent)
 }
+
+export const retrieveTop3PopularEvents = () => {
+    return apiClient.get("/event/popular")
+}

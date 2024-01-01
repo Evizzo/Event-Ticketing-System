@@ -63,4 +63,8 @@ public class EventController {
     public ResponseEntity<Event> eventIsDone(@PathVariable UUID id, HttpServletRequest request){
         return ResponseEntity.ok(eventService.eventIsDone(id,request));
     }
+    @GetMapping("/popular")
+    public ResponseEntity<List<Event>> retrieveTop3PopularEvents() {
+        return ResponseEntity.ok(eventService.findTop3MostPopularEvents());
+    }
 }
