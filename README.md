@@ -29,6 +29,7 @@ The frontend is built with React, utilizing TypeScript, Bootstrap, HTML, and CSS
 The project includes comprehensive test coverage to ensure the reliability and stability of the application.
 
 **Technologies Used**
+
 Java, Spring Boot, Spring Security, Jpa/Hibernate, React, TypeScript, Bootstrap, HTML, CSS, Mockito...
 
 This project aims to provide a scalable and secure platform for managing events, tickets, and user interactions within a ticketing system.
