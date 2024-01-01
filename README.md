@@ -1,17 +1,27 @@
 # **Event Ticketing System**
+This Event Ticketing System project is a full-stack application built to manage events, tickets, and users in a simplified ticketing environment.
 
-The Event Ticketing System is a web application designed for managing and attending events. 
+**Backend Features**
+**Controllers:** The backend features multiple controllers handling various functionalities.
 
-It is built using Spring Boot for the backend, backed by a database, and features a React frontend. 
+EventController: Manages events, allowing creation, retrieval, deletion, and updating of events. It includes features like retrieving published events, searching by name, marking an event as done, and accessing popular events.
+TicketController: Facilitates ticket purchasing and refunds for specific events.
+UserController: Manages user-related operations such as user creation, retrieval, updating, and deletion. It also handles user credits, current user details, and user ticket retrieval.
 
-The key functions of this application include:
+**Services:** The backend employs services to handle business logic and interact with the repositories.
 
-**Event Management**: Event organizers can add, update, and remove events, providing detailed information like event names, dates, locations, descriptions, and ticket prices. 
+EventService: Provides methods for event-related functionalities like saving events, finding events by different criteria, and handling event deletions and updates.
+TicketService: Manages ticket-related operations such as purchasing and refunding tickets.
+UserService: Handles user-related functionalities like user creation, retrieval, updating, and deletion, along with managing user credits and ticket retrieval.
+Security Configuration: Implements security measures using JWT (JSON Web Tokens) authentication. It secures endpoints and manages user authentication and authorization.
 
-**Ticket Purchase and Refund**: Attendees can browse and purchase tickets for events, and also request refunds if needed. 
+**Frontend Features**
+The frontend is built with React, utilizing TypeScript, Bootstrap, HTML, and CSS to create a user-friendly interface.
 
-**User-Friendly Interface**: The application offers a user-friendly React frontend. 
+**Testing**
+The project includes comprehensive test coverage to ensure the reliability and stability of the application.
 
-The Event Ticketing System represents the integration of Spring Boot, React and Postgres. 
+**Technologies Used**
+Java, Spring Boot, Spring Security, Jpa/Hibernate, React, TypeScript, Bootstrap, HTML, CSS, Mockito...
 
-Tests are avaliable.
+This project aims to provide a scalable and secure platform for managing events, tickets, and user interactions within a ticketing system.
