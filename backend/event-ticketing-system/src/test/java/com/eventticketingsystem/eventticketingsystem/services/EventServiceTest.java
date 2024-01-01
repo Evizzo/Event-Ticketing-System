@@ -117,7 +117,7 @@ class EventServiceTest {
         when(jwtService.extractUserIdFromToken(request)).thenReturn(userId);
         when(eventRepository.findByPublisherId(userId)).thenReturn(mockEvents);
 
-        List<Event> events = eventService.getEventsByPublisherId(request);
+        List<Event> events = eventService.getEventsByPublisherId("name",request);
 
         assertEquals(2, events.size());
         verify(eventRepository, times(1)).findByPublisherId(userId);
@@ -129,7 +129,7 @@ class EventServiceTest {
 
         when(eventRepository.findAll()).thenReturn(mockEvents);
 
-        List<Event> events = eventService.findAllEvents();
+        List<Event> events = eventService.findAllEvents("name");
 
         assertEquals(2, events.size());
         verify(eventRepository, times(1)).findAll();

@@ -13,6 +13,7 @@ interface Event {
   capacity: number;
   done: boolean;
 }
+type SortCriteria = 'name' | 'price' | 'date';
 
 function UsersPublishedEvents() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -22,23 +23,23 @@ function UsersPublishedEvents() {
   const isAuthenticated: boolean = authContext.isAuthenticated;
   const [numberOfActions, setNumberOfActions] = useState(1);
   const navigate = useNavigate();
+  const [sortCriteria, setSortCriteria] = useState<SortCriteria>('name');
 
   useEffect(() => {
-    retrieveAllPublishersEvents()
+    retrieveAllPublishersEvents(sortCriteria)
       .then((response: { data: Event[] }) => {
         console.log(response);
-        const sortedEvents = response.data.sort((a, b) =>
-          a.name.localeCompare(b.name)
-        );
-        setEvents(sortedEvents);
+        setEvents([...response.data]);
         setLoading(false);
       })
       .catch((error: Error) => {
         console.error('Error fetching publishers events:', error);
         setLoading(false);
       });
-  }, [numberOfActions]);
-
+  }, [numberOfActions, sortCriteria]);
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortCriteria(event.target.value as SortCriteria);
+  };
   const handleDelete = (eventId: string) => {
     deleteEvent(eventId)
       .then((response: { data: string }) => {
@@ -72,6 +73,21 @@ function UsersPublishedEvents() {
         <p>Loading events...</p>
       ) : (
         <div className="row">
+          <div className="row mb-3">
+            <label htmlFor="sortCriteria" className="form-label me-2">
+              Sort By:
+            </label>
+            <select
+              id="sortCriteria"
+              className="form-select"
+              value={sortCriteria}
+              onChange={handleSortChange}
+            >
+              <option value="name">Name</option>
+              <option value="price">Price</option>
+              <option value="date">Date</option>
+            </select>
+          </div>
           {message && <div className="alert alert-warning">{message}</div>}
           {events.map((event) => (
             <div className="col-md-4 mb-4" key={event.id}>

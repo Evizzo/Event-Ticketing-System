@@ -54,7 +54,11 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
     }
 
-    public Optional<List<Ticket>> retrieveAllUserTickets(UUID userId) {
-        return Optional.of(ticketRepository.findTicketsPurchasedByUserId(userId));
+    public Optional<List<Ticket>> retrieveAllUserTickets(String sortCriteria, UUID userId) {
+        return switch (sortCriteria) {
+            case "date" -> Optional.of(ticketRepository.findAllByUserIdOrderByEvent_Date(userId));
+            case "price" -> Optional.of(ticketRepository.findAllByUserIdOrderByPaidAmount(userId));
+            default -> Optional.of(ticketRepository.findAllByUserIdOrderByEvent_Name(userId));
+        };
     }
 }

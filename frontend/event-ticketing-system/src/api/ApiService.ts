@@ -20,19 +20,20 @@ export const executeRegistration = (userData: RegisterRequest) => {
     return apiClient.post(`/api/v1/auth/register`, userData);
 };
 
-export const retrieveAllEvents
-    = () => apiClient.get(`/event`)
+export const retrieveAllEvents = (sortCriteria: string) => 
+    apiClient.get(`/event?sortCriteria=${sortCriteria}`)
+
 
 export const addNewEvent = (event: Event) => {
-        return apiClient.post('/event', event)
-    }
+    return apiClient.post('/event', event)
+}
       
 export const purchaseEventTicket = (eventId: string) => {
     return apiClient.post(`/event/${eventId}/ticket`)
 }
 
-export const retrieveAllUserTickets = () => {
-    return apiClient.get(`/user/tickets`)
+export const retrieveAllUserTickets = (sortCriteria: string) => {
+    return apiClient.get(`/user/tickets?sortCriteria=${sortCriteria}`)
 }
 
 export const refoundTicket = (ticketId: string) => {
@@ -65,8 +66,8 @@ export const deleteCurrentUser = () => {
     return apiClient.delete(`/user/delete-current-user`)
 }
 
-export const retrieveAllPublishersEvents = () => {
-    return apiClient.get(`/event/published`)
+export const retrieveAllPublishersEvents = (sortCriteria: string) => {
+    return apiClient.get(`/event/published?sortCriteria=${sortCriteria}`)
 }
 
 export const deleteEvent = (eventId: string) => {

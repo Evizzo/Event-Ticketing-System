@@ -24,12 +24,12 @@ public class EventController {
         return ResponseEntity.ok(eventService.saveEvent(event, request));
     }
     @GetMapping("/published")
-    public ResponseEntity<List<Event>> retrieveAllPublishersEvents(HttpServletRequest request){
-        return ResponseEntity.ok(eventService.getEventsByPublisherId(request));
+    public ResponseEntity<List<Event>> retrieveAllPublishersEvents(@RequestParam String sortCriteria ,HttpServletRequest request){
+        return ResponseEntity.ok(eventService.getEventsByPublisherId(sortCriteria, request));
     }
     @GetMapping
-    public ResponseEntity<List<Event>> retrieveAllEvents(){
-        return ResponseEntity.ok(eventService.findAllEvents());
+    public ResponseEntity<List<Event>> retrieveAllEvents(@RequestParam String sortCriteria){
+        return ResponseEntity.ok(eventService.findAllEvents(sortCriteria));
     }
     @GetMapping("/{id}")
     public ResponseEntity<Event> retrieveEvent(@PathVariable UUID id){

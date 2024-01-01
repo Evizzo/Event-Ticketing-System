@@ -21,4 +21,11 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
 
     @Query("SELECT t FROM Ticket t WHERE t.event.id = :eventId")
     List<Ticket> findTicketsByEventId(UUID eventId);
+
+    List<Ticket> findAllByUserIdOrderByPaidAmount(@Param("userId") UUID userId);
+
+    List<Ticket> findAllByUserIdOrderByEvent_Name(@Param("userId") UUID userId);
+
+    List<Ticket> findAllByUserIdOrderByEvent_Date(@Param("userId") UUID userId);
+
 }

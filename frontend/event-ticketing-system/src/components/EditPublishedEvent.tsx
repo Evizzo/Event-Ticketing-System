@@ -12,8 +12,8 @@ type Event = {
 };
 
 interface Params {
-    eventId?: string;
-  }
+  eventId?: string;
+}
 
 function EditPublishedEvent() {
   const [message, setMessage] = useState('');

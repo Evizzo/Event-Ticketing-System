@@ -61,11 +61,19 @@ public class EventService {
         }
     }
 
-    public List<Event> getEventsByPublisherId(HttpServletRequest request) {
-        return eventRepository.findByPublisherId(jwtService.extractUserIdFromToken(request));
+    public List<Event> getEventsByPublisherId(String sortCriteria, HttpServletRequest request) {
+        return switch (sortCriteria) {
+            case "date" -> eventRepository.findByPublisherIdOrderByDateAsc(jwtService.extractUserIdFromToken(request));
+            case "price" -> eventRepository.findByPublisherIdOrderByTicketPriceAsc(jwtService.extractUserIdFromToken(request));
+            default -> eventRepository.findByPublisherIdOrderByNameAsc(jwtService.extractUserIdFromToken(request));
+        };
     }
-    public List<Event> findAllEvents(){
-        return eventRepository.findAll();
+    public List<Event> findAllEvents(String sortCriteria){
+        return switch (sortCriteria) {
+            case "date" -> eventRepository.findAllByOrderByDateAsc();
+            case "price" -> eventRepository.findAllByOrderByTicketPriceAsc();
+            default -> eventRepository.findAllByOrderByNameAsc();
+        };
     }
     public Optional<Event> findEventById(UUID id){
         return eventRepository.findById(id);

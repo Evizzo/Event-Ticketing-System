@@ -57,8 +57,8 @@ public class UserController {
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + jwtService.extractUserIdFromToken(request)));
     }
     @GetMapping("/tickets")
-    public ResponseEntity<List<Ticket>> retrieveAllUserTickets(HttpServletRequest request) {
-        return userService.retrieveAllUserTickets(jwtService.extractUserIdFromToken(request))
+    public ResponseEntity<List<Ticket>> retrieveAllUserTickets(@RequestParam String sortCriteria, HttpServletRequest request) {
+        return userService.retrieveAllUserTickets(sortCriteria, jwtService.extractUserIdFromToken(request))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
