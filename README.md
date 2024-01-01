@@ -21,9 +21,11 @@ UserService: Handles user-related functionalities like user creation, retrieval,
 Security Configuration: Implements security measures using JWT (JSON Web Tokens) authentication. It secures endpoints and manages user authentication and authorization.
 
 **Frontend Features**
+
 The frontend is built with React, utilizing TypeScript, Bootstrap, HTML, and CSS to create a user-friendly interface.
 
 **Testing**
+
 The project includes comprehensive test coverage to ensure the reliability and stability of the application.
 
 **Technologies Used**
