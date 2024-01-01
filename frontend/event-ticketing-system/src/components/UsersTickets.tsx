@@ -2,25 +2,26 @@ import { useState, useEffect } from 'react';
 import { retrieveAllUserTickets, refoundTicket } from '../api/ApiService.ts';
 import { Link } from 'react-router-dom';
 
+type SortCriteria = 'name' | 'price' | 'date';
+
 function UsersTickets() {
   const [events, setEvents] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [message,setMessage] = useState("")
   const [refundAttempts, setRefundAttempts] = useState(1)
+  const [sortCriteria, setSortCriteria] = useState<SortCriteria>('name');
 
   useEffect(() => {
-    retrieveAllUserTickets()
+    retrieveAllUserTickets(sortCriteria)
       .then((response) => {
-        const sortedEvents = response.data.sort((a: { event: { name: string } }, b: { event: { name: string } }) =>
-        a.event.name.localeCompare(b.event.name));
-        setEvents(sortedEvents);
+        setEvents([...response.data]);
         setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching events:', error);
         setLoading(false);
       });
-    }, [refundAttempts]);
+    }, [refundAttempts, sortCriteria]);
 
   const handleRefound = (ticketId: string) => {
     console.log(ticketId)
@@ -40,9 +41,26 @@ function UsersTickets() {
         setTimeout(() => setMessage(''), 3000);
       });
   };
-
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortCriteria(event.target.value as SortCriteria);
+  };
   return (
     <div className="container mt-4">
+    <div className="row mb-3">
+        <label htmlFor="sortCriteria" className="form-label me-2">
+          Sort By:
+        </label>
+        <select
+          id="sortCriteria"
+          className="form-select"
+          value={sortCriteria}
+          onChange={handleSortChange}
+        >
+          <option value="name">Name</option>
+          <option value="price">Price</option>
+          <option value="date">Date</option>
+        </select>
+      </div>
       {loading ? (
         <p>Loading events...</p>
       ) : (
