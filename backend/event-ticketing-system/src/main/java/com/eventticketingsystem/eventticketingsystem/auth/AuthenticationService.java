@@ -7,6 +7,7 @@ import com.eventticketingsystem.eventticketingsystem.entities.TokenType;
 import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.repositories.TokenRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.UserRepository;
+import com.eventticketingsystem.eventticketingsystem.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
+    private final NotificationService notificationService;
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .firstname(request.getFirstname())
@@ -35,6 +37,7 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         var savedUser = userRepository.save(user);
+        notificationService.sendWelcomeNotification(savedUser);
         var jwtToken = jwtService.generateToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder().token(jwtToken).build();

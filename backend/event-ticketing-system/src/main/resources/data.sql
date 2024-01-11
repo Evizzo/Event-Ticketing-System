@@ -13,3 +13,13 @@ INSERT INTO ticket (id, event_id, user_id, purchase_date, status, amount, paid_a
 VALUES
     (UNHEX('8a9b6ac4e3e04824a5476c89a1e31c2e'), UNHEX('8a9b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('2f883b26f61b41b0a83f390bfb4b311a'), '2025-11-02', 1, 2, 30.00),
     (UNHEX('8a9b6ac4e3e04824a5469c89a1e31c2e'), UNHEX('6f885b26f61b41b0a83f390bfb4be11a'), UNHEX('2f883b26f61b41b0a83f390bfb4b311a'), '2025-10-01', 1, 2, 50.00);
+
+
+    INSERT INTO notification (id, title, message, created_at, user_id)
+    VALUES (
+        UNHEX('10f445c70cb24d0db4b3e0153b6b6d8f'),
+        'Welcome',
+        'Welcome',
+        '2023-01-02 12:00:00',
+        UNHEX('3f883b26f61b41b0a83f390bfb4b311a')
+    );

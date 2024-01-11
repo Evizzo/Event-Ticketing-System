@@ -85,3 +85,12 @@ export const editEvent = (eventId: string, updatedEvent: Event) => {
 export const retrieveTop3PopularEvents = () => {
     return apiClient.get("/event/popular")
 }
+
+export const retrieveAllUserNotifications = () => {
+    return apiClient.get("/notification")
+}
+
+export const deleteNotification = (id: string) => {
+    return apiClient.delete(`/notification/delete/${id}`);
+};
+

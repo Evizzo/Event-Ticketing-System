@@ -1,6 +1,5 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
-import com.eventticketingsystem.eventticketingsystem.auth.AuthenticationService;
 import com.eventticketingsystem.eventticketingsystem.config.JwtService;
 import com.eventticketingsystem.eventticketingsystem.entities.Event;
 import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
@@ -17,11 +16,11 @@ import org.springframework.data.domain.PageRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
 public class EventService {
+    private final NotificationService notificationService;
     private final TicketService ticketService;
     private final EventRepository eventRepository;
     private final TicketRepository ticketRepository;
@@ -52,10 +51,12 @@ public class EventService {
         if (userIdFromToken.equals(publisherId)) {
             if(!event.isDone()){
                 event.setDone(true);
+                notificationService.sendNotification("Event ended.",event.getName() + " is done", eventId);
                 return eventRepository.save(event);
             }
             else{
                 event.setDone(false);
+                notificationService.sendNotification("Event started.",event.getName() + " started", eventId);
                 return eventRepository.save(event);
             }
         } else {
@@ -87,6 +88,7 @@ public class EventService {
         optionalEvent.ifPresent(event -> {
             UUID eventPublisherId = event.getPublisher().getId();
             if (eventPublisherId.equals(publisherIdFromToken)) {
+                notificationService.sendNotification("Event canceled.", event.getName() + " is canceled, your money has been refunded.", id);
                 ticketService.refundUsersForCanceledEvent(id);
                 eventRepository.deleteById(id);
             } else {
@@ -121,7 +123,7 @@ public class EventService {
                             ticket.setEvent(updated);
                             ticketRepository.save(ticket);
                         }
-
+                        notificationService.sendNotification("Event updated.", existingEvent.getName() + " is updated.", id);
                         return Optional.of(updated);
                     } else {
                         throw new RuntimeException("You are not authorized to update this event.");
