@@ -15,10 +15,10 @@ public class ScheduledTasks {
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateEventsStatusAutomaticlly() {
         List<Event> events = eventRepository.findAll();
-        LocalDate currentDate = LocalDate.now().plusDays(1);
-        System.out.println(currentDate);
+        LocalDate endDate = LocalDate.now().plusDays(1);
+        System.out.println(endDate);
         for (Event event : events) {
-            if (event.getDate().isEqual(currentDate) && !event.isDone()) {
+            if (event.getDate().isEqual(endDate) && !event.isDone()) {
                 event.setDone(true);
                 eventRepository.save(event);
             }

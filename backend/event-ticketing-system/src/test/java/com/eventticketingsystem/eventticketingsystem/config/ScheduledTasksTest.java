@@ -31,10 +31,10 @@ class ScheduledTasksTest {
 
     @Test
     void testUpdateEventsStatusAutomatically() {
-        LocalDate currentDate = LocalDate.now().plusDays(1);
+        LocalDate endDate = LocalDate.now().plusDays(1);
 
         Event event = new Event();
-        event.setDate(currentDate);
+        event.setDate(endDate);
         event.setDone(false);
 
         when(eventRepository.findAll()).thenReturn(List.of(event));
