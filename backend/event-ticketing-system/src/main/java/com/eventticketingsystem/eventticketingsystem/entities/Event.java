@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -38,4 +39,6 @@ public class Event {
     @JsonIgnore
     private User publisher;
     private boolean isDone;
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Review> reviews;
 }
