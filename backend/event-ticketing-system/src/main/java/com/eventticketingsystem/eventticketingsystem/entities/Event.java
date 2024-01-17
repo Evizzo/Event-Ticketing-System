@@ -41,4 +41,6 @@ public class Event {
     private boolean isDone;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Review> reviews;
+    private BigDecimal totalRating;
+
 }

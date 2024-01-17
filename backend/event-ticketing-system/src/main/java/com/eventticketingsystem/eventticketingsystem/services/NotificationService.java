@@ -1,6 +1,5 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
-import com.eventticketingsystem.eventticketingsystem.config.JwtService;
 import com.eventticketingsystem.eventticketingsystem.entities.Event;
 import com.eventticketingsystem.eventticketingsystem.entities.Notification;
 import com.eventticketingsystem.eventticketingsystem.entities.Ticket;

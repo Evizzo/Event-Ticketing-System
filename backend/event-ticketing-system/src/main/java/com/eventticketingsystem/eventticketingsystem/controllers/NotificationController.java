@@ -2,8 +2,6 @@ package com.eventticketingsystem.eventticketingsystem.controllers;
 
 import com.eventticketingsystem.eventticketingsystem.config.JwtService;
 import com.eventticketingsystem.eventticketingsystem.entities.Notification;
-import com.eventticketingsystem.eventticketingsystem.exceptions.EventNotFoundException;
-import com.eventticketingsystem.eventticketingsystem.exceptions.UserNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.services.NotificationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;

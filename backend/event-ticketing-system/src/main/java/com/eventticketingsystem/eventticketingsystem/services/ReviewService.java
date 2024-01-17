@@ -7,11 +7,13 @@ import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.repositories.EventRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.ReviewRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.UserRepository;
-import io.micrometer.observation.ObservationFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,9 +31,17 @@ public class ReviewService {
         if (optionalUser.isPresent() && optionalEvent.isPresent()) {
             User reviewer = optionalUser.get();
             Event event = optionalEvent.get();
+
             review.setReviewer(reviewer);
             review.setEvent(event);
-            return reviewRepository.save(review);
+            review.setDate(LocalDate.now());
+            review.setEdited(false);
+
+            Review savedReview = reviewRepository.save(review);
+
+            updateEventTotalRating(eventId);
+
+            return savedReview;
         } else {
             throw new RuntimeException("Unauthorized access");
         }
@@ -64,5 +74,47 @@ public class ReviewService {
         } else {
             throw new RuntimeException("Event not found with ID: " + eventId);
         }
+    }
+
+    public Optional<Review> updateReview(UUID id, Review updatedReview, HttpServletRequest request) {
+        UUID userIdFromToken = jwtService.extractUserIdFromToken(request);
+
+        return reviewRepository.findById(id)
+                .map(existingReview -> {
+                    User reviewer = existingReview.getReviewer();
+                    if (reviewer == null) {
+                        throw new RuntimeException("Reviewer information is missing for this event.");
+                    }
+
+                    UUID reviewerId = reviewer.getId();
+                    if (userIdFromToken.equals(reviewerId)) {
+                        Optional.ofNullable(updatedReview.getRating()).ifPresent(existingReview::setRating);
+                        Optional.ofNullable(updatedReview.getComment()).ifPresent(existingReview::setComment);
+                        existingReview.setEdited(true);
+
+                        Review updated = reviewRepository.save(existingReview);
+
+                        return Optional.of(updated);
+                    } else {
+                        throw new RuntimeException("You are not authorized to update this review.");
+                    }
+                })
+                .orElseThrow(() -> new RuntimeException("Review not found with ID: " + id));
+    }
+    private void updateEventTotalRating(UUID eventId) {
+        Optional<Event> optionalEvent = eventRepository.findById(eventId);
+        optionalEvent.ifPresent(event -> {
+            List<Review> reviews = reviewRepository.findByEvent_Id(eventId);
+            BigDecimal totalRating = reviews.stream().map(Review::getRating)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            int numberOfReviews = reviews.size();
+            BigDecimal averageRating = numberOfReviews > 0 ?
+                    totalRating.divide(BigDecimal.valueOf(numberOfReviews), 2, RoundingMode.HALF_UP) :
+                    BigDecimal.ZERO;
+
+            event.setTotalRating(averageRating);
+            eventRepository.save(event);
+        });
     }
 }
