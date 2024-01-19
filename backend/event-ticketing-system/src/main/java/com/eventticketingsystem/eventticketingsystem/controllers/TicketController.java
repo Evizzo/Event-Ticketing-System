@@ -1,7 +1,9 @@
 package com.eventticketingsystem.eventticketingsystem.controllers;
 
 import com.eventticketingsystem.eventticketingsystem.config.JwtService;
+import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
 import com.eventticketingsystem.eventticketingsystem.exceptions.TicketNotFoundException;
+import com.eventticketingsystem.eventticketingsystem.repositories.UserRepository;
 import com.eventticketingsystem.eventticketingsystem.services.TicketService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -34,5 +36,16 @@ public class TicketController {
                 return ResponseEntity.ok("Ticket refunded successfully.");
             })
             .orElseThrow(() -> new TicketNotFoundException("Ticket not found with ID: " + ticketId));
+    }
+
+    @GetMapping("/ticketId/{eventId}")
+    public ResponseEntity<Ticket> getUserTicketByEventId(
+            @PathVariable UUID eventId,
+            HttpServletRequest request
+    ) {
+        return ticketService.findUserTicketByEventId(jwtService.extractUserIdFromToken(request), eventId)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found for user ID: " + jwtService.extractUserIdFromToken(request)
+                        + " and event ID: " + eventId));
     }
 }

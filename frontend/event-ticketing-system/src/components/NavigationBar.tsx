@@ -63,11 +63,15 @@ function NavigationBar() {
                         {isAuthenticated && <Nav.Link as={Link} to="/published">Published</Nav.Link>}
                         
                         <Nav.Link as={Link} to="/about">About</Nav.Link>
-                        {!isAuthenticated && <Nav.Link as={Link} to="/login" style={{color: "cyan"}}>Login</Nav.Link>}
-                        {!isAuthenticated && <Nav.Link as={Link} to="/register" style={{color: "cyan"}}>Register</Nav.Link>}
                     </Nav>
                 </Navbar.Collapse>
             </Container>
+            {!isAuthenticated &&
+                <Nav className="ml-auto">
+                    <Nav.Item><Nav.Link as={Link} to="/login" style={{color: "cyan"}}>Login</Nav.Link></Nav.Item>
+                    <Nav.Item><Nav.Link as={Link} to="/register" style={{color: "cyan"}}>Register</Nav.Link></Nav.Item>
+                </Nav>
+            }
             {isAuthenticated &&
                 <Nav className="ml-auto">
                     <Nav.Item>

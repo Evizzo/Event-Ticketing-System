@@ -99,7 +99,7 @@ public class TicketService {
 
             int currentAmount = ticket.getAmount();
             if (refundAmount <= 0 || refundAmount > currentAmount) {
-                throw new RuntimeException("Invalid amout to refound");
+                throw new RuntimeException("Invalid amount to refund");
             }
 
             BigDecimal refundPrice = ticket.getPaidAmount().multiply(BigDecimal.valueOf(refundAmount));
@@ -125,5 +125,11 @@ public class TicketService {
             refundTicket(ticket.getId(), ticket.getUser().getId(), ticket.getAmount());
             ticketRepository.delete(ticket);
         }
+    }
+    public Optional<Ticket> findUserTicketByEventId(UUID userId, UUID eventId) {
+        return userRepository.findById(userId)
+                .flatMap(user -> user.getTickets().stream()
+                        .filter(ticket -> ticket.getEvent().getId().equals(eventId))
+                        .findFirst());
     }
 }

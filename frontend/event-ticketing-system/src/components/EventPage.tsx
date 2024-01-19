@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { retrieveEventById, purchaseEventTicket } from '../api/ApiService.ts';
+import { retrieveEventById, purchaseEventTicket, getUserTicketByEventId } from '../api/ApiService.ts';
 import { useAuth } from '../api/AuthContex';
+import CommentBox from './CommentBox.tsx';
 
 interface Event {
   id: string;
@@ -19,6 +20,7 @@ function EventPage() {
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
+  const [userTicket, setUserTicket] = useState<string | null>(null);
   const authContext = useAuth();
   const isAuthenticated = authContext.isAuthenticated;
 
@@ -28,13 +30,23 @@ function EventPage() {
         .then((response) => {
           setEvent(response.data);
           setLoading(false);
+
+          if (isAuthenticated) {
+            getUserTicketByEventId(eventId)
+              .then((ticketResponse) => {
+                setUserTicket(ticketResponse.data.id);
+              })
+              .catch((error) => {
+                console.error('Error fetching user ticket:', error);
+              });
+          }
         })
         .catch((error) => {
           console.error('Error fetching event:', error);
           setLoading(false);
         });
     }
-  }, [eventId]);
+  }, [eventId, isAuthenticated]);
 
   const handlePurchase = (eventId: string) => {
     purchaseEventTicket(eventId)
@@ -43,7 +55,7 @@ function EventPage() {
         updateEventCapacity();
       })
       .catch((error) => {
-        setMessage(`Not enought credits.`)
+        setMessage(`Not enough credits.`)
         console.error(`Error purchasing ticket: ${error}`)
         setTimeout(() => setMessage(''), 3000);
       });
@@ -86,6 +98,9 @@ function EventPage() {
             <p>
               <strong>Price:</strong> ${event.ticketPrice}
             </p>
+            <p>
+              <strong>Ticket ID:</strong> {userTicket || 'Not purchased'}
+            </p>
             {event.done ? (
             <div className="text-center">
               <strong style={{ color: 'red' }}>Ended</strong>
@@ -110,11 +125,15 @@ function EventPage() {
             }
             </>)}
           </div>
+          <CommentBox eventId={event.id} updateEvent={updateEventCapacity} />
         </div>
+        
       ) : (
         <p>Event not found.</p>
       )}
+      
       {message && <div className="alert alert-info mt-3">{message}</div>}
+      
     </div>
   );
 }

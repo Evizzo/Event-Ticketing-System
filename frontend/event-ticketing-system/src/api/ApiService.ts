@@ -94,3 +94,22 @@ export const deleteNotification = (id: string) => {
     return apiClient.delete(`/notification/delete/${id}`);
 };
 
+export const saveReview = (eventId: string, review: any) => {
+    return apiClient.post(`/review/${eventId}`, review);
+};
+
+export const deleteReview = (id: string) => {
+    return apiClient.delete(`/review/${id}`);
+};
+
+export const retrieveAllReviewsForEvent = (eventId: string) => {
+    return apiClient.get(`/review/${eventId}`);
+};
+
+export const updateReview = (id: string, review: any) => {
+    return apiClient.put(`/review/${id}`, review);
+};
+
+export const getUserTicketByEventId = (eventId: string) => {
+    return apiClient.get(`/event/ticketId/${eventId}`);
+};

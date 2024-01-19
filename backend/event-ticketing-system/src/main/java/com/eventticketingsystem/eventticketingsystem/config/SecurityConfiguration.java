@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                             .requestMatchers(HttpMethod.GET,"/search").permitAll()
                             .requestMatchers(HttpMethod.GET,"/event/{id}").permitAll()
                             .requestMatchers(HttpMethod.GET,"/event/popular").permitAll()
+                            .requestMatchers(HttpMethod.GET,"/review/{eventId}").permitAll()
                             .requestMatchers(WHITE_LIST_URL).permitAll()
                     .anyRequest()
                     .authenticated()

@@ -34,9 +34,9 @@ public class ReviewController {
                 .orElseThrow(() -> new RuntimeException(REVIEW_NOT_FOUND + id));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<Review>> retrieveAllReviewsForEvent(@PathVariable UUID id){
-        return ResponseEntity.ok(reviewService.getAllReviewsForEvent(id));
+    @GetMapping("/{eventId}")
+    public ResponseEntity<List<Review>> retrieveAllReviewsForEvent(@PathVariable UUID eventId){
+        return ResponseEntity.ok(reviewService.getAllReviewsForEvent(eventId));
     }
 
     @PutMapping("/{id}")

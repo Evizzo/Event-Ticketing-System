@@ -11,8 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -36,12 +34,9 @@ public class ReviewService {
             review.setEvent(event);
             review.setDate(LocalDate.now());
             review.setEdited(false);
+            review.setEmailOfReviewer(reviewer.getEmail());
 
-            Review savedReview = reviewRepository.save(review);
-
-            updateEventTotalRating(eventId);
-
-            return savedReview;
+            return reviewRepository.save(review);
         } else {
             throw new RuntimeException("Unauthorized access");
         }
@@ -88,7 +83,6 @@ public class ReviewService {
 
                     UUID reviewerId = reviewer.getId();
                     if (userIdFromToken.equals(reviewerId)) {
-                        Optional.ofNullable(updatedReview.getRating()).ifPresent(existingReview::setRating);
                         Optional.ofNullable(updatedReview.getComment()).ifPresent(existingReview::setComment);
                         existingReview.setEdited(true);
 
@@ -100,21 +94,5 @@ public class ReviewService {
                     }
                 })
                 .orElseThrow(() -> new RuntimeException("Review not found with ID: " + id));
-    }
-    private void updateEventTotalRating(UUID eventId) {
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
-        optionalEvent.ifPresent(event -> {
-            List<Review> reviews = reviewRepository.findByEvent_Id(eventId);
-            BigDecimal totalRating = reviews.stream().map(Review::getRating)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-            int numberOfReviews = reviews.size();
-            BigDecimal averageRating = numberOfReviews > 0 ?
-                    totalRating.divide(BigDecimal.valueOf(numberOfReviews), 2, RoundingMode.HALF_UP) :
-                    BigDecimal.ZERO;
-
-            event.setTotalRating(averageRating);
-            eventRepository.save(event);
-        });
     }
 }
