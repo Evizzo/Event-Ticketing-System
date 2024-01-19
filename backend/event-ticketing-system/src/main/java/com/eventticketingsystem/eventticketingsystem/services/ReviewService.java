@@ -2,6 +2,7 @@ package com.eventticketingsystem.eventticketingsystem.services;
 
 import com.eventticketingsystem.eventticketingsystem.config.JwtService;
 import com.eventticketingsystem.eventticketingsystem.entities.Event;
+import com.eventticketingsystem.eventticketingsystem.entities.Notification;
 import com.eventticketingsystem.eventticketingsystem.entities.Review;
 import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.repositories.EventRepository;
@@ -23,6 +24,7 @@ public class ReviewService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final NotificationService notificationService;
     public Review saveReview(Review review, UUID eventId, HttpServletRequest request) {
         Optional<User> optionalUser = userRepository.findById(jwtService.extractUserIdFromToken(request));
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
@@ -35,6 +37,9 @@ public class ReviewService {
             review.setDate(LocalDate.now());
             review.setEdited(false);
             review.setEmailOfReviewer(reviewer.getEmail());
+
+            notificationService.sentReviewNotification("New review", reviewer.getEmail() + " left a review on "
+            + event.getName(), event.getPublisher().getId());
 
             return reviewRepository.save(review);
         } else {
@@ -53,6 +58,8 @@ public class ReviewService {
         optionalReview.ifPresent(review -> {
             UUID reviewerId = review.getReviewer().getId();
             if (reviewerId.equals(reviewerIdFromToken)) {
+                notificationService.sentReviewNotification("Deleted review", review.getEmailOfReviewer() + " deleted a review on "
+                        + review.getEvent().getName(), review.getEvent().getPublisher().getId());
                 reviewRepository.deleteById(id);
             } else {
                 throw new RuntimeException("You are not authorized to delete this review.");
@@ -85,7 +92,8 @@ public class ReviewService {
                     if (userIdFromToken.equals(reviewerId)) {
                         Optional.ofNullable(updatedReview.getComment()).ifPresent(existingReview::setComment);
                         existingReview.setEdited(true);
-
+                        notificationService.sentReviewNotification("Updated review", reviewer.getEmail() + " updated a review on "
+                                + existingReview.getEvent().getName(), existingReview.getEvent().getPublisher().getId());
                         Review updated = reviewRepository.save(existingReview);
 
                         return Optional.of(updated);

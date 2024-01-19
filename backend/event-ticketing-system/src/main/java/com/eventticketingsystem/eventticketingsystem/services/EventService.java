@@ -51,12 +51,12 @@ public class EventService {
         if (userIdFromToken.equals(publisherId)) {
             if(!event.isDone()){
                 event.setDone(true);
-                notificationService.sendNotification("Event ended.",event.getName() + " is done", eventId);
+                notificationService.sendEventNotification("Event ended.",event.getName() + " is done", eventId);
                 return eventRepository.save(event);
             }
             else{
                 event.setDone(false);
-                notificationService.sendNotification("Event started.",event.getName() + " started", eventId);
+                notificationService.sendEventNotification("Event started.",event.getName() + " started", eventId);
                 return eventRepository.save(event);
             }
         } else {
@@ -88,7 +88,7 @@ public class EventService {
         optionalEvent.ifPresent(event -> {
             UUID eventPublisherId = event.getPublisher().getId();
             if (eventPublisherId.equals(publisherIdFromToken)) {
-                notificationService.sendNotification("Event canceled.", event.getName() + " is canceled, your money has been refunded.", id);
+                notificationService.sendEventNotification("Event canceled.", event.getName() + " is canceled, your money has been refunded.", id);
                 ticketService.refundUsersForCanceledEvent(id);
                 eventRepository.deleteById(id);
             } else {
@@ -123,7 +123,7 @@ public class EventService {
                             ticket.setEvent(updated);
                             ticketRepository.save(ticket);
                         }
-                        notificationService.sendNotification("Event updated.", existingEvent.getName() + " is updated.", id);
+                        notificationService.sendEventNotification("Event updated.", existingEvent.getName() + " is updated.", id);
                         return Optional.of(updated);
                     } else {
                         throw new RuntimeException("You are not authorized to update this event.");

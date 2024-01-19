@@ -5,9 +5,11 @@ import com.eventticketingsystem.eventticketingsystem.entities.Notification;
 import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
 import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.exceptions.EventNotFoundException;
+import com.eventticketingsystem.eventticketingsystem.exceptions.UserNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.repositories.EventRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.NotificationRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.TicketRepository;
+import com.eventticketingsystem.eventticketingsystem.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,21 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final TicketRepository ticketRepository;
     private final EventRepository eventRepository;
-    public void sendNotification(String title, String message, UUID eventId) {
+    private final UserRepository userRepository;
+    public void sentReviewNotification(String title,String message, UUID publisherId){
+        Optional<User> userOptional = userRepository.findById(publisherId);
+        User userExc = userOptional.orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        userOptional.ifPresent(user -> {
+            Notification notification = new Notification();
+            notification.setTitle(title);
+            notification.setMessage(message);
+            notification.setCreatedAt(LocalDateTime.now());
+            notification.setUser(user);
+            notificationRepository.save(notification);
+        });
+    }
+    public void sendEventNotification(String title, String message, UUID eventId) {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
         Event event = optionalEvent.orElseThrow(() -> new EventNotFoundException("Event not found with ID: " + eventId));
 
