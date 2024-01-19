@@ -15,7 +15,7 @@ interface CommentBoxProps {
   updateEvent: () => void;
 }
 
-function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
+function ReviewBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [newComment, setNewComment] = useState('');
   const { isAuthenticated, email } = useAuth();
@@ -148,4 +148,4 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
   );
 }
 
-export default CommentBox;
+export default ReviewBox;
