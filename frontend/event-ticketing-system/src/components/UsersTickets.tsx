@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { retrieveAllUserTickets, refoundTicket } from '../api/ApiService.ts';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 type SortCriteria = 'name' | 'price' | 'date';
 
@@ -10,6 +10,7 @@ function UsersTickets() {
   const [message,setMessage] = useState("")
   const [refundAttempts, setRefundAttempts] = useState(1)
   const [sortCriteria, setSortCriteria] = useState<SortCriteria>('name');
+  const navigate = useNavigate();
 
   useEffect(() => {
     retrieveAllUserTickets(sortCriteria)
@@ -43,6 +44,9 @@ function UsersTickets() {
   };
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortCriteria(event.target.value as SortCriteria);
+  };
+  const handleReview = (eventId: string) => {
+    navigate(`/events/${eventId}`);
   };
   return (
     <div className="container mt-4">
@@ -113,7 +117,7 @@ function UsersTickets() {
                 <div className="position-absolute bottom-0 end-0 p-2">
                   <button
                     className="btn btn-secondary"
-                    onClick={() => {/* Handle "Review" functionality */}}
+                    onClick={() => handleReview(event.event.id)}
                     >
                     Review
                   </button>

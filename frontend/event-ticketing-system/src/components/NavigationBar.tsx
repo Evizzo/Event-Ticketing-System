@@ -39,7 +39,7 @@ function NavigationBar() {
     const handleDeleteNotification = async (notificationId: string) => {
         try {
             await deleteNotification(notificationId);
-            setNotificationClickCount(prevCount => prevCount + 1);
+            setNotificationClickCount(notificationClickCount + 1);
         } catch (error) {
             console.error('Error deleting notification:', error);
         }
@@ -77,7 +77,7 @@ function NavigationBar() {
                     <Nav.Item>
                     <Dropdown>
                         <Dropdown.Toggle variant="link" id="notification-dropdown">
-                            <FaBell onClick={() => setNotificationClickCount(prevCount => prevCount + 1)} />
+                            <FaBell onClick={() => setNotificationClickCount(notificationClickCount + 1)} />
                         </Dropdown.Toggle>
                         <Dropdown.Menu style={{overflowY: 'auto', marginLeft: "-360%" }}>
                             {notifications.map((notification, index) => (
