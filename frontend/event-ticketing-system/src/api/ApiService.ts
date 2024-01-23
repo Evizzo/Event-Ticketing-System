@@ -94,20 +94,20 @@ export const deleteNotification = (id: string) => {
     return apiClient.delete(`/notification/delete/${id}`);
 };
 
-export const saveReview = (eventId: string, review: any) => {
-    return apiClient.post(`/review/${eventId}`, review);
+export const saveComment = (eventId: string, comment: any) => {
+    return apiClient.post(`/comment/${eventId}`, comment);
 };
 
-export const deleteReview = (id: string) => {
-    return apiClient.delete(`/review/${id}`);
+export const deleteComment = (id: string) => {
+    return apiClient.delete(`/comment/${id}`);
 };
 
-export const retrieveAllReviewsForEvent = (eventId: string) => {
-    return apiClient.get(`/review/${eventId}`);
+export const retrieveAllCommentsForEventByDate = (eventId: string) => {
+    return apiClient.get(`/comment/${eventId}`);
 };
 
-export const updateReview = (id: string, review: any) => {
-    return apiClient.put(`/review/${id}`, review);
+export const updateComment = (id: string, comment: any) => {
+    return apiClient.put(`/comment/${id}`, comment);
 };
 
 export const getUserTicketByEventId = (eventId: string) => {

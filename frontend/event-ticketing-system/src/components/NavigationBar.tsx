@@ -85,8 +85,11 @@ function NavigationBar() {
                                     <div style={{overflowWrap: 'break-word' }}>
                                         <strong>{notification.title}</strong>
                                     </div>
+                                    <div style={{overflowWrap: 'break-word' }}>
+                                        <strong>{notification.message}</strong>
+                                    </div>
                                     <div>
-                                        {notification.message}
+                                        {notification.createdAt}
                                         <FaTrash
                                             style={{ color: 'red', marginLeft: '5px', cursor: 'pointer' }}
                                             onClick={() => handleDeleteNotification(notification.id)}
