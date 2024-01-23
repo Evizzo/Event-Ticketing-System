@@ -31,7 +31,7 @@ public class UserController {
         return ResponseEntity.ok(userService.saveUser(user));
     }
     @GetMapping
-    public ResponseEntity<List<User>> retriveAllUsers(){
+    public ResponseEntity<List<User>> retrieveAllUsers(){
         return ResponseEntity.ok(userService.findAllUsers());
     }
     @GetMapping("/current")

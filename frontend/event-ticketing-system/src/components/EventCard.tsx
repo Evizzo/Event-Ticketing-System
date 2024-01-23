@@ -27,7 +27,7 @@ function EventCard(props: EventCardProps) {
         </div>
         <div className="card-body d-flex flex-column justify-content-between">
           <div>
-            <h5 className="card-title">{event.name}</h5>
+            <h5 className="card-title"><strong>{event.name}</strong></h5>
             <p className="card-text">{event.description}</p>
           </div>
           <div className="text-left">

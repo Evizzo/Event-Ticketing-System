@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { retrieveEventById, purchaseEventTicket, getUserTicketByEventId } from '../api/ApiService.ts';
 import { useAuth } from '../api/AuthContex';
-import ReviewBox from './ReviewBox.tsx';
+import CommentBox from './CommentBox.tsx';
 
 interface Event {
   id: string;
@@ -87,7 +87,7 @@ function EventPage() {
               }}
             />
           <div className="card-body">
-            <h5 className="card-title">{event.name}</h5>
+            <h3 className="card-title"><strong>{event.name}</strong></h3>
             <p className="card-text">{event.description}</p>
             <p>
               <strong>Date:</strong> {event.date}
@@ -125,7 +125,7 @@ function EventPage() {
             }
             </>)}
           </div>
-          <ReviewBox eventId={event.id} updateEvent={updateEventCapacity} />
+          {event.done && <CommentBox eventId={event.id} updateEvent={updateEventCapacity} />}
         </div>
         
       ) : (

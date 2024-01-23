@@ -1,5 +1,6 @@
 package com.eventticketingsystem.eventticketingsystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -8,7 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -16,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Review {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -25,12 +26,13 @@ public class Review {
     @JsonIgnore
     private Event event;
     @ManyToOne
-    @JoinColumn(name = "reviewer_id")
+    @JoinColumn(name = "commenter_id")
     @JsonIgnore
-    private User reviewer;
-    @Size(max = 320, message = "Max size of comment is 320 characters")
+    private User commenter;
+    @Size(max = 320, min = 3, message = "Max character size of comment is 320, min is 3")
     private String comment;
-    private LocalDate date;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime date;
     private boolean isEdited;
-    private String emailOfReviewer;
+    private String emailOfCommenter;
 }

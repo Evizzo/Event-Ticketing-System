@@ -23,7 +23,7 @@ public class NotificationService {
     private final TicketRepository ticketRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
-    public void sentReviewNotification(String title,String message, UUID publisherId){
+    public void sendCommentNotification(String title, String message, UUID publisherId){
         Optional<User> userOptional = userRepository.findById(publisherId);
         User userExc = userOptional.orElseThrow(() -> new UserNotFoundException("User not found"));
 

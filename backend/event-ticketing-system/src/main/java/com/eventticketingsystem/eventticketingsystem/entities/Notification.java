@@ -1,5 +1,6 @@
 package com.eventticketingsystem.eventticketingsystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class Notification {
     private UUID id;
     private String title;
     private String message;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
     @ManyToOne
     @JoinColumn(name = "user_id")

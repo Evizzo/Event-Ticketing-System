@@ -93,7 +93,7 @@ function UsersTickets() {
                 </div>
                 <div className="card-body d-flex flex-column justify-content-between">
                   <div>
-                    <h5 className="card-title">{event.event.name}</h5>
+                    <h5 className="card-title"><strong>{event.event.name}</strong></h5>
                     <p className="card-text">{event.event.description}</p>
                   </div>
                   <div className="text-left">

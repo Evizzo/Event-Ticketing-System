@@ -1,11 +1,9 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
 import com.eventticketingsystem.eventticketingsystem.auth.AuthenticationService;
-import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
-import com.eventticketingsystem.eventticketingsystem.entities.User;
+import com.eventticketingsystem.eventticketingsystem.entities.*;
 import com.eventticketingsystem.eventticketingsystem.exceptions.UserNotFoundException;
-import com.eventticketingsystem.eventticketingsystem.repositories.TicketRepository;
-import com.eventticketingsystem.eventticketingsystem.repositories.UserRepository;
+import com.eventticketingsystem.eventticketingsystem.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +18,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final TicketRepository ticketRepository;
     private final AuthenticationService authenticationService;
+    private final EventRepository eventRepository;
+    private final CommentRepository commentRepository;
+    private final NotificationRepository notificationRepository;
     public User saveUser(User user){
         return userRepository.save(user);
     }
@@ -29,11 +30,32 @@ public class UserService {
     public Optional<User> findUserById(UUID userId){
         return userRepository.findById(userId);
     }
-    public void deleteUserById(UUID id){
-        authenticationService.deleteAllUserTokens(id);
-        ticketRepository.deleteByUserId(id);
-        userRepository.deleteById(id);
+    public void deleteUserById(UUID id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        optionalUser.ifPresent(user -> {
+            ticketRepository.deleteByUserId(id);
+
+            List<Event> userEvents = user.getPublishedEvents();
+            for (Event event : userEvents) {
+                eventRepository.deleteById(event.getId());
+            }
+
+            List<Comment> userComments = commentRepository.findAllByCommenterId(id);
+            for (Comment comment : userComments) {
+                commentRepository.deleteById(comment.getId());
+            }
+
+            List<Notification> userNotifications = user.getNotifications();
+            for (Notification notification : userNotifications) {
+                notificationRepository.deleteById(notification.getId());
+            }
+
+            authenticationService.deleteAllUserTokens(id);
+            userRepository.deleteById(id);
+        });
     }
+
     public BigDecimal retrieveUserCredits(UUID id){
         return userRepository.findCreditsByUserId(id)
                 .orElseThrow(() -> new RuntimeException("Credits not found for user with ID: " + id));

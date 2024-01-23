@@ -39,7 +39,7 @@ class ScheduledTasksTest {
 
         when(eventRepository.findAll()).thenReturn(List.of(event));
 
-        scheduledTasks.updateEventsStatusAutomaticlly();
+        scheduledTasks.updateEventsStatusAutomatically();
 
         verify(eventRepository).save(any(Event.class));
 

@@ -13,7 +13,7 @@ import java.util.List;
 public class ScheduledTasks {
     private final EventRepository eventRepository;
     @Scheduled(cron = "0 0 0 * * ?")
-    public void updateEventsStatusAutomaticlly() {
+    public void updateEventsStatusAutomatically() {
         List<Event> events = eventRepository.findAll();
         LocalDate endDate = LocalDate.now().plusDays(1);
         System.out.println(endDate);
@@ -23,7 +23,7 @@ public class ScheduledTasks {
                 eventRepository.save(event);
             }
         }
-        System.out.println("Executing scheduled task at midnight");
+        System.out.println("Executing scheduled task updateEventsStatusAutomatically at midnight");
     }
 }
 

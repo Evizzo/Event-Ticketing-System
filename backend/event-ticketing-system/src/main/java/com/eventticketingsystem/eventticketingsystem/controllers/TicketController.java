@@ -3,7 +3,6 @@ package com.eventticketingsystem.eventticketingsystem.controllers;
 import com.eventticketingsystem.eventticketingsystem.config.JwtService;
 import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
 import com.eventticketingsystem.eventticketingsystem.exceptions.TicketNotFoundException;
-import com.eventticketingsystem.eventticketingsystem.repositories.UserRepository;
 import com.eventticketingsystem.eventticketingsystem.services.TicketService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;

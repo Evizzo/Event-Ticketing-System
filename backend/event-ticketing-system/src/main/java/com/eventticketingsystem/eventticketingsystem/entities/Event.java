@@ -40,5 +40,9 @@ public class Event {
     private User publisher;
     private boolean isDone;
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<Review> reviews;
+    private List<Comment> comments;
+    @JsonIgnore
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Ticket> tickets;
+
 }
