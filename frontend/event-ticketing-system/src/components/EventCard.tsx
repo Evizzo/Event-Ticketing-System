@@ -38,7 +38,7 @@ function EventCard(props: EventCardProps) {
         </div>
         {event.done ? (
           <div className="position-absolute bottom-0 end-0 p-2">
-            <strong style={{ color: 'red' }}>Ended</strong>
+            <strong style={{ color: 'red' }}>Done</strong>
           </div>
         ) : (
           <>
