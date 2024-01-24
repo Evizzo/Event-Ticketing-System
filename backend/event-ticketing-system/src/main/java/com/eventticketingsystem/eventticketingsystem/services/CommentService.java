@@ -12,10 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +38,8 @@ public class CommentService {
                 comment.setDate(LocalDateTime.now());
                 comment.setEdited(false);
                 comment.setEmailOfCommenter(commenter.getEmail());
+                comment.setLikes(0);
+                comment.setDislikes(0);
 
                 notificationService.sendCommentNotification("New comment", commenter.getEmail()
                         + " left a comment on "
@@ -118,5 +117,55 @@ public class CommentService {
                     }
                 })
                 .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + id));
+    }
+    public Comment likeComment(UUID commentId, HttpServletRequest request) {
+        UUID userId = jwtService.extractUserIdFromToken(request);
+
+        return commentRepository.findById(commentId)
+                .map(comment -> {
+                    Set<UUID> likedByUsers = comment.getLikedByUsers();
+                    Set<UUID> dislikedByUsers = comment.getDislikedByUsers();
+
+                    if (likedByUsers.contains(userId)) {
+                        comment.setLikes(comment.getLikes() - 1);
+                        likedByUsers.remove(userId);
+                    } else {
+                        comment.setLikes(comment.getLikes() + 1);
+                        likedByUsers.add(userId);
+
+                        if (dislikedByUsers.contains(userId)) {
+                            comment.setDislikes(comment.getDislikes() - 1);
+                            dislikedByUsers.remove(userId);
+                        }
+                    }
+                    return commentRepository.save(comment);
+                })
+                .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + commentId));
+    }
+
+    public Comment dislikeComment(UUID commentId, HttpServletRequest request) {
+        UUID userId = jwtService.extractUserIdFromToken(request);
+
+        return commentRepository.findById(commentId)
+                .map(comment -> {
+                    Set<UUID> likedByUsers = comment.getLikedByUsers();
+                    Set<UUID> dislikedByUsers = comment.getDislikedByUsers();
+
+                    if (dislikedByUsers.contains(userId)) {
+                        comment.setDislikes(comment.getDislikes() - 1);
+                        dislikedByUsers.remove(userId);
+                    } else {
+                        comment.setDislikes(comment.getDislikes() + 1);
+                        dislikedByUsers.add(userId);
+
+                        if (likedByUsers.contains(userId)) {
+                            comment.setLikes(comment.getLikes() - 1);
+                            likedByUsers.remove(userId);
+                        }
+                    }
+
+                    return commentRepository.save(comment);
+                })
+                .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + commentId));
     }
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { retrieveAllCommentsForEventByDate, deleteComment, updateComment, saveComment } from '../api/ApiService.ts';
+import { retrieveAllCommentsForEventByDate, deleteComment, updateComment, saveComment, likeComment, dislikeComment } from '../api/ApiService.ts';
 import { useAuth } from '../api/AuthContex.tsx';
 
 interface Comment {
@@ -8,6 +8,8 @@ interface Comment {
   comment: string;
   date: string;
   edited: boolean;
+  likes: number;
+  dislikes: number;
 }
 
 interface CommentBoxProps {
@@ -98,7 +100,39 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
         console.error('Error saving comments:', error);
       });
   }
+  function handleLikeComment(commentId: string): void {
+    likeComment(commentId)
+      .then(() => {
+        retrieveAllCommentsForEventByDate(eventId)
+          .then((response) => {
+            setComments(response.data);
+            updateEvent();
+          })
+          .catch((error) => {
+            console.error('Error fetching comments:', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error liking comment:', error);
+      });
+  }
 
+  function handleDislikeComment(commentId: string): void {
+    dislikeComment(commentId)
+      .then(() => {
+        retrieveAllCommentsForEventByDate(eventId)
+          .then((response) => {
+            setComments(response.data);
+            updateEvent();
+          })
+          .catch((error) => {
+            console.error('Error fetching comments:', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error disliking comment:', error);
+      });
+  }
   return (
     <div className="comment-box">
       <h2>Comments</h2>
@@ -139,6 +173,22 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
               </button>
               <button className="btn btn-sm btn-danger" onClick={() => handleDeleteComment(comment.id)}>
                 Delete
+              </button>
+            </div>
+          )}
+          <p className="mb-2">
+             <span style={{ color: 'green' }}><strong>Likes:</strong> {comment.likes}</span>
+          </p>
+          <p className="mb-2">
+            <span style={{ color: 'red' }}><strong>Dislikes:</strong> {comment.dislikes}</span>
+          </p>
+          {isAuthenticated && (
+            <div className="btn-group">
+              <button className="btn btn-sm btn-success" onClick={() => handleLikeComment(comment.id)}>
+                Like
+              </button>
+              <button className="btn btn-sm btn-danger" onClick={() => handleDislikeComment(comment.id)}>
+                Dislike
               </button>
             </div>
           )}

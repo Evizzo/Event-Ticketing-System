@@ -113,3 +113,11 @@ export const updateComment = (id: string, comment: any) => {
 export const getUserTicketByEventId = (eventId: string) => {
     return apiClient.get(`/event/ticketId/${eventId}`);
 };
+
+export const likeComment = (id: string) => {
+    return apiClient.put(`/comment/${id}/like`);
+};
+
+export const dislikeComment = (id: string) => {
+    return apiClient.put(`/comment/${id}/dislike`);
+};

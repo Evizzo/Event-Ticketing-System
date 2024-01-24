@@ -45,4 +45,13 @@ public class CommentController {
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new RuntimeException(COMMENT_NOT_FOUND + id));
     }
+    @PutMapping("/{id}/like")
+    public ResponseEntity<Comment> likeComment(@PathVariable UUID id, HttpServletRequest request) {
+        return ResponseEntity.ok(commentService.likeComment(id, request));
+    }
+
+    @PutMapping("/{id}/dislike")
+    public ResponseEntity<Comment> dislikeComment(@PathVariable UUID id, HttpServletRequest request) {
+        return ResponseEntity.ok(commentService.dislikeComment(id, request));
+    }
 }

@@ -17,7 +17,7 @@ VALUES
     (UNHEX('8a9b6ac4e3e04824a5476c89a1e31c2e'), UNHEX('8a9b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('2f883b26f61b41b0a83f390bfb4b311a'), '2025-11-02', 1, 2, 30.00),
     (UNHEX('8a9b6ac4e3e04824a5469c89a1e31c2e'), UNHEX('6f885b26f61b41b0a83f390bfb4be11a'), UNHEX('2f883b26f61b41b0a83f390bfb4b311a'), '2025-10-01', 1, 2, 50.00);
 
-INSERT INTO comment (id, event_id, commenter_id, comment, date, is_edited, email_of_commenter)
+INSERT INTO comment (id, event_id, commenter_id, comment, date, is_edited, email_of_commenter, likes, dislikes)
     VALUES
-      (UNHEX('8a9b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('9a8b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('2f883b26f61b41b0a83f390bfb4b311a'), 'Event looked great on the internet, will go next time !', '2023-05-21', false, 'ema@gmail.com'),
-      (UNHEX('7a8b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('9a8b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('3f883b26f61b41b0a83f390bfb4b311a'), 'Awesome experience!', '2023-05-22', true, 'stefan@gmail.com');
+      (UNHEX('8a9b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('9a8b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('2f883b26f61b41b0a83f390bfb4b311a'), 'Event looked great on the internet, will go next time !', '2023-05-21', false, 'ema@gmail.com', 0, 0),
+      (UNHEX('7a8b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('9a8b6ac4e3e04824a5436c89a1e31c2e'), UNHEX('3f883b26f61b41b0a83f390bfb4b311a'), 'Awesome experience!', '2023-05-22', true, 'stefan@gmail.com', 0, 0);

@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -35,4 +37,14 @@ public class Comment {
     private LocalDateTime date;
     private boolean isEdited;
     private String emailOfCommenter;
+    private Integer likes;
+    private Integer dislikes;
+    @ElementCollection
+    @CollectionTable(name = "comment_likes", joinColumns = @JoinColumn(name = "comment_id"))
+    @Column(name = "user_id")
+    private Set<UUID> likedByUsers = new HashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "comment_dislikes", joinColumns = @JoinColumn(name = "comment_id"))
+    @Column(name = "user_id")
+    private Set<UUID> dislikedByUsers = new HashSet<>();
 }
