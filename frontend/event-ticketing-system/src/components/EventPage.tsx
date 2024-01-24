@@ -103,7 +103,7 @@ function EventPage() {
             </p>
             {event.done ? (
             <div className="text-center">
-              <strong style={{ color: 'red' }}>Ended</strong>
+              <strong style={{ color: 'red' }}>Done</strong>
             </div>
             ) : (<>
             {isAuthenticated &&

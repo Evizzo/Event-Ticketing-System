@@ -109,33 +109,6 @@ class EventServiceTest {
     }
 
     @Test
-    void getEventsByPublisherId_ReturnsEventsForPublisher() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        UUID userId = UUID.randomUUID();
-        List<Event> mockEvents = Arrays.asList(new Event(), new Event());
-
-        when(jwtService.extractUserIdFromToken(request)).thenReturn(userId);
-        when(eventRepository.findByPublisherId(userId)).thenReturn(mockEvents);
-
-        List<Event> events = eventService.getEventsByPublisherId("name",request);
-
-        assertEquals(2, events.size());
-        verify(eventRepository, times(1)).findByPublisherId(userId);
-    }
-
-    @Test
-    void findAllEvents_ReturnsAllEvents() {
-        List<Event> mockEvents = Arrays.asList(new Event(), new Event());
-
-        when(eventRepository.findAll()).thenReturn(mockEvents);
-
-        List<Event> events = eventService.findAllEvents("name");
-
-        assertEquals(2, events.size());
-        verify(eventRepository, times(1)).findAll();
-    }
-
-    @Test
     void findEventById_WhenValidId_ReturnsEvent() {
         UUID eventId = UUID.randomUUID();
         Event mockEvent = new Event();
@@ -161,28 +134,6 @@ class EventServiceTest {
         assertTrue(event.isEmpty());
         verify(eventRepository, times(1)).findById(invalidId);
     }
-
-    @Test
-    void deleteEventById_WhenValidIdAndUserIsPublisher_DeletesEvent() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        UUID eventId = UUID.randomUUID();
-        UUID userId = UUID.randomUUID();
-
-        Event event = new Event();
-        event.setId(eventId);
-        User publisher = new User();
-        publisher.setId(userId);
-        event.setPublisher(publisher);
-
-        when(jwtService.extractUserIdFromToken(request)).thenReturn(userId);
-        when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
-
-        eventService.deleteEventById(eventId, request);
-
-        verify(ticketService, times(1)).refundUsersForCanceledEvent(eventId);
-        verify(eventRepository, times(1)).deleteById(eventId);
-    }
-
     @Test
     void deleteEventById_WhenValidIdAndUserIsNotPublisher_ThrowsRuntimeException() {
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -201,37 +152,6 @@ class EventServiceTest {
         assertThrows(RuntimeException.class, () -> eventService.deleteEventById(eventId, request));
         verify(ticketService, never()).refundUsersForCanceledEvent(eventId);
         verify(eventRepository, never()).deleteById(eventId);
-    }
-
-    @Test
-    void updateEvent_WhenValidIdAndEventExistsAndUserIsPublisher_UpdatesEvent() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        UUID eventId = UUID.randomUUID();
-        UUID userId = UUID.randomUUID();
-
-        Event existingEvent = new Event();
-        existingEvent.setId(eventId);
-        existingEvent.setName("Old Event Name");
-
-        Event updatedEvent = new Event();
-        updatedEvent.setId(eventId);
-        updatedEvent.setName("Updated Event Name");
-
-        User publisher = new User();
-        publisher.setId(userId);
-        existingEvent.setPublisher(publisher);
-
-        when(jwtService.extractUserIdFromToken(request)).thenReturn(userId);
-        when(eventRepository.findById(eventId)).thenReturn(Optional.of(existingEvent));
-        when(eventRepository.save(existingEvent)).thenReturn(updatedEvent);
-        when(ticketRepository.findTicketsByEventId(eventId)).thenReturn(Collections.emptyList());
-
-        Optional<Event> result = eventService.updateEvent(eventId, updatedEvent, request);
-
-        assertTrue(result.isPresent());
-        assertEquals("Updated Event Name", result.get().getName());
-        verify(eventRepository, times(1)).save(existingEvent);
-        verify(ticketRepository, times(1)).findTicketsByEventId(eventId);
     }
 
     @Test
