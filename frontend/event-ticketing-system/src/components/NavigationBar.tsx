@@ -75,13 +75,13 @@ function NavigationBar() {
             {isAuthenticated &&
                 <Nav className="ml-auto">
                     <Nav.Item>
-                    <Dropdown>
+                    <Dropdown onClick={() => setNotificationClickCount(notificationClickCount + 1)}>
                         <Dropdown.Toggle variant="link" id="notification-dropdown">
-                            <FaBell onClick={() => setNotificationClickCount(notificationClickCount + 1)} />
+                            <FaBell  />
                         </Dropdown.Toggle>
-                        <Dropdown.Menu style={{overflowY: 'auto', marginLeft: "-360%" }}>
+                        <Dropdown.Menu style={{overflowY: 'auto', left: 'auto', right: 0 }}>
                             {notifications.map((notification, index) => (
-                                <Dropdown.Item key={index}>
+                                <Dropdown.Item key={notification.id}>
                                     <div style={{overflowWrap: 'break-word' }}>
                                         <strong>{notification.title}</strong>
                                     </div>
