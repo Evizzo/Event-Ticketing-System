@@ -102,8 +102,8 @@ export const deleteComment = (id: string) => {
     return apiClient.delete(`/comment/${id}`);
 };
 
-export const retrieveAllCommentsForEventByDate = (eventId: string) => {
-    return apiClient.get(`/comment/${eventId}`);
+export const retrieveAllCommentsForEvent = (eventId: string, sortCriteria: string) => {
+    return apiClient.get(`/comment/${eventId}?sortCriteria=${sortCriteria}`);
 };
 
 export const updateComment = (id: string, comment: any) => {

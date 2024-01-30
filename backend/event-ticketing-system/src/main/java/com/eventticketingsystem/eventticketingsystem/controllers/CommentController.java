@@ -58,8 +58,11 @@ public class CommentController {
      * @return ResponseEntity containing the list of comments for the specified event.
      */
     @GetMapping("/{eventId}")
-    public ResponseEntity<List<Comment>> getAllCommentsForEventByDate(@PathVariable UUID eventId){
-        return ResponseEntity.ok(commentService.getAllCommentsForEventByDate(eventId));
+    public ResponseEntity<List<Comment>> getAllCommentsForEvent(
+            @PathVariable UUID eventId,
+            @RequestParam(defaultValue = "date") String sortCriteria
+    ) {
+        return ResponseEntity.ok(commentService.getAllCommentsForEvent(eventId, sortCriteria));
     }
     /**
      * Updates a specific comment by its ID.

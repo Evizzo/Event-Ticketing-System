@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { retrieveAllCommentsForEventByDate, deleteComment, updateComment, saveComment, likeComment, dislikeComment } from '../api/ApiService.ts';
+import { retrieveAllCommentsForEvent, deleteComment, updateComment, saveComment, likeComment, dislikeComment } from '../api/ApiService.ts';
 import { useAuth } from '../api/AuthContex.tsx';
 
 interface Comment {
@@ -18,14 +18,18 @@ interface CommentBoxProps {
   commentCount: number;
 }
 
+type SortCriteria = 'date' | 'likes' | 'dislikes';
+
 function CommentBox({ eventId, updateEvent, commentCount }: CommentBoxProps): JSX.Element {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const { isAuthenticated, email } = useAuth();
   const [message,setMessage] = useState("")
   const [commentCountFront, setCommentCountFront] = useState(commentCount)
+  const [sortCriteria, setSortCriteria] = useState<SortCriteria>('date');
+
   useEffect(() => {
-    retrieveAllCommentsForEventByDate(eventId)
+    retrieveAllCommentsForEvent(eventId, sortCriteria)
       .then((response) => {
         console.log('API Response:', response.data);
         setComments(response.data);
@@ -33,12 +37,12 @@ function CommentBox({ eventId, updateEvent, commentCount }: CommentBoxProps): JS
       .catch((error) => {
         console.error('Error fetching comments:', error);
       });
-  }, [eventId]);
+  }, [eventId, sortCriteria]);
 
   function handleDeleteComment(commentId: string): void {
     deleteComment(commentId)
       .then(() => {
-        retrieveAllCommentsForEventByDate(eventId)
+        retrieveAllCommentsForEvent(eventId, sortCriteria)
           .then((response) => {
             setCommentCountFront(commentCountFront-1)
             setComments(response.data);
@@ -62,7 +66,7 @@ function CommentBox({ eventId, updateEvent, commentCount }: CommentBoxProps): JS
 
       updateComment(commentId, updatedCommentObject)
         .then(() => {
-          retrieveAllCommentsForEventByDate(eventId)
+          retrieveAllCommentsForEvent(eventId, sortCriteria)
             .then((response) => {
               setMessage("");
               setComments(response.data);
@@ -90,7 +94,7 @@ function CommentBox({ eventId, updateEvent, commentCount }: CommentBoxProps): JS
 
     saveComment(eventId, commentToAdd)
       .then(() => {
-        retrieveAllCommentsForEventByDate(eventId)
+        retrieveAllCommentsForEvent(eventId, sortCriteria)
           .then((response) => {
             setCommentCountFront(commentCountFront+1)
 
@@ -110,7 +114,7 @@ function CommentBox({ eventId, updateEvent, commentCount }: CommentBoxProps): JS
   function handleLikeComment(commentId: string): void {
     likeComment(commentId)
       .then(() => {
-        retrieveAllCommentsForEventByDate(eventId)
+        retrieveAllCommentsForEvent(eventId, sortCriteria)
           .then((response) => {
             setComments(response.data);
             updateEvent();
@@ -127,7 +131,7 @@ function CommentBox({ eventId, updateEvent, commentCount }: CommentBoxProps): JS
   function handleDislikeComment(commentId: string): void {
     dislikeComment(commentId)
       .then(() => {
-        retrieveAllCommentsForEventByDate(eventId)
+        retrieveAllCommentsForEvent(eventId, sortCriteria)
           .then((response) => {
             setComments(response.data);
             updateEvent();
@@ -140,9 +144,30 @@ function CommentBox({ eventId, updateEvent, commentCount }: CommentBoxProps): JS
         console.error('Error disliking comment:', error);
       });
   }
+
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortCriteria(event.target.value as SortCriteria);
+  };
+  
   return (
     <div className="comment-box">
       <h2>Comments ({commentCountFront})</h2>
+      <div className="row mb-3">
+        <label htmlFor="sortCriteria" className="form-label me-2">
+          Sort By:
+        </label>
+        <select
+          id="sortCriteria"
+          className="form-select"
+          value={sortCriteria}
+          onChange={handleSortChange}
+          style={{ width: '120px', marginLeft: '12px' }} 
+        >
+          <option value="date">Date</option>
+          <option value="likes">Likes</option>
+          <option value="dislikes">Dislikes</option>
+        </select>
+      </div>
       {isAuthenticated ? (
         <div className="mb-3">
           <textarea

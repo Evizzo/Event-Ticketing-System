@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -84,15 +83,20 @@ public class CommentService {
         });
     }
 
-    public List<Comment> getAllCommentsForEventByDate(UUID eventId) {
+    public List<Comment> getAllCommentsForEvent(UUID eventId, String sortCriteria) {
         Optional<Event> optionalEvent = eventRepository.findById(eventId);
 
         if (optionalEvent.isPresent()) {
             Event event = optionalEvent.get();
-            return event.getComments()
-                    .stream()
-                    .sorted(Comparator.comparing(Comment::getDate).reversed())
-                    .collect(Collectors.toList());
+            List<Comment> comments = new ArrayList<>(event.getComments());
+
+            switch (sortCriteria) {
+                case "likes" -> comments.sort(Comparator.comparing(Comment::getLikes).reversed());
+                case "dislikes" -> comments.sort(Comparator.comparing(Comment::getDislikes).reversed());
+                default -> comments.sort(Comparator.comparing(Comment::getDate).reversed());
+            }
+
+            return comments;
         } else {
             throw new EventNotFoundException("Event not found with ID: " + eventId);
         }

@@ -13,6 +13,7 @@ function AvailableEvents() {
   const [sortCriteria, setSortCriteria] = useState<SortCriteria>('name');
   const authContext = useAuth();
   const isAuthenticated = authContext.isAuthenticated;
+
   type Event = {
     id: string;
     name: string;
@@ -22,6 +23,7 @@ function AvailableEvents() {
     capacity: number;
     price: number;
   };
+  
   useEffect(() => {
     retrieveAllEvents(sortCriteria)
       .then((response: { data: Event[] }) => {
