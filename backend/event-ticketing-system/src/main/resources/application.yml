@@ -19,3 +19,11 @@ spring:
       mode: always
 jwt:
   secret-key: "370c7005cac2e7495f3ee8b6edfe98594e292da208fb21b5d58e63fe064624b3"
+
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate: TRACE
+    org.springframework.security: DEBUG

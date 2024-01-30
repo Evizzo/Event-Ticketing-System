@@ -13,6 +13,7 @@ interface Event {
   ticketPrice: number;
   capacity: number;
   done: boolean;
+  commentCount: number;
 }
 
 function EventPage() {
@@ -101,6 +102,9 @@ function EventPage() {
             </p>
             <p>
               <strong>Ticket ID:</strong> {userTicket || 'Not purchased'}
+            </p>
+            <p>
+              <strong>Number of comments:</strong> {event.commentCount}
             </p>
             {event.done ? (
             <div className="text-center">

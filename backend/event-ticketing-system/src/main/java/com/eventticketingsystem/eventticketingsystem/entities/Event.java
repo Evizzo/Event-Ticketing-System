@@ -44,5 +44,5 @@ public class Event {
     @JsonIgnore
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Ticket> tickets;
-
+    private Integer commentCount;
 }

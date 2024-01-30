@@ -47,7 +47,12 @@ public class CommentService {
                         + " left a comment on "
                         + event.getName(), event.getPublisher().getId());
 
-                return commentRepository.save(comment);
+                Comment savedComment = commentRepository.save(comment);
+
+                event.setCommentCount(event.getCommentCount() + 1);
+                eventRepository.save(event);
+
+                return savedComment;
             } else {
                 throw new RuntimeException("Unauthorized access.");
             }
@@ -67,6 +72,11 @@ public class CommentService {
         optionalComment.ifPresent(comment -> {
             UUID commenterId = comment.getCommenter().getId();
             if (commenterId.equals(commenterIdFromToken)) {
+
+                Event event = comment.getEvent();
+                event.setCommentCount(event.getCommentCount() - 1);
+                eventRepository.save(event);
+
                 notificationService.sendCommentNotification("Deleted comment", comment.getEmailOfCommenter()
                         + " deleted a comment on "
                         + comment.getEvent().getName(), comment.getEvent().getPublisher().getId());

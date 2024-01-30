@@ -32,8 +32,11 @@ public class EventService {
     public Event saveEvent(Event event, HttpServletRequest request){
         UUID userId = jwtService.extractUserIdFromToken(request);
         User user = userService.findUserById(userId).orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+
         event.setPublisher(user);
         event.setDone(false);
+        event.setCommentCount(0);
+
         return eventRepository.save(event);
     }
     public Event eventIsDone(UUID eventId, HttpServletRequest request) {
