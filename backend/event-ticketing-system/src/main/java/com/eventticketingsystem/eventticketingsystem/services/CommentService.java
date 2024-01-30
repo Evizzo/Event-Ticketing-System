@@ -76,6 +76,7 @@ public class CommentService {
                 notificationService.sendCommentNotification("Deleted comment", comment.getEmailOfCommenter()
                         + " deleted a comment on "
                         + comment.getEvent().getName(), comment.getEvent().getPublisher().getId());
+
                 commentRepository.deleteById(id);
             } else {
                 throw new RuntimeException("You are not authorized to delete this comment.");

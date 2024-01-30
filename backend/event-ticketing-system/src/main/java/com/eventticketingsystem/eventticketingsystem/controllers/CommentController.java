@@ -52,8 +52,9 @@ public class CommentController {
                 .orElseThrow(() -> new CommentNotFoundException(COMMENT_NOT_FOUND + id));
     }
     /**
-     * Retrieves all comments for a specific event, sorted by date.
+     * Retrieves all comments for a specific event.
      *
+     * @param sortCriteria Sorting criteria for the retrieved comments.
      * @param eventId UUID of the event for which comments are to be retrieved.
      * @return ResponseEntity containing the list of comments for the specified event.
      */
