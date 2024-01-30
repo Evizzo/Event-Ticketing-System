@@ -103,9 +103,6 @@ function EventPage() {
             <p>
               <strong>Ticket ID:</strong> {userTicket || 'Not purchased'}
             </p>
-            <p>
-              <strong>Number of comments:</strong> {event.commentCount}
-            </p>
             {event.done ? (
             <div className="text-center">
               <strong style={{ color: 'red' }}>Done</strong>
@@ -130,7 +127,7 @@ function EventPage() {
             }
             </>)}
           </div>
-          {event.done && <CommentBox eventId={event.id} updateEvent={updateEventCapacity} />}
+          {event.done && <CommentBox eventId={event.id} updateEvent={updateEventCapacity} commentCount={event.commentCount} />}
         </div>
         
       ) : (

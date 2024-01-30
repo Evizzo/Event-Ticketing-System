@@ -3,7 +3,9 @@ package com.eventticketingsystem.eventticketingsystem.repositories;
 import com.eventticketingsystem.eventticketingsystem.entities.Event;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,4 +37,13 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
             "ORDER BY e.name ASC")
     List<Event> findMostPopularEventsSortedByName(Pageable pageable);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE Event e SET e.commentCount = e.commentCount + 1 WHERE e.id = :eventId")
+    void incrementCommentCount(UUID eventId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Event e SET e.commentCount = e.commentCount - 1 WHERE e.id = :eventId")
+    void decrementCommentCount(UUID eventId);
 }

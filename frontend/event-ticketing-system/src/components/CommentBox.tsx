@@ -15,14 +15,15 @@ interface Comment {
 interface CommentBoxProps {
   eventId: string;
   updateEvent: () => void;
+  commentCount: number;
 }
 
-function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
+function CommentBox({ eventId, updateEvent, commentCount }: CommentBoxProps): JSX.Element {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const { isAuthenticated, email } = useAuth();
   const [message,setMessage] = useState("")
-
+  const [commentCountFront, setCommentCountFront] = useState(commentCount)
   useEffect(() => {
     retrieveAllCommentsForEventByDate(eventId)
       .then((response) => {
@@ -39,6 +40,7 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
       .then(() => {
         retrieveAllCommentsForEventByDate(eventId)
           .then((response) => {
+            setCommentCountFront(commentCountFront-1)
             setComments(response.data);
             updateEvent();
           })
@@ -90,6 +92,8 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
       .then(() => {
         retrieveAllCommentsForEventByDate(eventId)
           .then((response) => {
+            setCommentCountFront(commentCountFront+1)
+
             setMessage("");
             setComments(response.data);
             updateEvent();
@@ -138,7 +142,7 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
   }
   return (
     <div className="comment-box">
-      <h2>Comments</h2>
+      <h2>Comments ({commentCountFront})</h2>
       {isAuthenticated ? (
         <div className="mb-3">
           <textarea
