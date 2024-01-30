@@ -4,6 +4,8 @@ import com.eventticketingsystem.eventticketingsystem.config.JwtService;
 import com.eventticketingsystem.eventticketingsystem.entities.Event;
 import com.eventticketingsystem.eventticketingsystem.entities.Comment;
 import com.eventticketingsystem.eventticketingsystem.entities.User;
+import com.eventticketingsystem.eventticketingsystem.exceptions.CommentNotFoundException;
+import com.eventticketingsystem.eventticketingsystem.exceptions.EventNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.repositories.EventRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.CommentRepository;
 import com.eventticketingsystem.eventticketingsystem.repositories.UserRepository;
@@ -85,7 +87,7 @@ public class CommentService {
                     .sorted(Comparator.comparing(Comment::getDate).reversed())
                     .collect(Collectors.toList());
         } else {
-            throw new RuntimeException("Event not found with ID: " + eventId);
+            throw new EventNotFoundException("Event not found with ID: " + eventId);
         }
     }
 
@@ -116,7 +118,7 @@ public class CommentService {
                         throw new RuntimeException("You are not authorized to update this comment.");
                     }
                 })
-                .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + id));
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
     }
     public Comment likeComment(UUID commentId, HttpServletRequest request) {
         UUID userId = jwtService.extractUserIdFromToken(request);
@@ -140,7 +142,7 @@ public class CommentService {
                     }
                     return commentRepository.save(comment);
                 })
-                .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + commentId));
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + commentId));
     }
 
     public Comment dislikeComment(UUID commentId, HttpServletRequest request) {
@@ -166,6 +168,6 @@ public class CommentService {
 
                     return commentRepository.save(comment);
                 })
-                .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + commentId));
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + commentId));
     }
 }

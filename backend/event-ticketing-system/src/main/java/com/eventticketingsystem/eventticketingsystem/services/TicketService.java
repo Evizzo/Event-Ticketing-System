@@ -67,7 +67,7 @@ public class TicketService {
 
                             int comparison = newCredits.compareTo(BigDecimal.ZERO);
                             if (comparison < 0) {
-                                return Optional.<Ticket>empty();
+                                throw new RuntimeException("You don't have enough credits.");
                             }
 
                             user.setCredits(newCredits);

@@ -47,8 +47,8 @@ function AvailableEvents() {
           `Ticket purchased ${numberOfBought === 1 ? '1 time' : `${numberOfBought} times`}: ${response.data}`
         );
       })
-      .catch((error: Error) => {
-        setMessage(`Not enough credits.`);
+      .catch((error) => {
+        setMessage(error.response.data.message)
         console.error(`Error purchasing ticket: ${error.message}`);
         setTimeout(() => setMessage(''), 3000);
       });

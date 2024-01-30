@@ -55,8 +55,7 @@ function Search() {
         setFoundEvents(updatedEvents);
       })
       .catch((error) => {
-        setMessage(`Not enought credits.`)
-        console.error(`Error purchasing ticket: ${error}`)
+        setMessage(error.response.data.message)
         setTimeout(() => setMessage(''), 3000);
       });
   };

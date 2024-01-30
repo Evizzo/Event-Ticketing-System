@@ -55,7 +55,7 @@ function EventPage() {
         updateEventCapacity();
       })
       .catch((error) => {
-        setMessage(`Not enough credits.`)
+        setMessage(error.response.data.message)
         console.error(`Error purchasing ticket: ${error}`)
         setTimeout(() => setMessage(''), 3000);
       });
@@ -72,6 +72,7 @@ function EventPage() {
 
   return (
     <div className="container mt-4">
+      {message && <div className="alert alert-info mt-3">{message}</div>}
       {loading ? (
         <p>Loading event details...</p>
       ) : event ? (
@@ -130,10 +131,7 @@ function EventPage() {
         
       ) : (
         <p>Event not found.</p>
-      )}
-      
-      {message && <div className="alert alert-info mt-3">{message}</div>}
-      
+      )}      
     </div>
   );
 }

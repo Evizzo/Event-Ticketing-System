@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-
+/**
+ * Controller class for managing user-related operations.
+ */
 @AllArgsConstructor
 @RestController
 @RequestMapping("user")
@@ -22,24 +24,55 @@ public class UserController {
     private final UserService userService;
     private final JwtService jwtService;
     public static final String USER_NOT_FOUND = "User not found with ID: ";
+    /**
+     * Retrieves the credits of the currently authenticated user.
+     *
+     * @param request HttpServletRequest to extract the user ID from the JWT token.
+     * @return ResponseEntity containing the user's credits.
+     */
     @GetMapping("/credits")
     public ResponseEntity<BigDecimal> retrieveUserCredits(HttpServletRequest request){
         return ResponseEntity.ok(userService.retrieveUserCredits(jwtService.extractUserIdFromToken(request)));
     }
+    /**
+     * Adds a new user to the system, intended for Admins.
+     *
+     * @param user The user object to be added.
+     * @return ResponseEntity containing the newly added user.
+     */
     @PostMapping
     public ResponseEntity<User> addNewUser(@Valid @RequestBody User user){
         return ResponseEntity.ok(userService.saveUser(user));
     }
+    /**
+     * Retrieves all users in the system.
+     *
+     * @return ResponseEntity containing a list of all users.
+     */
     @GetMapping
     public ResponseEntity<List<User>> retrieveAllUsers(){
         return ResponseEntity.ok(userService.findAllUsers());
     }
+    /**
+     * Retrieves the details of the currently authenticated user.
+     *
+     * @param request HttpServletRequest to extract the user ID from the JWT token.
+     * @return ResponseEntity containing the details of the current user.
+     * @throws UserNotFoundException if the user is not found.
+     */
     @GetMapping("/current")
     public ResponseEntity<User> retrieveCurrentUser(HttpServletRequest request) {
         return userService.findUserById(jwtService.extractUserIdFromToken(request))
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + jwtService.extractUserIdFromToken(request)));
     }
+    /**
+     * Deletes the currently authenticated user.
+     *
+     * @param request HttpServletRequest to extract the user ID from the JWT token.
+     * @return ResponseEntity indicating the success of the deletion.
+     * @throws UserNotFoundException if the user is not found.
+     */
     @DeleteMapping("/delete-current-user")
     @Transactional
     public ResponseEntity<String> deleteUser(HttpServletRequest request) {
@@ -50,12 +83,27 @@ public class UserController {
                 })
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + jwtService.extractUserIdFromToken(request)));
     }
+    /**
+     * Updates the details of the currently authenticated user.
+     *
+     * @param request HttpServletRequest to extract the user ID from the JWT token.
+     * @param user The updated user object.
+     * @return ResponseEntity containing the updated user details.
+     * @throws UserNotFoundException if the user is not found.
+     */
     @PutMapping("/update-current-user")
     public ResponseEntity<User> updateUser(HttpServletRequest request, @Valid @RequestBody User user) {
         return userService.updateUser(jwtService.extractUserIdFromToken(request), user)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + jwtService.extractUserIdFromToken(request)));
     }
+    /**
+     * Retrieves all tickets associated with the currently authenticated user.
+     *
+     * @param sortCriteria The criteria for sorting the tickets.
+     * @param request HttpServletRequest to extract the user ID from the JWT token.
+     * @return ResponseEntity containing a list of user tickets.
+     */
     @GetMapping("/tickets")
     public ResponseEntity<List<Ticket>> retrieveAllUserTickets(@RequestParam String sortCriteria, HttpServletRequest request) {
         return userService.retrieveAllUserTickets(sortCriteria, jwtService.extractUserIdFromToken(request))

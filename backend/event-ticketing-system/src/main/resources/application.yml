@@ -17,3 +17,5 @@ spring:
   sql:
     init:
       mode: always
+jwt:
+  secret-key: "370c7005cac2e7495f3ee8b6edfe98594e292da208fb21b5d58e63fe064624b3"

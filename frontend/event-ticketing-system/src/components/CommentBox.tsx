@@ -21,6 +21,7 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const { isAuthenticated, email } = useAuth();
+  const [message,setMessage] = useState("")
 
   useEffect(() => {
     retrieveAllCommentsForEventByDate(eventId)
@@ -61,6 +62,7 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
         .then(() => {
           retrieveAllCommentsForEventByDate(eventId)
             .then((response) => {
+              setMessage("");
               setComments(response.data);
               updateEvent();
             })
@@ -69,7 +71,7 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
             });
         })
         .catch((error) => {
-          console.error('Error updating comment:', error);
+          setMessage(error.response.data.message)
         });
     }
   }
@@ -88,6 +90,7 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
       .then(() => {
         retrieveAllCommentsForEventByDate(eventId)
           .then((response) => {
+            setMessage("");
             setComments(response.data);
             updateEvent();
             setNewComment('');
@@ -97,7 +100,7 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
           });
       })
       .catch((error) => {
-        console.error('Error saving comments:', error);
+        setMessage(error.response.data.message)
       });
   }
   function handleLikeComment(commentId: string): void {
@@ -152,6 +155,7 @@ function CommentBox({ eventId, updateEvent }: CommentBoxProps): JSX.Element {
       ) : (
         <p>Please log in to add comments.</p>
       )}
+      {message && <div className="alert alert-warning">{message}</div>}
       {comments.map((comment) => (
         <div key={comment.id} className="comment border p-3 mb-3">
           <p className="mb-2">

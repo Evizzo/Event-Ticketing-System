@@ -11,7 +11,7 @@ type Event = {
 };
 
 function Publish() {
-  const [message,setMessage] = useState("")
+  const [message, setMessage] = useState("")
   const [eventData, setEventData] = useState<Event>({
     name: '',
     date: '',
