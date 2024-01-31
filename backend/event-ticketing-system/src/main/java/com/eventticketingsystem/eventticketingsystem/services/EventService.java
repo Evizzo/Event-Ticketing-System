@@ -91,7 +91,8 @@ public class EventService {
         optionalEvent.ifPresent(event -> {
             UUID eventPublisherId = event.getPublisher().getId();
             if (eventPublisherId.equals(publisherIdFromToken)) {
-                notificationService.sendEventNotification("Event canceled.", event.getName() + " is canceled, your money has been refunded.", id);
+                notificationService.sendEventNotification("Event canceled.", event.getName()
+                        + " is canceled, your money has been refunded.", id);
                 ticketService.refundUsersForCanceledEvent(id);
                 eventRepository.deleteById(id);
             } else {

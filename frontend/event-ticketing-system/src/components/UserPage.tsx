@@ -36,7 +36,7 @@ function UserPage() {
         alert('Account deleted successfully');
       })
       .catch((error) => {
-        alert(`Error deleting account: ${error}`);
+        alert(error.response.data.message);
       });
   };
 

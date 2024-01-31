@@ -34,9 +34,14 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         optionalUser.ifPresent(user -> {
+            List<Event> userEvents = user.getPublishedEvents();
+
+            for (Event event : userEvents) {
+                if (!event.isDone()) throw new RuntimeException("You have events going on !");
+            }
+
             ticketRepository.deleteByUserId(id);
 
-            List<Event> userEvents = user.getPublishedEvents();
             for (Event event : userEvents) {
                 eventRepository.deleteById(event.getId());
             }
