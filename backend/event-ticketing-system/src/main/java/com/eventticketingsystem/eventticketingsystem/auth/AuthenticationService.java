@@ -27,6 +27,11 @@ public class AuthenticationService {
     private final TokenRepository tokenRepository;
     private final NotificationService notificationService;
     public AuthenticationResponse register(RegisterRequest request) {
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("User with this email already exists");
+        }
+
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())

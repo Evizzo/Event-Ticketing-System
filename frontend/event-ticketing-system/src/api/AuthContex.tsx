@@ -58,7 +58,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
           const response = await executeRegistration(userData)
           console.log(response.status)
           if(response.status === 200){
-              console.log("resp stat is 200")
+              console.log("resp stat is 200 for register")
               const jwtToken = 'Bearer ' + response.data.token
               console.log(jwtToken)
               
@@ -80,10 +80,16 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
               logout()
               return false
           }    
-      } catch(error) {
-          console.error(error)
-          logout()
-          return false
+      } catch(error: any) {
+            if (error.response && error.response.data) {
+                alert(error.response.data.message)
+            }
+            else{
+                alert(`Error during registration: ${error}`);
+            }
+
+            logout()
+            return false
       }
   }
     function logout() {

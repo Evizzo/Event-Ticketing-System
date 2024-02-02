@@ -11,6 +11,7 @@ import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
+    boolean existsByEmail(String email);
     @Query("SELECT u.credits FROM User u WHERE u.id = :userId")
     Optional<BigDecimal> findCreditsByUserId(@Param("userId") UUID userId);
 }

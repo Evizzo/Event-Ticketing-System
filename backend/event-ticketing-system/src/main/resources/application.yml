@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/ets
     username: root
-    password: password
+    password: P@ssword123
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -20,10 +20,11 @@ spring:
 jwt:
   secret-key: "370c7005cac2e7495f3ee8b6edfe98594e292da208fb21b5d58e63fe064624b3"
 
-
-logging:
-  level:
-    root: DEBUG
-    org.springframework.web: DEBUG
-    org.hibernate: TRACE
-    org.springframework.security: DEBUG
+#
+#
+#logging:
+#  level:
+#    root: DEBUG
+#    org.springframework.web: DEBUG
+#    org.hibernate: TRACE
+#    org.springframework.security: DEBUG  

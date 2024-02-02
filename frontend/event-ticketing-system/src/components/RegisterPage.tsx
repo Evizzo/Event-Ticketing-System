@@ -53,18 +53,15 @@ function RegisterPage() {
     
         try {            
             if (await authContext.register(userData)) {
-                console.log('Registration successful');
+                alert('Registration successful');
                 navigate("/")
-            } else {
-                alert(`Registration failed, password must have at least 7 characters and contain at least one number.`);
-                return;
             }
         } catch (error: any) {
             if (error.response && error.response.data) {
-                alert(error.response.data.message)
+                console.log(error.response.data.message)
               }
             else
-                alert(`Error during registration: ${error}`);
+                console.log(`Error during registration: ${error}`);
         }
     };
 
