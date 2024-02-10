@@ -12,7 +12,7 @@ spring:
       hibernate:
         format_sql: true
     database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     defer-datasource-initialization: true
   sql:
     init:
@@ -27,4 +27,4 @@ jwt:
 #    root: DEBUG
 #    org.springframework.web: DEBUG
 #    org.hibernate: TRACE
-#    org.springframework.security: DEBUG  
+#    org.springframework.security: DEBUG

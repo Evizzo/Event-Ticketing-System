@@ -4,7 +4,7 @@ function About() {
       <div className="row">
         <div className="col-md-6">
           <img
-            src="public/ets.png"
+            src="/ets.png"
             className="img-fluid rounded-circle"
             alt="About Us"
           />

@@ -13,7 +13,7 @@ function EventCard(props: EventCardProps) {
     <div className="col-md-4 mb-4" key={event.id}>
       <div className="card h-100 d-flex flex-column position-relative">
         <Link to={`/events/${event.id}`}>
-          <img src="public/ets.png" className="card-img-top" alt={event.name} />
+          <img src="/ets.png" className="card-img-top" alt={event.name} />
         </Link>
         <div className="position-absolute top-0 start-0 m-3">
           <p className="mb-0">

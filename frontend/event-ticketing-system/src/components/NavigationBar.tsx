@@ -80,7 +80,7 @@ function NavigationBar() {
                             <FaBell  />
                         </Dropdown.Toggle>
                         <Dropdown.Menu style={{overflowY: 'auto', left: 'auto', right: 0 }}>
-                            {notifications.map((notification, index) => (
+                            {notifications.map((notification, _index) => (
                                 <Dropdown.Item key={notification.id}>
                                     <div style={{overflowWrap: 'break-word' }}>
                                         <strong>{notification.title}</strong>

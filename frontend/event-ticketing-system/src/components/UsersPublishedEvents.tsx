@@ -94,7 +94,7 @@ function UsersPublishedEvents() {
               <div className="card h-100 d-flex flex-column position-relative">
                 <Link to={`/events/${event.id}`}>
                   <img
-                    src="public/ets.png"
+                    src="/ets.png"
                     className="card-img-top"
                     alt={event.name}
                   />

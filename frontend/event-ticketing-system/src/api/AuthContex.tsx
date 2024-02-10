@@ -4,8 +4,8 @@ import { executeJwtAuthenticationService, executeLogout, executeRegistration } f
 
 export const AuthContext = createContext({
     isAuthenticated: false,
-    login: async (email: string, password: string) => false,
-    register: async (userData: any) => false,
+    login: async (_email: string, _password: string) => false,
+    register: async (_userData: any) => false,
     logout: () => {},
     email: '',
     token: '',
