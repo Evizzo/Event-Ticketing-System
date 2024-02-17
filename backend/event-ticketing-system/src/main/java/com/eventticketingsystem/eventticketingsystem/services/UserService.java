@@ -1,13 +1,17 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
 import com.eventticketingsystem.eventticketingsystem.auth.AuthenticationService;
+import com.eventticketingsystem.eventticketingsystem.auth.ChangePasswordRequest;
 import com.eventticketingsystem.eventticketingsystem.entities.*;
 import com.eventticketingsystem.eventticketingsystem.exceptions.UserNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.repositories.*;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,6 +25,7 @@ public class UserService {
     private final EventRepository eventRepository;
     private final CommentRepository commentRepository;
     private final NotificationRepository notificationRepository;
+    private final PasswordEncoder passwordEncoder;
     public User saveUser(User user){
         return userRepository.save(user);
     }
@@ -87,5 +92,17 @@ public class UserService {
             case "price" -> Optional.of(ticketRepository.findAllByUserIdOrderByPaidAmount(userId));
             default -> Optional.of(ticketRepository.findAllByUserIdOrderByEvent_Name(userId));
         };
+    }
+    public void changePassword(ChangePasswordRequest request, Principal connectedUser) {
+
+        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalStateException("Wrong password");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        userRepository.save(user);
     }
 }

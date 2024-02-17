@@ -1,5 +1,6 @@
 package com.eventticketingsystem.eventticketingsystem.controllers;
 
+import com.eventticketingsystem.eventticketingsystem.auth.ChangePasswordRequest;
 import com.eventticketingsystem.eventticketingsystem.config.JwtService;
 import com.eventticketingsystem.eventticketingsystem.entities.Ticket;
 import com.eventticketingsystem.eventticketingsystem.entities.User;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.List;
 /**
  * Controller class for managing user-related operations.
@@ -109,5 +111,14 @@ public class UserController {
         return userService.retrieveAllUserTickets(sortCriteria, jwtService.extractUserIdFromToken(request))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<?> changePassword(
+            @Valid @RequestBody ChangePasswordRequest request,
+            Principal connectedUser
+    ) {
+        userService.changePassword(request, connectedUser);
+        return ResponseEntity.ok().build();
     }
 }
