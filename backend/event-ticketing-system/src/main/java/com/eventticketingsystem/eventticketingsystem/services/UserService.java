@@ -98,7 +98,7 @@ public class UserService {
         User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new IllegalStateException("Wrong password");
+            throw new IllegalStateException("Wrong current password");
         }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));

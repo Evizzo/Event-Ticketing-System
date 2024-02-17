@@ -112,7 +112,13 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+    /**
+     * Endpoint for changing user password.
+     *
+     * @param request        The request object containing current and new password.
+     * @param connectedUser  The principal object representing the authenticated user.
+     * @return               ResponseEntity indicating the success of the password change operation.
+     */
     @PatchMapping("/change-password")
     public ResponseEntity<?> changePassword(
             @Valid @RequestBody ChangePasswordRequest request,

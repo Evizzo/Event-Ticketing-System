@@ -47,9 +47,11 @@ export const searchEventsByName = (eventName: string) => {
 export const retrieveEventById = (eventId: string) => {
     return apiClient.get(`/event/${eventId}`)
 }
+
 export const retrieveCurrentUser = () => {
     return apiClient.get(`/user/current`)
 }
+
 export const executeJwtAuthenticationService = (email: string, password: string) => {
     return apiClient.post(`/api/v1/auth/authenticate`, { email, password });
 }
@@ -121,3 +123,7 @@ export const likeComment = (id: string) => {
 export const dislikeComment = (id: string) => {
     return apiClient.put(`/comment/${id}/dislike`);
 };
+
+export const changePassword = (currentPassword: string, newPassword: string) => {
+    return apiClient.patch(`/user/change-password`, { currentPassword, newPassword });
+}
