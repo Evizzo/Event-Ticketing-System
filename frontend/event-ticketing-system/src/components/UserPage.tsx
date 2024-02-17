@@ -2,7 +2,7 @@ import { useEffect, useState, ChangeEvent } from 'react';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
-import { retrieveCurrentUser, deleteCurrentUser, changePassword } from '../api/ApiService'; // Importing changePassword function
+import { retrieveCurrentUser, deleteCurrentUser, changePassword } from '../api/ApiService';
 import { Button, Form } from 'react-bootstrap';
 import { useAuth } from '../api/AuthContex';
 
