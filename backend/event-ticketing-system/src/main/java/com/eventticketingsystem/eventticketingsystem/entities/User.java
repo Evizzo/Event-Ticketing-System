@@ -49,7 +49,7 @@ public class User implements UserDetails {
     private List<Notification> notifications;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return role.getAuthorities();
     }
 
     @Override

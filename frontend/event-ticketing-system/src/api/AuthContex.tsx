@@ -9,6 +9,7 @@ export const AuthContext = createContext({
     logout: () => {},
     email: '',
     token: '',
+    role: '',
   })
   
 export const useAuth = () => useContext(AuthContext)
@@ -18,6 +19,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     const [isAuthenticated, setAuthenticated] = useState(false)
     const [email, setEmail] = useState("")
     const [token, setToken] = useState("")
+    const [role, setRole] = useState("")
 
     async function login(email: string, password: string) {
         try {
@@ -31,6 +33,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
                 setAuthenticated(true)
                 setEmail(email)
                 setToken(jwtToken)
+                setRole(response.data.role)
 
                 apiClient.interceptors.request.use(
                     (config) => {
@@ -65,6 +68,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
               setAuthenticated(true)
               setEmail(userData.email)
               setToken(jwtToken)
+              setRole(response.data.role)
 
               apiClient.interceptors.request.use(
                   (config) => {
@@ -101,6 +105,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
               setAuthenticated(false);
               setToken('');
               setEmail('');
+              setRole('');
 
               window.location.reload()
 
@@ -117,7 +122,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       }
 
     return (
-        <AuthContext.Provider value={ {isAuthenticated, login, register, logout, email, token }  }>
+        <AuthContext.Provider value={ {isAuthenticated, login, register, logout, email, token, role }  }>
             {children}
         </AuthContext.Provider>
     )

@@ -127,3 +127,7 @@ export const dislikeComment = (id: string) => {
 export const changePassword = (currentPassword: string, newPassword: string) => {
     return apiClient.patch(`/user/change-password`, { currentPassword, newPassword });
 }
+
+export const retrieveAllUsers = () => {
+    return apiClient.get(`/admin/users`)
+}

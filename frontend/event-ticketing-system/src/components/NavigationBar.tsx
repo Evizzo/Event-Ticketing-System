@@ -61,7 +61,6 @@ function NavigationBar() {
                         {isAuthenticated && <Nav.Link as={Link} to="/tickets">Tickets</Nav.Link>}
                         {isAuthenticated && <Nav.Link as={Link} to="/publish">Publish</Nav.Link>}
                         {isAuthenticated && <Nav.Link as={Link} to="/published">Published</Nav.Link>}
-                        
                         <Nav.Link as={Link} to="/about">About</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
@@ -106,6 +105,7 @@ function NavigationBar() {
                             <strong>User page</strong>
                         </Nav.Link>
                     </Nav.Item>
+                    {isAuthenticated && authContext.role === "ADMIN" && <Nav.Link as={Link} to="/admin" style={{ color: "cyan" }}>AdminPage</Nav.Link>}
                     <Nav.Item>
                         <Nav.Link as={Link} to="/login" onClick={logout} style={{ color: "red" }}>
                             Logout

@@ -16,6 +16,7 @@ import NotFound from "./components/NotFound";
 import UserPage from "./components/UserPage";
 import UsersPublishedEvents from "./components/UsersPublishedEvents";
 import EditPublishedEvent from "./components/EditPublishedEvent";
+import AdminPage from "./components/AdminPage";
 
 function App(){
   function AuthenticatedRoute({ children }: { children: ReactNode }) {
@@ -68,6 +69,13 @@ function App(){
                 <Publish/>
               </AuthenticatedRoute>
             }/>
+            <Route path="/admin" element={
+              <AuthenticatedRoute>
+                <AdminPage/>
+              </AuthenticatedRoute>
+            }/>
+
+
             <Route path="/search" element={
                 <Search/>
             }/>

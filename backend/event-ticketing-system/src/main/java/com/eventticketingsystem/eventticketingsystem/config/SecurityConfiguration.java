@@ -3,7 +3,6 @@ package com.eventticketingsystem.eventticketingsystem.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +15,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import static com.eventticketingsystem.eventticketingsystem.config.Permission.*;
+import static com.eventticketingsystem.eventticketingsystem.entities.Role.ADMIN;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
@@ -36,11 +39,16 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                     req
-                            .requestMatchers(HttpMethod.GET,"/event").permitAll()
-                            .requestMatchers(HttpMethod.GET,"/search").permitAll()
-                            .requestMatchers(HttpMethod.GET,"/event/{id}").permitAll()
-                            .requestMatchers(HttpMethod.GET,"/event/popular").permitAll()
-                            .requestMatchers(HttpMethod.GET,"/comment/{eventId}").permitAll()
+                            .requestMatchers(GET,"/event").permitAll()
+                            .requestMatchers(GET,"/search").permitAll()
+                            .requestMatchers(GET,"/event/{id}").permitAll()
+                            .requestMatchers(GET,"/event/popular").permitAll()
+                            .requestMatchers(GET,"/comment/{eventId}").permitAll()
+                            .requestMatchers("/admin/**").hasRole(ADMIN.name())
+                            .requestMatchers(GET, "/admin/**").hasAuthority(ADMIN_READ.name())
+                            .requestMatchers(POST, "/admin/**").hasAuthority(ADMIN_CREATE.name())
+                            .requestMatchers(PUT, "/admin/**").hasAuthority(ADMIN_UPDATE.name())
+                            .requestMatchers(DELETE, "/admin/**").hasAuthority(ADMIN_DELETE.name())
                             .requestMatchers(WHITE_LIST_URL).permitAll()
                     .anyRequest()
                     .authenticated()
