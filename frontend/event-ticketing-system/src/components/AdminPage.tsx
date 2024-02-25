@@ -48,7 +48,7 @@ function AdminPage() {
   const handleEditUser = async (userId: string) => {
     try {
       const editedUser = editedValues[userId];
-      if (!editedUser) return; // No changes made
+      if (!editedUser) return;
       await editUser(userId, editedUser);
       const updatedUsers = users.map(user =>
         user.id === userId ? { ...user, ...editedUser } : user

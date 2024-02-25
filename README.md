@@ -1,35 +1,78 @@
 # **Event Ticketing System**
-This Event Ticketing System project is a full-stack application built to manage events, tickets, and users in a simplified ticketing environment.
 
-**Backend Features**
-**Controllers:** The backend features multiple controllers handling various functionalities.
+This system provides a platform for managing events, ticket purchases, user interactions, and more. 
+Below, you'll find an overview of the controllers in this project along with their functionalities.
 
-EventController: Manages events, allowing creation, retrieval, deletion, and updating of events. It includes features like retrieving published events, searching by name, marking an event as done, and accessing popular events.
+# **Tools used**
 
-TicketController: Facilitates ticket purchasing and refunds for specific events.
+**Frontend**: Html, Css, React, TypeScript, BootStrap...
+**Backend**: Java, Spring Boot, Spring Security, Jpa/Hibernate...
+**Database**: MySQL.
+**Testing**: Mockito, JUnit.
+**Other**: Docker.
 
-UserController: Manages user-related operations such as user creation, retrieval, updating, and deletion. It also handles user credits, current user details, and user ticket retrieval.
+# **Overview:**
 
-**Services:** The backend employs services to handle business logic and interact with the repositories.
+**UserController**
 
-EventService: Provides methods for event-related functionalities like saving events, finding events by different criteria, and handling event deletions and updates.
+Manages user-related operations such as retrieving user credits, adding new users, retrieving user details, updating user information, deleting users, 
+retrieving user tickets, and changing passwords.
 
-TicketService: Manages ticket-related operations such as purchasing and refunding tickets.
+**TicketController**
 
-UserService: Handles user-related functionalities like user creation, retrieval, updating, and deletion, along with managing user credits and ticket retrieval.
+Handles ticket-related operations including purchasing tickets for events, refunding tickets, and retrieving user tickets for specific events.
 
-Security Configuration: Implements security measures using JWT (JSON Web Tokens) authentication. It secures endpoints and manages user authentication and authorization.
+**NotificationController**
 
-**Frontend Features**
+Manages notification-related operations such as retrieving user notifications and deleting specific notifications.
 
-The frontend is built with React, utilizing TypeScript, Bootstrap, HTML, and CSS to create a user-friendly interface.
+**EventController**
 
-**Testing**
+Handles event-related operations like adding new events, retrieving events published by users, retrieving all events, retrieving a specific event, deleting events, 
+updating events, searching events by name, marking events as done, and retrieving popular events.
 
-The project includes comprehensive test coverage to ensure the reliability and stability of the application.
+**CommentController**
 
-**Technologies Used**
+Manages comment-related operations including saving comments for events, deleting comments, retrieving all comments for an event, updating comments, 
+liking comments, and disliking comments.
 
-Java, Spring Boot, Spring Security, Jpa/Hibernate, React, TypeScript, Bootstrap, HTML, CSS, Mockito...
+**AdminController**
 
-This project aims to provide a scalable and secure platform for managing events, tickets, and user interactions within a ticketing system.
+Handles administrative operations like adding new users, retrieving all users, and updating existing users. 
+Requires admin privileges for access.
+
+**AuthenticationController**
+
+Manages authentication-related operations such as user registration, user authentication, and user logout. 
+Utilizes JWT tokens for authentication.
+
+**Authentication:**
+
+JWT tokens are used for authentication throughout the system.
+Endpoints requiring authentication are protected, and users must provide a valid JWT token to access them.
+The system provides endpoints for user registration, authentication, and logout.
+
+**Security Configuration:**
+
+The system's security configuration ensures that endpoints are properly secured based on their functionalities.
+Different roles and authorities are defined to control access to various endpoints.
+CORS is configured to allow cross-origin requests from all origins.
+
+**Docker Support:**
+
+This project contains Docker support for easy deployment and scalability.
+Docker containers can be used to package the application and its dependencies for deployment in any environment.
+
+**Testing:**
+
+The project includes comprehensive testing to ensure the reliability and correctness of its functionalities.
+
+**Frontend**
+
+Additionally, this project includes a frontend made in React, TypeScript, and Bootstrap. 
+The frontend provides a user-friendly interface for interacting with the Event Ticketing System.
+
+**Database**
+
+This project utilizes Spring Data JPA/Hibernate to communicate with a MySQL database. 
+This setup enables efficient storage and retrieval of data, ensuring seamless interaction between the application and the database.
