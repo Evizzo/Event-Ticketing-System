@@ -131,3 +131,7 @@ export const changePassword = (currentPassword: string, newPassword: string) => 
 export const retrieveAllUsers = () => {
     return apiClient.get(`/admin/users`)
 }
+
+export const editUser = (id: string, user: any) => {
+    return apiClient.put(`/admin/user?id=${id}`, user)
+}

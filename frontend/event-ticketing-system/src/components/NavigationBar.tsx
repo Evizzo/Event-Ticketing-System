@@ -105,7 +105,7 @@ function NavigationBar() {
                             <strong>User page</strong>
                         </Nav.Link>
                     </Nav.Item>
-                    {isAuthenticated && authContext.role === "ADMIN" && <Nav.Link as={Link} to="/admin" style={{ color: "cyan" }}>AdminPage</Nav.Link>}
+                    {isAuthenticated && authContext.role === "ADMIN" && <Nav.Link as={Link} to="/admin" style={{ color: "cyan" }}>Admin Page</Nav.Link>}
                     <Nav.Item>
                         <Nav.Link as={Link} to="/login" onClick={logout} style={{ color: "red" }}>
                             Logout
