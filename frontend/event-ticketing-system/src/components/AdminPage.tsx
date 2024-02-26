@@ -23,6 +23,7 @@ function AdminPage() {
   const [editedValues, setEditedValues] = useState<Record<string, Partial<EditableUser>>>({});
   const authContext = useAuth();
   const navigate = useNavigate();
+  const [message, setMessage] = useState("")
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -30,6 +31,7 @@ function AdminPage() {
         const response = await retrieveAllUsers();
         setUsers(response.data);
         setLoading(false);
+        setMessage("")
       } catch (error: any) {
         console.error('Error fetching users:', error);
         setLoading(false);
@@ -54,7 +56,12 @@ function AdminPage() {
         user.id === userId ? { ...user, ...editedUser } : user
       );
       setUsers(updatedUsers);
+      setMessage(`${userId} updated successfully.`)
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
     } catch (error: any) {
+      setMessage(error.response.data.message)
       console.error('Error editing user:', error);
     }
   };
@@ -65,6 +72,7 @@ function AdminPage() {
 
   return (
     <div>
+      {message && <div className="alert alert-warning">{message}</div>}
       <h1 className="mb-4">User List</h1>
       {loading ? (
         <p>Loading...</p>
