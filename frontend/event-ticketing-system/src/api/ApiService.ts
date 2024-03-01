@@ -135,3 +135,7 @@ export const retrieveAllUsers = () => {
 export const editUser = (id: string, user: any) => {
     return apiClient.put(`/admin/user?id=${id}`, user)
 }
+
+export const convertEventPriceCurrency = (toCurrency: string, amount: number) => {
+    return apiClient.get(`/currency-converter?toCurrency=${toCurrency}&amount=${amount}`)
+}

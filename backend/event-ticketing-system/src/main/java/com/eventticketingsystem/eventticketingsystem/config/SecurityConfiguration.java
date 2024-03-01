@@ -44,11 +44,13 @@ public class SecurityConfiguration {
                             .requestMatchers(GET,"/event/{id}").permitAll()
                             .requestMatchers(GET,"/event/popular").permitAll()
                             .requestMatchers(GET,"/comment/{eventId}").permitAll()
+                            .requestMatchers(GET,"/currency-converter").permitAll()
                             .requestMatchers("/admin/**").hasRole(ADMIN.name())
                             .requestMatchers(GET, "/admin/**").hasAuthority(ADMIN_READ.name())
                             .requestMatchers(POST, "/admin/**").hasAuthority(ADMIN_CREATE.name())
                             .requestMatchers(PUT, "/admin/**").hasAuthority(ADMIN_UPDATE.name())
                             .requestMatchers(DELETE, "/admin/**").hasAuthority(ADMIN_DELETE.name())
+
                             .requestMatchers(WHITE_LIST_URL).permitAll()
                     .anyRequest()
                     .authenticated()

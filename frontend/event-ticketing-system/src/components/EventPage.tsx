@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { retrieveEventById, purchaseEventTicket, getUserTicketByEventId } from '../api/ApiService.ts';
+import { retrieveEventById, purchaseEventTicket, getUserTicketByEventId, convertEventPriceCurrency } from '../api/ApiService.ts';
 import { useAuth } from '../api/AuthContex';
 import CommentBox from './CommentBox.tsx';
 
@@ -24,6 +24,7 @@ function EventPage() {
   const [userTicket, setUserTicket] = useState<string | null>(null);
   const authContext = useAuth();
   const isAuthenticated = authContext.isAuthenticated;
+  const [currencyCode, setCurrencyCode] = useState<string>('USD');
 
   useEffect(() => {
     if (eventId) {
@@ -71,6 +72,21 @@ function EventPage() {
     }
   };
 
+  const handleCurrencyCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrencyCode(event.target.value);
+  };
+
+  const handleConvert = () => {
+    convertEventPriceCurrency(currencyCode, event!.ticketPrice)
+      .then((response) => {
+        alert(`${response.data} ${currencyCode}`)
+        console.log(response)
+      })
+      .catch((error) => {
+        alert(error.response.data.message);
+      });
+  };
+  
   return (
     <div className="container mt-4">
       {message && <div className="alert alert-info mt-3">{message}</div>}
@@ -99,6 +115,8 @@ function EventPage() {
             </p>
             <p>
               <strong>Price:</strong> ${event.ticketPrice}
+              <input type="text" value={currencyCode} onChange={handleCurrencyCodeChange} placeholder="Currency Code" />
+              <button className="btn btn-primary ml-2" onClick={handleConvert}>Convert</button>
             </p>
             <p>
               <strong>Ticket ID:</strong> {userTicket || 'Not purchased'}
