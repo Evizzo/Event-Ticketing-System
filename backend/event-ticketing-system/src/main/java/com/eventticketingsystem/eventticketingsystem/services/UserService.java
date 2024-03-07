@@ -105,4 +105,7 @@ public class UserService {
 
         userRepository.save(user);
     }
+    public User getUserWithPublishedEvents(String email) {
+        return userRepository.findUserWithPublishedEvents(email);
+    }
 }

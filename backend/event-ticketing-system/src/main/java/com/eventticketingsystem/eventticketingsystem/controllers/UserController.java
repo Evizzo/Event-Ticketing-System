@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
+
 /**
  * Controller class for managing user-related operations.
  */
@@ -126,5 +128,15 @@ public class UserController {
     ) {
         userService.changePassword(request, connectedUser);
         return ResponseEntity.ok().build();
+    }
+    /**
+     * Retrieves user information (user profile) along with the list of events they published.
+     *
+     * @param email The unique identifier of the user.
+     * @return The user information with the list of published events.
+     */
+    @GetMapping("/profile/{email}")
+    public User getUserWithPublishedEvents(@PathVariable String email) {
+        return userService.getUserWithPublishedEvents(email);
     }
 }

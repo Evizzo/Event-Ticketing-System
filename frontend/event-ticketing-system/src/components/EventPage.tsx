@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { retrieveEventById, purchaseEventTicket, getUserTicketByEventId, convertEventPriceCurrency } from '../api/ApiService.ts';
 import { useAuth } from '../api/AuthContex';
 import CommentBox from './CommentBox.tsx';
@@ -14,6 +14,7 @@ interface Event {
   capacity: number;
   done: boolean;
   commentCount: number;
+  publisherEmail: string;
 }
 
 function EventPage() {
@@ -120,6 +121,9 @@ function EventPage() {
             </p>
             <p>
               <strong>Ticket ID:</strong> {userTicket || 'Not purchased'}
+            </p>
+            <p>
+              <strong>Publisher:</strong> <Link to={`/user-profile/${event.publisherEmail}`}>{event.publisherEmail}</Link>
             </p>
             {event.done ? (
             <div className="text-center">

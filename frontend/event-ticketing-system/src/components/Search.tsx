@@ -9,7 +9,7 @@ function Search() {
   const [foundEvents, setFoundEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [numberOfBought, setNumberOfBought] = useState(1);
+  const [numberOfBought, setNumberOfBought] = useState(0);
   const authContext = useAuth();
   const isAuthenticated = authContext.isAuthenticated;
 

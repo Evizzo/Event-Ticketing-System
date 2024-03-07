@@ -45,4 +45,5 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Ticket> tickets;
     private Integer commentCount;
+    private String publisherEmail;
 }

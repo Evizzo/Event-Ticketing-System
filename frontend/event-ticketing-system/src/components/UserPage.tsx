@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { retrieveCurrentUser, deleteCurrentUser, changePassword } from '../api/ApiService';
 import { Button, Form } from 'react-bootstrap';
 import { useAuth } from '../api/AuthContex';
+import { Link } from 'react-router-dom';
 
 function UserPage() {
   const authContext = useAuth();
@@ -85,6 +86,7 @@ function UserPage() {
               <strong>Last Name:</strong> {userData.lastname}<br />
               <strong>Email:</strong> {userData.email}<br />
               <strong>Credits:</strong> {userData.credits}<br />
+              <Link to={`/user-profile/${userData.email}`}><strong>Public profile page</strong></Link>
             </Card.Text>
             <Form>
               <Form.Group controlId="currentPassword">

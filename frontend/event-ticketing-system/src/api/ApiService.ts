@@ -1,6 +1,7 @@
 import {apiClient} from './ApiClient'; 
 
-type Event = {
+export type Event = {
+    id: string;
     name: string;
     date: string;
     location: string;
@@ -8,6 +9,14 @@ type Event = {
     capacity: number;
     ticketPrice: number;
   };
+
+export interface User {
+    firstname: string;
+    lastname: string;
+    email: string;
+    credits: number;
+    publishedEvents: any;
+  }
 
 type RegisterRequest = {
     firstname: string;
@@ -138,4 +147,8 @@ export const editUser = (id: string, user: any) => {
 
 export const convertEventPriceCurrency = (toCurrency: string, amount: number) => {
     return apiClient.get(`/currency-converter?toCurrency=${toCurrency}&amount=${amount}`)
+}
+
+export const getUserWithPublishedEvents = (email: string) => {
+    return apiClient.get(`/user/profile/${email}`)
 }

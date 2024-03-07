@@ -13,7 +13,7 @@ Below, you'll find an overview of the controllers in this project along with the
 
 **Testing**: Mockito, JUnit.
 
-**External APIs**: https://www.exchangerate-api.com/
+**External APIs**: https://www.exchangerate-api.com/.
 
 **Other**: Docker.
 

@@ -42,6 +42,7 @@ public class SecurityConfiguration {
                             .requestMatchers(GET,"/event").permitAll()
                             .requestMatchers(GET,"/search").permitAll()
                             .requestMatchers(GET,"/event/{id}").permitAll()
+                            .requestMatchers(GET,"/user/profile/{email}").permitAll()
                             .requestMatchers(GET,"/event/popular").permitAll()
                             .requestMatchers(GET,"/comment/{eventId}").permitAll()
                             .requestMatchers(GET,"/currency-converter").permitAll()

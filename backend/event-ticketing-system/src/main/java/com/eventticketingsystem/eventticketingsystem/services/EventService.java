@@ -36,6 +36,7 @@ public class EventService {
         event.setPublisher(user);
         event.setDone(false);
         event.setCommentCount(0);
+        event.setPublisherEmail(user.getEmail());
 
         return eventRepository.save(event);
     }

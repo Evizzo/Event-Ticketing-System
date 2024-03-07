@@ -14,4 +14,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     boolean existsByEmail(String email);
     @Query("SELECT u.credits FROM User u WHERE u.id = :userId")
     Optional<BigDecimal> findCreditsByUserId(@Param("userId") UUID userId);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.publishedEvents WHERE u.email = :email")
+    User findUserWithPublishedEvents(String email);
 }
