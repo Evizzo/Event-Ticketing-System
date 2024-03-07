@@ -152,3 +152,7 @@ export const convertEventPriceCurrency = (toCurrency: string, amount: number) =>
 export const getUserWithPublishedEvents = (email: string) => {
     return apiClient.get(`/user/profile/${email}`)
 }
+
+export const forceDeleteUserById = (userId: string) => {
+    return apiClient.delete(`/admin/user/${userId}`)
+}

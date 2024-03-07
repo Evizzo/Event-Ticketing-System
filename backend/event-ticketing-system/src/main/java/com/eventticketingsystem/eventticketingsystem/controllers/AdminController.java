@@ -3,11 +3,12 @@ package com.eventticketingsystem.eventticketingsystem.controllers;
 import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.exceptions.UserNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.services.AdminService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,5 +59,23 @@ public class AdminController {
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND + id));
     }
-
+    /**
+     * Forcefully delete a user by ID.
+     *
+     * @param id The UUID of the user to be forcefully deleted.
+     * @return ResponseEntity with a success message or throw UserNotFoundException if user not found.
+     */
+    @DeleteMapping("user/{id}")
+    @PreAuthorize("hasAuthority('admin:delete')")
+    @Transactional
+    public ResponseEntity<String> forceDeleteUserById(@PathVariable UUID id) {
+        try {
+            adminService.forceDeleteUserById(id);
+            return ResponseEntity.ok("User forcefully deleted");
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to delete user: " + e.getMessage());
+        }
+    }
 }

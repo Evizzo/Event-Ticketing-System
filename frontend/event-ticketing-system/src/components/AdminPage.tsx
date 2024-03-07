@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { retrieveAllUsers, editUser } from '../api/ApiService';
+import { retrieveAllUsers, editUser, forceDeleteUserById } from '../api/ApiService';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../api/AuthContex';
 
@@ -70,6 +70,21 @@ function AdminPage() {
     setEditedValues({ ...editedValues, [userId]: { ...editedValues[userId], [field]: value } });
   };
 
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      await forceDeleteUserById(userId);
+      const updatedUsers = users.filter(user => user.id !== userId);
+      setUsers(updatedUsers);
+      setMessage(`User ${userId} deleted successfully.`);
+      setTimeout(() => {
+        setMessage("");
+      }, 5000);
+    } catch (error: any) {
+      setMessage(error.response.data.message);
+      console.error('Error deleting user:', error);
+    }
+  };
+
   return (
     <div>
       {message && <div className="alert alert-warning">{message}</div>}
@@ -121,7 +136,8 @@ function AdminPage() {
                     />
                   </td>
                   <td>
-                    <button onClick={() => handleEditUser(user.id)}>Save</button>
+                    <button className="btn btn-primary" onClick={() => handleEditUser(user.id)}>Save</button>
+                    <button className="btn btn-danger" onClick={() => handleDeleteUser(user.id)}>Delete</button>
                   </td>
                 </tr>
               ))}
