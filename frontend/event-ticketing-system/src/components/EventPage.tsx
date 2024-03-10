@@ -26,6 +26,7 @@ function EventPage() {
   const authContext = useAuth();
   const isAuthenticated = authContext.isAuthenticated;
   const [currencyCode, setCurrencyCode] = useState<string>('USD');
+  const [codeName, setCodeName] = useState('');
 
   useEffect(() => {
     if (eventId) {
@@ -51,8 +52,8 @@ function EventPage() {
     }
   }, [eventId, isAuthenticated]);
 
-  const handlePurchase = (eventId: string) => {
-    purchaseEventTicket(eventId)
+  const handlePurchase = (eventId: string, codeName: string) => {
+    purchaseEventTicket(eventId, codeName)
       .then((response) => {
         setMessage(`${response.data}`);
         updateEventCapacity();
@@ -132,10 +133,14 @@ function EventPage() {
             ) : (<>
             {isAuthenticated &&
               <div className="text-center">
+                <div className="form-group">
+                  <label>Code Name:</label>
+                  <input type="text" className="form-control" value={codeName} onChange={(e) => setCodeName(e.target.value)} />
+                </div>
                 <button
                   className="btn btn-primary"
                   onClick={() =>
-                    handlePurchase(event.id)
+                    handlePurchase(event.id, codeName)
                   }
                 >
                   Purchase: {event.capacity}

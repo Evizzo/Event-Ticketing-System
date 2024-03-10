@@ -20,16 +20,17 @@ public class TicketController {
     private final TicketService ticketService;
     private final JwtService jwtService;
     /**
-     * Purchases a ticket for the specified event.
+     * Purchases a ticket for the specified event with an optional redeem code.
      *
      * @param eventId The ID of the event for which the ticket is being purchased.
      * @param request HttpServletRequest to extract the user ID from the JWT token.
+     * @param codeName  (Optional) The name of the redeem code to apply for a discount.
      * @return ResponseEntity indicating the success of the ticket purchase.
      * @throws TicketNotFoundException if the ticket is not found.
      */
     @PostMapping("/{eventId}/ticket")
-    public ResponseEntity<String> purchaseTicket(@PathVariable UUID eventId, HttpServletRequest request) {
-        return ticketService.purchaseTicket(eventId, jwtService.extractUserIdFromToken(request))
+    public ResponseEntity<String> purchaseTicket(@PathVariable UUID eventId, HttpServletRequest request, @RequestParam String codeName) {
+        return ticketService.purchaseTicket(eventId, jwtService.extractUserIdFromToken(request), codeName)
                 .map(purchasedTicket -> ResponseEntity.ok("Ticket purchased successfully. Ticket ID: " + purchasedTicket.getId()))
                 .orElseThrow(() -> new TicketNotFoundException("Ticket not found."));
     }

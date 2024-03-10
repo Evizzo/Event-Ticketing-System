@@ -23,7 +23,8 @@ public class TicketService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final UserService userService;
-    public Optional<Ticket> purchaseTicket(UUID eventId, UUID userId) {
+    private final RedeemCodeService redeemCodeService;
+    public Optional<Ticket> purchaseTicket(UUID eventId, UUID userId, String codeName) {
         return eventRepository.findById(eventId)
                 .flatMap(event -> userRepository.findById(userId)
                         .map(user -> {
@@ -31,25 +32,21 @@ public class TicketService {
                                 return Optional.<Ticket>empty();
                             }
 
+                            BigDecimal ticketPrice = event.getTicketPrice();
+
+                            if (codeName != null && !codeName.isEmpty()) {
+                                ticketPrice = redeemCodeService.calculatePriceWithCode(ticketPrice, codeName);
+                            }
+
+                            BigDecimal lambdaTicketPrice = ticketPrice;
                             Optional<Ticket> existingTicket = user.getTickets().stream()
-                                    .filter(ticket -> ticket.getEvent().getId().equals(eventId))
+                                    .filter(ticket -> ticket.getEvent().getId().equals(eventId)
+                                            && ticket.getPaidAmount().equals(lambdaTicketPrice))
                                     .findFirst();
 
                             if (existingTicket.isPresent()) {
                                 Ticket ticket = existingTicket.get();
-                                if (ticket.getPaidAmount().equals(event.getTicketPrice())){
-                                    ticket.setAmount(ticket.getAmount() + 1);
-                                }
-                                else {
-                                    Ticket newTicket = new Ticket();
-                                    newTicket.setEvent(event);
-                                    newTicket.setUser(user);
-                                    newTicket.setPurchaseDate(LocalDateTime.now());
-                                    newTicket.setStatus(TicketStatus.PURCHASED);
-                                    newTicket.setAmount(1);
-                                    newTicket.setPaidAmount(event.getTicketPrice());
-                                    user.getTickets().add(newTicket);
-                                }
+                                ticket.setAmount(ticket.getAmount() + 1);
                             } else {
                                 Ticket ticket = new Ticket();
                                 ticket.setEvent(event);
@@ -57,13 +54,13 @@ public class TicketService {
                                 ticket.setPurchaseDate(LocalDateTime.now());
                                 ticket.setStatus(TicketStatus.PURCHASED);
                                 ticket.setAmount(1);
-                                ticket.setPaidAmount(event.getTicketPrice());
+                                ticket.setPaidAmount(ticketPrice);
                                 user.getTickets().add(ticket);
                             }
 
                             event.setCapacity(event.getCapacity() - 1);
 
-                            BigDecimal newCredits = user.getCredits().subtract(event.getTicketPrice());
+                            BigDecimal newCredits = user.getCredits().subtract(ticketPrice);
 
                             int comparison = newCredits.compareTo(BigDecimal.ZERO);
                             if (comparison < 0) {

@@ -3,6 +3,7 @@ import { editEvent, retrieveEventById } from '../api/ApiService';
 import { useParams } from 'react-router-dom';
 
 type Event = {
+  id: string;
   name: string;
   date: string;
   location: string;
@@ -18,6 +19,7 @@ interface Params {
 function EditPublishedEvent() {
   const [message, setMessage] = useState('');
   const [eventData, setEventData] = useState<Event>({
+    id: '',
     name: '',
     date: '',
     location: '',

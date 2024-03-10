@@ -33,7 +33,7 @@ function Search() {
   };
 
   const handlePurchase = (eventId: string) => {
-    purchaseEventTicket(eventId)
+    purchaseEventTicket(eventId, '')
       .then((response) => {
         const updatedNumberOfBought = numberOfBought + 1;
         setNumberOfBought(updatedNumberOfBought);

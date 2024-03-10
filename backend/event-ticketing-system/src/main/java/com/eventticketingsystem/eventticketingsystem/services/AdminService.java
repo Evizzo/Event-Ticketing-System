@@ -1,10 +1,7 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
 import com.eventticketingsystem.eventticketingsystem.auth.AuthenticationService;
-import com.eventticketingsystem.eventticketingsystem.entities.Comment;
-import com.eventticketingsystem.eventticketingsystem.entities.Event;
-import com.eventticketingsystem.eventticketingsystem.entities.Notification;
-import com.eventticketingsystem.eventticketingsystem.entities.User;
+import com.eventticketingsystem.eventticketingsystem.entities.*;
 import com.eventticketingsystem.eventticketingsystem.exceptions.UserNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.repositories.*;
 import lombok.AllArgsConstructor;

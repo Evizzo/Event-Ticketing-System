@@ -52,7 +52,7 @@ public class TicketServiceTest {
 
         when(ticketRepository.save(any())).thenReturn(new Ticket());
 
-        Optional<Ticket> ticketOptional = ticketService.purchaseTicket(UUID.fromString("74b3a465-c5a7-4850-a590-80db8db84b0f"), UUID.fromString("c65d8e0d-6bc9-4a1b-a981-0ef9c74d2da4"));
+        Optional<Ticket> ticketOptional = ticketService.purchaseTicket(UUID.fromString("74b3a465-c5a7-4850-a590-80db8db84b0f"), UUID.fromString("c65d8e0d-6bc9-4a1b-a981-0ef9c74d2da4"),"");
 
         assertTrue(ticketOptional.isPresent());
         String responseMessage = "Ticket purchased successfully. Ticket ID: " + ticketOptional.get().getId();
@@ -65,7 +65,7 @@ public class TicketServiceTest {
     public void testPurchaseTicket_InvalidEvent() {
         when(eventRepository.findById(UUID.fromString("74b3a465-c5a7-4850-a590-80db8db84b0f"))).thenReturn(Optional.empty());
 
-        Optional<Ticket> ticketOptional = ticketService.purchaseTicket(UUID.fromString("74b3a465-c5a7-4850-a590-80db8db84b0f"), UUID.fromString("c65d8e0d-6bc9-4a1b-a981-0ef9c74d2da4"));
+        Optional<Ticket> ticketOptional = ticketService.purchaseTicket(UUID.fromString("74b3a465-c5a7-4850-a590-80db8db84b0f"), UUID.fromString("c65d8e0d-6bc9-4a1b-a981-0ef9c74d2da4"),"");
 
         assertTrue(ticketOptional.isEmpty());
 

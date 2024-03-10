@@ -37,8 +37,8 @@ export const addNewEvent = (event: Event) => {
     return apiClient.post('/event', event)
 }
       
-export const purchaseEventTicket = (eventId: string) => {
-    return apiClient.post(`/event/${eventId}/ticket`)
+export const purchaseEventTicket = (eventId: string, codeName: string) => {
+    return apiClient.post(`/event/${eventId}/ticket?codeName=${codeName}`)
 }
 
 export const retrieveAllUserTickets = (sortCriteria: string) => {

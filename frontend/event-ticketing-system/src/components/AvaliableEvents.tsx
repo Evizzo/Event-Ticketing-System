@@ -41,7 +41,7 @@ function AvailableEvents() {
   };
 
   const handlePurchase = (eventId: string) => {
-    purchaseEventTicket(eventId)
+    purchaseEventTicket(eventId, '')
       .then((response: { data: string }) => {
         setNumberOfBought(numberOfBought + 1);
 

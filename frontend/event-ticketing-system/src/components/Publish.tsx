@@ -2,6 +2,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { addNewEvent } from '../api/ApiService';
 
 type Event = {
+  id: string;
   name: string;
   date: string;
   location: string;
@@ -13,6 +14,7 @@ type Event = {
 function Publish() {
   const [message, setMessage] = useState("")
   const [eventData, setEventData] = useState<Event>({
+    id:'',
     name: '',
     date: '',
     location: '',
@@ -40,6 +42,7 @@ function Publish() {
         setMessage("");
       }, 5000);
       setEventData({
+        id:'',
         name: '',
         date: '',
         location: '',
