@@ -156,3 +156,19 @@ export const getUserWithPublishedEvents = (email: string) => {
 export const forceDeleteUserById = (userId: string) => {
     return apiClient.delete(`/admin/user/${userId}`)
 }
+
+export const retrieveAllRedeemCodes = () => {
+    return apiClient.get(`/admin/redeem-codes`)
+}
+
+export const deleteRedeemCode = (id: string) => {
+    return apiClient.delete(`/admin/redeem/${id}`)
+}
+
+export const editRedeemCode = (id: string, code: any) => {
+    return apiClient.put(`/admin/redeem/${id}`, code)
+}
+
+export const addRedeemCode = (RedeemCode: any) => {
+    return apiClient.post(`/admin/redeem`, RedeemCode)
+}

@@ -135,12 +135,12 @@ public class AdminController {
      */
     @PostMapping("redeem")
     @PreAuthorize("hasAuthority('admin:create')")
-    public ResponseEntity<RedeemCode> addRedeemCode(@RequestBody @Valid RedeemCode redeemCode) {
+    public ResponseEntity<String> addRedeemCode(@RequestBody @Valid RedeemCode redeemCode) {
         try {
             RedeemCode addedRedeemCode = redeemCodeService.addRedeemCode(redeemCode);
-            return ResponseEntity.status(HttpStatus.CREATED).body(addedRedeemCode);
+            return ResponseEntity.ok("Redeem Code added successfully.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            throw new RuntimeException("Failed to delete redeem code: " + e.getMessage());
         }
     }
 }

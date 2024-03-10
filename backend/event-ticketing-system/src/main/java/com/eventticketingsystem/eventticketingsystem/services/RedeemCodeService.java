@@ -2,6 +2,7 @@ package com.eventticketingsystem.eventticketingsystem.services;
 
 import com.eventticketingsystem.eventticketingsystem.entities.RedeemCode;
 import com.eventticketingsystem.eventticketingsystem.repositories.RedeemCodeRepository;
+import com.eventticketingsystem.eventticketingsystem.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RedeemCodeService {
     private final RedeemCodeRepository redeemCodeRepository;
+    private final UserRepository userRepository;
     public List<RedeemCode> getAllRedeemCodes() {
         return redeemCodeRepository.findAll();
     }
@@ -53,6 +55,9 @@ public class RedeemCodeService {
         return "Redeem code with ID " + id + " not found.";
     }
     public RedeemCode addRedeemCode(RedeemCode redeemCode) {
+        if (!userRepository.existsByEmail(redeemCode.getOwnerEmail())) {
+            throw new RuntimeException("User with this email does not exist.");
+        }
         return redeemCodeRepository.save(redeemCode);
     }
 }

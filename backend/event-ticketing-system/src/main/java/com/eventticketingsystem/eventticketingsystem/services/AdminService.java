@@ -73,7 +73,6 @@ public class AdminService {
 
             authenticationService.deleteAllUserTokens(id);
             userRepository.deleteById(id);
-
         });
     }
 }

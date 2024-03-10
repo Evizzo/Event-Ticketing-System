@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { retrieveAllUsers, editUser, forceDeleteUserById } from '../api/ApiService';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../api/AuthContex';
+import RedeemCodesAdminPage from './RedeemCodesAdminPage';
 
 interface EditableUser {
   firstname: string;
@@ -143,6 +144,8 @@ function AdminPage() {
               ))}
             </tbody>
           </table>
+          <hr></hr><hr></hr>
+          <RedeemCodesAdminPage/>
         </div>
       )}
     </div>
