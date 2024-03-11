@@ -132,6 +132,7 @@ public class CommentService {
                 })
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found with ID: " + id));
     }
+
     public Comment likeComment(UUID commentId, HttpServletRequest request) {
         UUID userId = jwtService.extractUserIdFromToken(request);
 

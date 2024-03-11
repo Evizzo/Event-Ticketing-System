@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -37,6 +38,8 @@ public class EventService {
         event.setDone(false);
         event.setCommentCount(0);
         event.setPublisherEmail(user.getEmail());
+        event.setLikes(0);
+        event.setDislikes(0);
 
         return eventRepository.save(event);
     }
@@ -138,5 +141,56 @@ public class EventService {
     }
     public List<Event> findTop3MostPopularEvents() {
         return eventRepository.findMostPopularEventsSortedByName(PageRequest.of(0, 3));
+    }
+
+    public Event likeEvent(UUID eventId, HttpServletRequest request) {
+        UUID userId = jwtService.extractUserIdFromToken(request);
+
+        return eventRepository.findById(eventId)
+                .map(event -> {
+                    Set<UUID> likedByUsers = event.getLikedByUsers();
+                    Set<UUID> dislikedByUsers = event.getDislikedByUsers();
+
+                    if (likedByUsers.contains(userId)) {
+                        event.setLikes(event.getLikes() - 1);
+                        likedByUsers.remove(userId);
+                    } else {
+                        event.setLikes(event.getLikes() + 1);
+                        likedByUsers.add(userId);
+
+                        if (dislikedByUsers.contains(userId)) {
+                            event.setDislikes(event.getDislikes() - 1);
+                            dislikedByUsers.remove(userId);
+                        }
+                    }
+                    return eventRepository.save(event);
+                })
+                .orElseThrow(() -> new EventNotFoundException("Event not found with ID: " + eventId));
+    }
+
+    public Event dislikeEvent(UUID eventId, HttpServletRequest request) {
+        UUID userId = jwtService.extractUserIdFromToken(request);
+
+        return eventRepository.findById(eventId)
+                .map(event -> {
+                    Set<UUID> likedByUsers = event.getLikedByUsers();
+                    Set<UUID> dislikedByUsers = event.getDislikedByUsers();
+
+                    if (dislikedByUsers.contains(userId)) {
+                        event.setDislikes(event.getDislikes() - 1);
+                        dislikedByUsers.remove(userId);
+                    } else {
+                        event.setDislikes(event.getDislikes() + 1);
+                        dislikedByUsers.add(userId);
+
+                        if (likedByUsers.contains(userId)) {
+                            event.setLikes(event.getLikes() - 1);
+                            likedByUsers.remove(userId);
+                        }
+                    }
+
+                    return eventRepository.save(event);
+                })
+                .orElseThrow(() -> new EventNotFoundException("Event not found with ID: " + eventId));
     }
 }

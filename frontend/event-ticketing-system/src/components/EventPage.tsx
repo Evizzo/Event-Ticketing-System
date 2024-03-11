@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { retrieveEventById, purchaseEventTicket, getUserTicketByEventId, convertEventPriceCurrency } from '../api/ApiService.ts';
+import { retrieveEventById, purchaseEventTicket, getUserTicketByEventId, convertEventPriceCurrency, likeEvent, dislikeEvent } from '../api/ApiService.ts';
 import { useAuth } from '../api/AuthContex';
 import CommentBox from './CommentBox.tsx';
 
@@ -15,6 +15,8 @@ interface Event {
   done: boolean;
   commentCount: number;
   publisherEmail: string;
+  likes: number;
+  dislikes: number;
 }
 
 function EventPage() {
@@ -88,7 +90,40 @@ function EventPage() {
         alert(error.response.data.message);
       });
   };
+  function handleLikeEvent(id: string): void {
+    likeEvent(id)
+      .then(() => {
+        retrieveEventById(id)
+          .then((response) => {
+            setEvent(response.data);
+          })
+          .catch((error) => {
+            console.error('Error fetching event:', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error liking event:', error);
+      });
+  }
   
+  function handleDislikeEvent(id: string): void {
+    dislikeEvent(id)
+      .then(() => {
+        retrieveEventById(id)
+          .then((response) => {
+            setEvent(response.data);
+          })
+          .catch((error) => {
+            console.error('Error fetching event:', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error disliking event:', error);
+      });
+  }
+  
+  
+
   return (
     <div className="container mt-4">
       {message && <div className="alert alert-info mt-3">{message}</div>}
@@ -126,6 +161,22 @@ function EventPage() {
             <p>
               <strong>Publisher:</strong> <Link to={`/user-profile/${event.publisherEmail}`}>{event.publisherEmail}</Link>
             </p>
+            <p className="mb-2">
+             <span style={{ color: 'green' }}><strong>Likes:</strong> {event.likes}</span>
+          </p>
+          <p className="mb-2">
+            <span style={{ color: 'red' }}><strong>Dislikes:</strong> {event.dislikes}</span>
+          </p>
+          {isAuthenticated && (
+              <div className="btn-group">
+                <button className="btn btn-sm btn-success" onClick={() => handleLikeEvent(event.id)}>
+                  Like
+                </button>
+                <button className="btn btn-sm btn-danger" onClick={() => handleDislikeEvent(event.id)}>
+                  Dislike
+                </button>
+              </div>
+            )}
             {event.done ? (
             <div className="text-center">
               <strong style={{ color: 'red' }}>Done</strong>

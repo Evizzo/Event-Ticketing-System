@@ -1,6 +1,5 @@
 package com.eventticketingsystem.eventticketingsystem.services;
 
-import com.eventticketingsystem.eventticketingsystem.auth.AuthenticationService;
 import com.eventticketingsystem.eventticketingsystem.entities.User;
 import com.eventticketingsystem.eventticketingsystem.repositories.*;
 import org.junit.jupiter.api.BeforeEach;

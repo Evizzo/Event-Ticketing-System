@@ -111,6 +111,7 @@ function CommentBox({ eventId, updateEvent, commentCount }: CommentBoxProps): JS
         setMessage(error.response.data.message)
       });
   }
+  
   function handleLikeComment(commentId: string): void {
     likeComment(commentId)
       .then(() => {

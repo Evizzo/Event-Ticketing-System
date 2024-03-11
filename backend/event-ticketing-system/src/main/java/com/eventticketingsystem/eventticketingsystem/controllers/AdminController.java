@@ -137,7 +137,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('admin:create')")
     public ResponseEntity<String> addRedeemCode(@RequestBody @Valid RedeemCode redeemCode) {
         try {
-            RedeemCode addedRedeemCode = redeemCodeService.addRedeemCode(redeemCode);
+            redeemCodeService.addRedeemCode(redeemCode);
             return ResponseEntity.ok("Redeem Code added successfully.");
         } catch (Exception e) {
             throw new RuntimeException("Failed to delete redeem code: " + e.getMessage());

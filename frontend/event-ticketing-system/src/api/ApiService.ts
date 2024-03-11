@@ -8,6 +8,8 @@ export type Event = {
     description: string;
     capacity: number;
     ticketPrice: number;
+    likes: number;
+    dislikes: number;
   };
 
 export interface User {
@@ -172,3 +174,11 @@ export const editRedeemCode = (id: string, code: any) => {
 export const addRedeemCode = (RedeemCode: any) => {
     return apiClient.post(`/admin/redeem`, RedeemCode)
 }
+
+export const likeEvent = (id: string) => {
+    return apiClient.put(`/event/${id}/like`);
+};
+
+export const dislikeEvent = (id: string) => {
+    return apiClient.put(`/event/${id}/dislike`);
+};

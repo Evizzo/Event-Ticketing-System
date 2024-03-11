@@ -1,5 +1,6 @@
 package com.eventticketingsystem.eventticketingsystem.controllers;
 
+import com.eventticketingsystem.eventticketingsystem.entities.Comment;
 import com.eventticketingsystem.eventticketingsystem.entities.Event;
 import com.eventticketingsystem.eventticketingsystem.exceptions.EventNotFoundException;
 import com.eventticketingsystem.eventticketingsystem.services.EventService;
@@ -130,5 +131,27 @@ public class EventController {
     @GetMapping("/popular")
     public ResponseEntity<List<Event>> retrieveTop3PopularEvents() {
         return ResponseEntity.ok(eventService.findTop3MostPopularEvents());
+    }
+    /**
+     * Likes a specific event by its ID.
+     *
+     * @param id UUID of the event to be liked.
+     * @param request HttpServletRequest containing the JWT token for extracting the current logged-in user.
+     * @return ResponseEntity containing the liked Event.
+     */
+    @PutMapping("/{id}/like")
+    public ResponseEntity<Event> likeEvent(@PathVariable UUID id, HttpServletRequest request) {
+        return ResponseEntity.ok(eventService.likeEvent(id, request));
+    }
+    /**
+     * Dislikes an event by its ID.
+     *
+     * @param id UUID of the event to be disliked.
+     * @param request HttpServletRequest containing the JWT token for extracting the current logged-in user.
+     * @return ResponseEntity containing the disliked Event.
+     */
+    @PutMapping("/{id}/dislike")
+    public ResponseEntity<Event> dislikeEvent(@PathVariable UUID id, HttpServletRequest request) {
+        return ResponseEntity.ok(eventService.dislikeEvent(id, request));
     }
 }

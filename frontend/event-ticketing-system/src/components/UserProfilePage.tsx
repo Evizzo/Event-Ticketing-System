@@ -39,6 +39,8 @@ const UserProfilePage: React.FC = () => {
                                     <th>Name</th>
                                     <th>Date</th>
                                     <th>Location</th>
+                                    <th>Likes</th>
+                                    <th>Dislikes</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,6 +49,8 @@ const UserProfilePage: React.FC = () => {
                                         <td><Link to={`/events/${event.id}`}>{event.name}</Link></td>
                                         <td>{event.date}</td>
                                         <td>{event.location}</td>
+                                        <td><span style={{ color: 'green' }}>{event.likes}</span></td>
+                                        <td><span style={{ color: 'red' }}>{event.dislikes}</span></td>
                                     </tr>
                                 ))}
                             </tbody>

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -47,4 +48,14 @@ public class Event {
     private List<Ticket> tickets;
     private Integer commentCount;
     private String publisherEmail;
+    private Integer likes;
+    private Integer dislikes;
+    @ElementCollection
+    @CollectionTable(name = "event_likes", joinColumns = @JoinColumn(name = "event_id"))
+    @Column(name = "user_id")
+    private Set<UUID> likedByUsers = new HashSet<>();
+    @ElementCollection
+    @CollectionTable(name = "event_dislikes", joinColumns = @JoinColumn(name = "event_id"))
+    @Column(name = "user_id")
+    private Set<UUID> dislikedByUsers = new HashSet<>();
 }
