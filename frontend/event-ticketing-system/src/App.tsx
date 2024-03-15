@@ -18,6 +18,7 @@ import UsersPublishedEvents from "./components/UsersPublishedEvents";
 import EditPublishedEvent from "./components/EditPublishedEvent";
 import AdminPage from "./components/AdminPage";
 import UserProfilePage from "./components/UserProfilePage";
+import RestartPassword from "./components/RestartPassword";
 
 function App(){
   function AuthenticatedRoute({ children }: { children: ReactNode }) {
@@ -78,6 +79,7 @@ function App(){
 
 
             <Route path="/search" element={<Search/>}/>
+            <Route path="/reset-password/:token" element={<RestartPassword/>}/>
             <Route path="/user-profile/:email" element={<UserProfilePage/>}/>
             <Route path="/about" element={<About/>}/>
             <Route path="/register" element={<RegisterPage/>}/>

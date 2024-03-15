@@ -1,4 +1,15 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: { Gmail Address }
+    password: { Gmail App Password }
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   datasource:
     url: jdbc:mysql://localhost:3306/ets
     username: root
@@ -22,8 +33,8 @@ jwt:
 currency-converter:
   api-key: "YOUR API SECRET KEY FROM https://www.exchangerate-api.com/"
 
-#
-#
+
+
 #logging:
 #  level:
 #    root: DEBUG

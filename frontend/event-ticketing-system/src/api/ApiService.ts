@@ -25,8 +25,13 @@ type RegisterRequest = {
     lastname: string;
     email: string;
     password: string;
-};
 
+};
+export interface RestartPasswordRequest {
+    token: string;
+    newPassword: string;
+  }
+  
 export const executeRegistration = (userData: RegisterRequest) => {
     return apiClient.post(`/api/v1/auth/register`, userData);
 };
@@ -182,3 +187,11 @@ export const likeEvent = (id: string) => {
 export const dislikeEvent = (id: string) => {
     return apiClient.put(`/event/${id}/dislike`);
 };
+
+export const executeResetPasswordWithToken = (restartPasswordRequest: RestartPasswordRequest) => {
+    return apiClient.post(`/api/v1/auth/reset-password`, restartPasswordRequest);
+}
+
+export const executeSendPasswordEmail = (email: string) => {
+    return apiClient.post(`/api/v1/auth/send-email?email=${email}`);
+}

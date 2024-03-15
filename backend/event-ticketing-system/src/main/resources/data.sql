@@ -1,6 +1,6 @@
 INSERT INTO users (id, firstname, lastname, email, password, credits, role)
 VALUES
- (UNHEX('3f883b26f61b41b0a83f390bfb4b311a'), 'Stefan', 'Stefanovic', 'stefan@gmail.com', '$2a$10$.pPphHcTYF5iSV/rIMdF0OtfJ0.gJMhCHdTFD3sxCG88LXF8mugim', 2000, 'USER'),
+ (UNHEX('3f883b26f61b41b0a83f390bfb4b311a'), 'Stefan', 'Stefanovic', 'stefanmatic941@gmail.com', '$2a$10$.pPphHcTYF5iSV/rIMdF0OtfJ0.gJMhCHdTFD3sxCG88LXF8mugim', 2000, 'USER'),
  (UNHEX('1f883b26f61b41b0a83f390bfb4b311a'), 'admin', 'admin', 'admin@gmail.com', '$2a$10$ipNpcggA0k4XB1OCQtiurObCjOQIdyu/oiGFR3oit85auJ2.tDrQm', 999999999, 'ADMIN'),
  (UNHEX('2f883b26f61b41b0a83f390bfb4b311a'), 'Ema', 'Emic', 'ema@gmail.com', '$2a$10$h3Jn0SC8MPGszKYp94aaDO09XjUqyk4VdsIfaa9su/SVjuT.IIE2S', 1840, 'USER');
 
