@@ -21,36 +21,107 @@ Below, you'll find an overview of the controllers in this project along with the
 
 **UserController**
 
-Manages user-related operations such as retrieving user credits, adding new users, retrieving user details, updating user information, deleting users, 
-retrieving user tickets, and changing passwords.
+GET /user/credits - Retrieve the credits of the currently authenticated user.
+
+GET /user - Retrieve all users.
+
+GET /user/current - Retrieve the details of the currently authenticated user.
+
+DELETE /user/delete-current-user - Delete the currently authenticated user.
+
+PUT /user/update-current-user - Update the details of the currently authenticated user.
+
+GET /user/tickets - Retrieve all tickets associated with the currently authenticated user.
+
+PATCH /user/change-password - Change the password for the currently authenticated user.
+
+GET /user/profile/{email} - Retrieve user information and the list of events they published.
 
 **TicketController**
 
-Handles ticket-related operations including purchasing tickets for events, refunding tickets, and retrieving user tickets for specific events.
+POST /event/{eventId}/ticket - Purchase a ticket for a specified event, with optional redeem code.
+
+DELETE /event/refund/{ticketId} - Refund a ticket by its ID.
+
+GET /event/ticketId/{eventId} - Retrieve a user's ticket for a specified event.
 
 **NotificationController**
 
-Manages notification-related operations such as retrieving user notifications and deleting specific notifications.
+GET /notification - Retrieve all notifications for the current user.
+
+DELETE /notification/delete/{id} - Delete a specific notification by ID.
 
 **EventController**
 
-Handles event-related operations like adding new events, retrieving events published by users, retrieving all events, retrieving a specific event, deleting events, 
-updating events, searching events by name, marking events as done, and retrieving popular events.
+POST /event - Add a new event.
+
+GET /event/published - Retrieve all events published by the current user.
+
+GET /event - Retrieve all events in the system.
+
+GET /event/{id} - Retrieve a specific event by ID.
+
+DELETE /event/{id} - Delete a specific event by ID.
+
+PUT /event/{id} - Update a specific event by ID.
+
+GET /event/search - Search for events by name.
+
+PUT /event/done/{id} - Mark an event as done.
+
+GET /event/popular - Retrieve the top 3 most popular events.
+
+PUT /event/{id}/like - Like a specific event by ID.
+
+PUT /event/{id}/dislike - Dislike a specific event by ID.
+
+**CurrencyConverterController**
+
+GET /currency-converter - Convert event ticket price from USD to another currency.
 
 **CommentController**
 
-Manages comment-related operations including saving comments for events, deleting comments, retrieving all comments for an event, updating comments, 
-liking comments, and disliking comments.
+POST /comment/{eventId} - Save a new comment for an event.
+
+DELETE /comment/{id} - Delete a comment by ID.
+
+GET /comment/{eventId} - Retrieve all comments for an event.
+
+PUT /comment/{id} - Update a comment by ID.
+
+PUT /comment/{id}/like - Like a comment by ID.
+
+PUT /comment/{id}/dislike - Dislike a comment by ID.
 
 **AdminController**
 
-Handles administrative operations like adding new users, retrieving all users, and updating existing users. 
-Requires admin privileges for access.
+POST /admin/user - Add a new user.
+
+GET /admin/users - Retrieve all users.
+
+PUT /admin/user - Update an existing user by ID.
+
+DELETE /admin/user/{id} - Forcefully delete a user by ID.
+
+PUT /admin/redeem/{id} - Edit a redeem code by ID.
+
+GET /admin/redeem-codes - Retrieve all redeem codes.
+
+DELETE /admin/redeem/{id} - Delete a redeem code by ID.
+
+POST /admin/redeem - Add a new redeem code.
 
 **AuthenticationController**
 
-Manages authentication-related operations such as user registration, user authentication, and user logout. 
-Utilizes JWT tokens for authentication.
+POST /api/v1/auth/register - Register a new user.
+
+POST /api/v1/auth/authenticate - Authenticate a user.
+
+POST /api/v1/auth/logout - Logout the current user.
+
+POST /api/v1/auth/send-email - Send a password reset email.
+
+POST /api/v1/auth/reset-password - Reset password using a token.
 
 **Authentication:**
 
